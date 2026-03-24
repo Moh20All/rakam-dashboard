@@ -1914,5 +1914,29 @@ window.addEventListener('scroll', () => {
   </button>
 </div>
 
+<script>
+    // ── DYNAMIC GITHUB RELEASE FETCH ──────────────────
+    async function updateLatestDownloadLink() {
+      const repo = 'Moh20All/Rakam';
+      try {
+        const response = await fetch(`https://api.github.com/repos/${repo}/releases/latest`);
+        const data = await response.json();
+        const exeAsset = data.assets.find(asset => asset.name.toLowerCase().endsWith('.exe'));
+        
+        if (exeAsset) {
+          const downloadUrl = exeAsset.browser_download_url;
+          // Target all primary buttons in the download section
+          const bts = document.querySelectorAll('#download .btn-primary');
+          bts.forEach(btn => {
+            btn.href = downloadUrl;
+          });
+          console.log('Latest release found:', exeAsset.name);
+        }
+      } catch (err) {
+        console.error('GitHub API error:', err);
+      }
+    }
+    updateLatestDownloadLink();
+</script>
 </body>
 </html>
