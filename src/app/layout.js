@@ -1,8 +1,8 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'Rakam License Dashboard',
-  description: 'Manage and monitor enterprise product licenses for Rakam',
+  title: 'Rakam — رقم | Ultimate Phone Repair Management',
+  description: 'The complete ecosystem for phone repair stores. Repairs, POS, Inventory, and Finance reports in one native experience.',
 };
 
 export default function RootLayout({ children }) {

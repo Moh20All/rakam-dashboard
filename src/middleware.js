@@ -3,9 +3,7 @@ import { NextResponse } from 'next/server';
 export function middleware(request) {
   const token = request.cookies.get('rakam_auth_token');
   
-  if (request.nextUrl.pathname === '/') {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
-  }
+  // Removed redirection from '/' to allow viewing the landing page
 
   if (request.nextUrl.pathname.startsWith('/dashboard')) {
     if (!token || token.value !== 'authenticated') {
