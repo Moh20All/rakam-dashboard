@@ -19,6 +19,7 @@ export default function DashboardLayout({ children }) {
             <nav className="hidden md:flex items-center gap-9">
               <Link href="/dashboard" className="text-white/90 hover:text-accent text-sm font-semibold leading-normal transition-colors">Dashboard</Link>
               <Link href="/dashboard/new" className="text-white/60 hover:text-accent text-sm font-medium leading-normal transition-colors">New License</Link>
+              <Link href="/dashboard/monitoring" className="text-white/60 hover:text-accent text-sm font-medium leading-normal transition-colors">Monitoring</Link>
             </nav>
             <div className="flex gap-3 items-center">
               <form action={logoutAction}>

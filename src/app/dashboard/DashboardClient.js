@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { BadgeCheck, AlertCircle, FileWarning, Bug, CheckCircle2, Zap, XCircle, FileText } from 'lucide-react';
 import LicenseToggleBtn from './LicenseToggleBtn';
 
 function getInitials(name) {
@@ -9,7 +10,7 @@ function getInitials(name) {
   return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
 }
 
-export default function DashboardClient({ licenses, stats }) {
+export default function DashboardClient({ licenses, stats, monitoringStats }) {
   const [query, setQuery] = useState('');
 
   const filtered = licenses.filter(lic => {
@@ -38,11 +39,18 @@ export default function DashboardClient({ licenses, stats }) {
       </div>
 
       {/* Stats Bar */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pb-8">
-        <StatCard icon="fact_check" iconColor="text-primary" label="Total Licenses" value={stats.total} />
-        <StatCard icon="check_circle" iconColor="text-green-600" label="Active" value={stats.active} />
-        <StatCard icon="bolt" iconColor="text-blue-500" label="Activated" value={stats.activated} />
-        <StatCard icon="cancel" iconColor="text-red-500" label="Revoked" value={stats.revoked} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pb-4">
+        <StatCard icon={BadgeCheck} iconColor="text-primary" label="Total Licenses" value={stats.total} />
+        <StatCard icon={CheckCircle2} iconColor="text-green-600" label="Active" value={stats.active} />
+        <StatCard icon={Zap} iconColor="text-blue-500" label="Activated" value={stats.activated} />
+        <StatCard icon={XCircle} iconColor="text-red-500" label="Revoked" value={stats.revoked} />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pb-8 border-b border-slate-200 mb-8">
+        <StatCard icon={FileText} iconColor="text-primary" label="Total Feedback" value={monitoringStats?.totalFeedback || 0} />
+        <StatCard icon={Bug} iconColor="text-orange-500" label="Open Bugs" value={monitoringStats?.openBugs || 0} />
+        <StatCard icon={FileWarning} iconColor="text-red-500" label="Total Crashes" value={monitoringStats?.totalCrashes || 0} />
+        <StatCard icon={AlertCircle} iconColor="text-rose-600" label="Unresolved Crashes" value={monitoringStats?.unresolvedCrashes || 0} />
       </div>
 
       {/* Search Bar */}
@@ -140,11 +148,11 @@ export default function DashboardClient({ licenses, stats }) {
   );
 }
 
-function StatCard({ icon, iconColor, label, value }) {
+function StatCard({ icon: Icon, iconColor, label, value }) {
   return (
     <div className="flex flex-col gap-2 rounded-xl p-6 bg-white border border-slate-200 shadow-sm">
       <div className="flex items-center gap-3">
-        <span className={`material-symbols-outlined ${iconColor}`}>{icon}</span>
+        <Icon className={`w-6 h-6 ${iconColor}`} />
         <p className="text-slate-500 text-sm font-semibold uppercase tracking-wider">{label}</p>
       </div>
       <p className="text-slate-900 tracking-tight text-3xl font-black">{value.toLocaleString()}</p>

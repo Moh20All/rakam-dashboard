@@ -29,5 +29,19 @@ export default async function DashboardPage() {
     revoked: licenses.filter(l => !l.is_active).length
   };
 
-  return <DashboardClient licenses={licenses || []} stats={stats} />;
+  // Fetch monitoring stats
+  const { count: totalFeedback } = await supabase.from('feedback').select('*', { count: 'exact', head: true });
+  const { count: openBugs } = await supabase.from('feedback').select('*', { count: 'exact', head: true }).eq('type', 'Bug');
+  
+  const { count: totalCrashes } = await supabase.from('crash_reports').select('*', { count: 'exact', head: true });
+  const { count: unresolvedCrashes } = await supabase.from('crash_reports').select('*', { count: 'exact', head: true }).eq('resolved', false);
+
+  const monitoringStats = {
+    totalFeedback: totalFeedback || 0,
+    openBugs: openBugs || 0,
+    totalCrashes: totalCrashes || 0,
+    unresolvedCrashes: unresolvedCrashes || 0
+  };
+
+  return <DashboardClient licenses={licenses || []} stats={stats} monitoringStats={monitoringStats} />;
 }
