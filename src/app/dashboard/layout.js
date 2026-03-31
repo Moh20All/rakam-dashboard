@@ -20,6 +20,10 @@ export default function DashboardLayout({ children }) {
               <Link href="/dashboard" className="text-white/90 hover:text-accent text-sm font-semibold leading-normal transition-colors">Dashboard</Link>
               <Link href="/dashboard/new" className="text-white/60 hover:text-accent text-sm font-medium leading-normal transition-colors">New License</Link>
               <Link href="/dashboard/monitoring" className="text-white/60 hover:text-accent text-sm font-medium leading-normal transition-colors">Monitoring</Link>
+              <Link href="/guide" target="_blank" className="text-white/60 hover:text-accent text-sm font-medium leading-normal transition-colors flex items-center gap-1">
+                <span>User Guide</span>
+                <span className="material-symbols-outlined text-[16px]">open_in_new</span>
+              </Link>
             </nav>
             <div className="flex gap-3 items-center">
               <form action={logoutAction}>

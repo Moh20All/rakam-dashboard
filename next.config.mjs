@@ -6,6 +6,10 @@ const nextConfig = {
         source: '/',
         destination: '/rakam-landing.html',
       },
+      {
+        source: '/guide',
+        destination: '/rakam-guide.html',
+      },
     ];
   },
 };

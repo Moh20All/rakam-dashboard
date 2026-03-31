@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rakam — رقم | User Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Mono:wght@300;400&family=Noto+Naskh+Arabic:wght@400;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0804;
+      --bg2: #120f0a;
+      --bg3: #1a1510;
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --gold-dim: #7a6330;
+      --cream: #f0e8d5;
+      --cream-dim: #a89878;
+      --text: #ddd0b8;
+      --text-dim: #7a6e60;
+      --border: rgba(201, 168, 76, 0.18);
+      --border-strong: rgba(201, 168, 76, 0.4);
+      --sidebar-w: 260px;
+      --accent: #c9a84c;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── Geometric background ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(60deg, transparent, transparent 60px, rgba(201, 168, 76, 0.025) 60px, rgba(201, 168, 76, 0.025) 61px),
+        repeating-linear-gradient(-60deg, transparent, transparent 60px, rgba(201, 168, 76, 0.025) 60px, rgba(201, 168, 76, 0.025) 61px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-w);
+      height: 100vh;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      overflow-y: auto;
+      padding-bottom: 2rem;
+    }
+
+    .sidebar-logo {
+      padding: 2rem 1.5rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .logo-en {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      line-height: 1;
+    }
+
+    .logo-ar {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 1.2rem;
+      color: var(--gold-dim);
+      direction: rtl;
+    }
+
+    .logo-tag {
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 0.4rem;
+    }
+
+    .nav-section-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 1.5rem 1.5rem 0.5rem;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.55rem 1.5rem;
+      color: var(--cream-dim);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      transition: color 0.2s, background 0.2s;
+      position: relative;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--gold-light);
+      background: rgba(201, 168, 76, 0.06);
+    }
+
+    .nav-link.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--gold);
+    }
+
+    .nav-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      opacity: 0.7;
+    }
+
+    /* ── Main Content ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 6rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: 'رقم';
+      position: absolute;
+      right: -2rem;
+      bottom: -4rem;
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 28rem;
+      color: rgba(201, 168, 76, 0.04);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .hero-kicker {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hero-kicker::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-title-ar {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      color: var(--gold-dim);
+      line-height: 1.3;
+      margin-bottom: 2rem;
+      direction: rtl;
+    }
+
+    .hero-desc {
+      max-width: 520px;
+      color: var(--text-dim);
+      font-size: 13px;
+      line-height: 1.8;
+      margin-bottom: 3rem;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .badge {
+      border: 1px solid var(--border-strong);
+      padding: 0.35rem 0.9rem;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      background: rgba(201, 168, 76, 0.05);
+    }
+
+    /* ── Section ── */
+    .section {
+      padding: 5rem;
+      border-top: 1px solid var(--border);
+      scroll-margin-top: 2rem;
+    }
+
+    .section-number {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      color: var(--gold-dim);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1.2;
+      margin-bottom: 0.3rem;
+    }
+
+    .section-subtitle {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 1.1rem;
+      color: var(--gold-dim);
+      direction: rtl;
+      margin-bottom: 2.5rem;
+    }
+
+    .section-intro {
+      max-width: 560px;
+      color: var(--text-dim);
+      margin-bottom: 3rem;
+      font-size: 13px;
+    }
+
+    /* ── Feature Cards ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: var(--bg2);
+      padding: 2rem;
+      transition: background 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      transition: width 0.4s ease;
+    }
+
+    .card:hover {
+      background: var(--bg3);
+    }
+
+    .card:hover::after {
+      width: 100%;
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: var(--gold-light);
+      margin-bottom: 0.5rem;
+    }
+
+    .card-text {
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+
+    /* ── Steps (Workflow) ── */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: var(--border-strong);
+    }
+
+    .step {
+      display: flex;
+      gap: 2rem;
+      padding: 2rem 0;
+      position: relative;
+      opacity: 0;
+      transform: translateX(-20px);
+      animation: stepIn 0.5s forwards;
+    }
+
+    .step:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .step:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .step:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .step:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+
+    .step:nth-child(5) {
+      animation-delay: 0.5s;
+    }
+
+    .step:nth-child(6) {
+      animation-delay: 0.6s;
+    }
+
+    @keyframes stepIn {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .step-num {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg2);
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .step:hover .step-num {
+      background: var(--gold);
+      color: var(--bg);
+      border-color: var(--gold);
+    }
+
+    .step-body {
+      flex: 1;
+    }
+
+    .step-time {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+
+    .step-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+
+    .step-text {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    /* ── Pillars ── */
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .pillar {
+      background: var(--bg2);
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s;
+    }
+
+    .pillar:hover {
+      background: var(--bg3);
+    }
+
+    .pillar-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5rem;
+      font-weight: 300;
+      color: rgba(201, 168, 76, 0.08);
+      position: absolute;
+      top: -1rem;
+      right: 1rem;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .pillar-icon {
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .pillar-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      color: var(--gold-light);
+      margin-bottom: 0.8rem;
+    }
+
+    .pillar-text {
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+
+    .pillar-features {
+      list-style: none;
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .pillar-features li {
+      font-size: 11px;
+      color: var(--text-dim);
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .pillar-features li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--gold-dim);
+    }
+
+    /* ── Setup Steps ── */
+    .setup-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .setup-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      position: relative;
+    }
+
+    .setup-card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .setup-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .setup-step {
+      display: flex;
+      gap: 0.8rem;
+      align-items: flex-start;
+    }
+
+    .setup-step-n {
+      width: 22px;
+      height: 22px;
+      background: rgba(201, 168, 76, 0.12);
+      border: 1px solid var(--gold-dim);
+      color: var(--gold);
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .setup-step-text {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    /* ── Tip box ── */
+    .tip {
+      border-left: 2px solid var(--gold);
+      background: rgba(201, 168, 76, 0.05);
+      padding: 1rem 1.5rem;
+      margin: 2rem 0;
+      font-size: 12px;
+      color: var(--cream-dim);
+    }
+
+    .tip strong {
+      color: var(--gold);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    /* ── Versions ── */
+    .versions {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border: 1px solid var(--border);
+    }
+
+    .version {
+      display: flex;
+      gap: 2rem;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+      align-items: flex-start;
+    }
+
+    .version:last-child {
+      border-bottom: none;
+    }
+
+    .version:hover {
+      background: var(--bg3);
+    }
+
+    .version-tag {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: var(--gold);
+      white-space: nowrap;
+      padding-top: 0.1rem;
+      min-width: 80px;
+    }
+
+    .version-current {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--bg);
+      background: var(--gold);
+      padding: 0.15rem 0.5rem;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    .version-changes {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .version-changes li {
+      font-size: 12px;
+      color: var(--text-dim);
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .version-changes li::before {
+      content: '·';
+      position: absolute;
+      left: 0;
+      color: var(--gold-dim);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      padding: 3rem 5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      color: var(--gold);
+    }
+
+    .footer-right {
+      text-align: right;
+      font-size: 11px;
+      color: var(--text-dim);
+      line-height: 1.8;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+      margin: 3rem 0;
+    }
+
+    /* ── Scroll indicator ── */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: var(--sidebar-w);
+      right: 0;
+      height: 2px;
+      background: var(--border);
+      z-index: 200;
+    }
+
+    .scroll-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero>* {
+      animation: fadeUp 0.8s ease forwards;
+      opacity: 0;
+    }
+
+    .hero .hero-kicker {
+      animation-delay: 0.1s;
+    }
+
+    .hero .hero-title {
+      animation-delay: 0.2s;
+    }
+
+    .hero .hero-title-ar {
+      animation-delay: 0.3s;
+    }
+
+    .hero .hero-desc {
+      animation-delay: 0.4s;
+    }
+
+    .hero .hero-badges {
+      animation-delay: 0.5s;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .section,
+      .hero {
+        padding: 3rem 2rem;
+      }
+
+      .pillars {
+        grid-template-columns: 1fr;
+      }
+
+      .setup-block {
+        grid-template-columns: 1fr;
+      }
+
+      .footer {
+        padding: 2rem;
+      }
+    }
+
+    /* ── Images Styling ── */
+    .guide-img-container {
+      margin: 2.5rem 0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: #1a1a1a;
+    }
+
+    .guide-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .guide-img:hover {
+      transform: scale(1.02);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Scroll progress -->
+  <div class="scroll-progress">
+    <div class="scroll-progress-bar" id="bar"></div>
+  </div>
+
+  <!-- ── Sidebar ── -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-en">Rakam</div>
+      <div class="logo-ar">رقم</div>
+      <div class="logo-tag">User Guide · v1.4.2</div>
+    </div>
+
+    <div class="nav-section-label">Introduction</div>
+    <a href="/" class="nav-link" style="color: var(--gold); border-bottom: 1px solid var(--border); margin-bottom: 0.5rem; padding-bottom: 0.8rem;">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      </svg>
+      Back to Home
+    </a>
+    <a href="#hero" class="nav-link active">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+      </svg>
+      Overview
+    </a>
+    <a href="#activation" class="nav-link">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+      </svg>
+      Activation
+    </a>
+
+    <div class="nav-section-label">Core Features</div>
+    <a href="#pillars" class="nav-link">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" stroke-width="1.5" />
+        <path stroke-linecap="round" stroke-width="1.5" d="M9 12l2 2 4-4" />
+      </svg>
+      The 6 Pillars
+    </a>
+    <a href="#repairs" class="nav-link">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+        <circle cx="12" cy="12" r="3" stroke-width="1.5" />
+      </svg>
+      Repair Tracking
+    </a>
+    <a href="#pos" class="nav-link">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <rect x="2" y="3" width="20" height="14" rx="2" stroke-width="1.5" />
+        <path stroke-linecap="round" stroke-width="1.5" d="M8 21h8M12 17v4" />
+      </svg>
+      POS & Inventory
+    </a>
+    <a href="#finance" class="nav-link">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+      </svg>
+      Financials
+    </a>
+
+    <div class="nav-section-label">Daily Use</div>
+    <a href="#workflow" class="nav-link">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      Daily Workflow
+    </a>
+
+    <div class="nav-section-label">Reference</div>
+    <a href="#changelog" class="nav-link">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+      </svg>
+      Changelog
+    </a>
+  </nav>
+
+  <!-- ── Main ── -->
+  <main class="main">
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+      <div class="hero-kicker">Official User Guide</div>
+      <h1 class="hero-title">The Digital<br><em>Nervous System</em><br>for Repair Shops.</h1>
+      <div class="hero-title-ar">النظام الرقمي المتكامل لمحلات الإصلاح</div>
+      <p class="hero-desc">
+        Rakam replaces chaotic paper trails and scattered spreadsheets with a unified, offline-first management
+        ecosystem — built for phone repair artisans who demand precision.
+      </p>
+      <div class="hero-badges">
+        <span class="badge">Fonctionne sans Internet</span>
+        <span class="badge">Technologie performante</span>
+        <span class="badge">Stockage local sécurisé</span>
+        <span class="badge">FR / AR / EN</span>
+        <span class="badge">Impression Thermique 58mm &amp; 80mm</span>
+        <span class="badge">v1.4.2</span>
+      </div>
+    </section>
+
+    <!-- Activation -->
+    <section class="section" id="activation">
+      <div class="section-number">00 — Pour commencer</div>
+      <h2 class="section-title">Premier Lancement &amp; Activation</h2>
+      <div class="section-subtitle">بدء التشغيل والتفعيل</div>
+      <p class="section-intro">
+        Rakam est un outil professionnel sécurisé. Chaque installation est liée à l'appareil sur lequel elle est
+        utilisée.
+      </p>
+
+      <!-- Image: Activation Screen -->
+      <div class="guide-img-container">
+        <img src="assets/guide/activation.png" alt="Activation Rakam" class="guide-img">
+      </div>
+
+      <div class="setup-block">
+        <div class="setup-card">
+          <div class="setup-card-title">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+            </svg>
+            Activation de la Licence
+          </div>
+          <div class="setup-steps">
+            <div class="setup-step">
+              <div class="setup-step-n">1</div>
+              <div class="setup-step-text">Lancez l'application. Un <strong style="color:var(--gold)">Identifiant
+                  unique</strong> est généré automatiquement pour votre appareil.</div>
+            </div>
+            <div class="setup-step">
+              <div class="setup-step-n">2</div>
+              <div class="setup-step-text">Entrez votre <strong style="color:var(--gold)">Clé d'Activation</strong>
+                reçue lors de votre achat.</div>
+            </div>
+            <div class="setup-step">
+              <div class="setup-step-n">3</div>
+              <div class="setup-step-text">La clé est vérifiée et liée à votre appareil. Une clé = un appareil.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="setup-card">
+          <div class="setup-card-title">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2" />
+            </svg>
+            Assistant de Configuration
+          </div>
+          <div class="setup-steps">
+            <div class="setup-step">
+              <div class="setup-step-n">1</div>
+              <div class="setup-step-text">Entrez le <strong style="color:var(--gold)">Nom de votre Magasin</strong> —
+                affiché sur vos reçus et rapports.</div>
+            </div>
+            <div class="setup-step">
+              <div class="setup-step-n">2</div>
+              <div class="setup-step-text">Sélectionnez votre <strong style="color:var(--gold)">Devise</strong> : DA
+                (Dinar Algérien), EUR, ou USD.</div>
+            </div>
+            <div class="setup-step">
+              <div class="setup-step-n">3</div>
+              <div class="setup-step-text">Crée au profil d'<strong style="color:var(--gold)">Administrateur</strong> —
+                nom d'utilisateur et mot de passe sécurisé.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <strong>🔒 Note de Sécurité</strong>
+        Votre identifiant est lié à votre matériel. Si vous changez d'appareil, contactez notre équipe pour transférer
+        votre licence.
+      </div>
+    </section>
+
+    <!-- 6 Pillars -->
+    <section class="section" id="pillars">
+      <div class="section-number">01 — Fonctions Clés</div>
+      <h2 class="section-title">Les Six Piliers</h2>
+      <div class="section-subtitle">الأعمدة الستة</div>
+      <p class="section-intro">
+        Rakam est construit sur six systèmes connectés pour couvrir tous les aspects de votre activité.
+      </p>
+
+      <!-- Image: Dashboard Overview -->
+      <div class="guide-img-container">
+        <img src="assets/guide/dashboard.png" alt="Vue d'ensemble Dashboard" class="guide-img">
+      </div>
+
+      <div class="pillars">
+        <div class="pillar">
+          <div class="pillar-num">1</div>
+          <div class="pillar-icon">🔧</div>
+          <div class="pillar-title">Suivi des Réparations</div>
+          <div class="pillar-text">Gestion précise du cycle de vie de chaque appareil entrant dans votre atelier.</div>
+          <ul class="pillar-features">
+            <li>Fiche d'entrée avec capture IMEI</li>
+            <li>Tableau de bord des statuts en direct</li>
+            <li>Suivi automatique de la garantie</li>
+          </ul>
+        </div>
+
+        <div class="pillar">
+          <div class="pillar-num">2</div>
+          <div class="pillar-icon">🏪</div>
+          <div class="pillar-title">Ventes &amp; Stock</div>
+          <div class="pillar-text">Un système de caisse complet relié directement à votre inventaire.</div>
+          <ul class="pillar-features">
+            <li>Scan de codes-barres pour des ventes rapides</li>
+            <li>Échange d'appareils (Trade-In)</li>
+            <li>Alertes automatiques de stock faible</li>
+          </ul>
+        </div>
+
+        <div class="pillar">
+          <div class="pillar-num">3</div>
+          <div class="pillar-icon">📊</div>
+          <div class="pillar-title">Intelligence Financière</div>
+          <div class="pillar-text">Comptabilité intégrée conçue pour le métier de la réparation.</div>
+          <ul class="pillar-features">
+            <li>Clôture journalière en un clic</li>
+            <li>Analyse du bénéfice net en temps réel</li>
+            <li>Graphiques de tendances mensuelles</li>
+          </ul>
+        </div>
+
+        <div class="pillar">
+          <div class="pillar-num">4</div>
+          <div class="pillar-icon">📒</div>
+          <div class="pillar-title">Gestion des Dettes</div>
+          <div class="pillar-text">Ne perdez jamais la trace de l'argent dû — clients ou fournisseurs.</div>
+          <ul class="pillar-features">
+            <li>Historique des paiements partiels</li>
+            <li>Registre fournisseur lié aux achats</li>
+            <li>Résumés clairs des soldes</li>
+          </ul>
+        </div>
+
+        <div class="pillar">
+          <div class="pillar-num">5</div>
+          <div class="pillar-icon">🛡️</div>
+          <div class="pillar-title">Confidentialité Totale</div>
+          <div class="pillar-text">Vos données vous appartiennent — stockées localement sur votre ordinateur.</div>
+          <ul class="pillar-features">
+            <li>Fonctionne sans Internet</li>
+            <li>Sécurité par identifiant unique</li>
+            <li>Impression thermique 58mm &amp; 80mm</li>
+          </ul>
+        </div>
+
+        <div class="pillar">
+          <div class="pillar-num">6</div>
+          <div class="pillar-icon">🌍</div>
+          <div class="pillar-title">Support Arabe Complet</div>
+          <div class="pillar-text">Intégration profonde de la langue arabe pour une expérience naturelle.</div>
+          <ul class="pillar-features">
+            <li>Interface totalement adaptée à l'arabe</li>
+            <li>Changement de langue instantané</li>
+            <li>Aucun redémarrage requis</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Repair Tracking Detail -->
+    <section class="section" id="repairs">
+      <div class="section-number">02 — Module Réparation</div>
+      <h2 class="section-title">Suivi des Réparations</h2>
+      <div class="section-subtitle">متابعة الإصلاحات</div>
+      <p class="section-intro">
+        Le cœur de Rakam. Chaque appareil est suivi de sa réception à sa remise au client.
+      </p>
+
+      <!-- Image: Repairs Dashboard -->
+      <div class="guide-img-container">
+        <img src="assets/guide/repairs.png" alt="Module Réparations" class="guide-img">
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <span class="card-icon">📋</span>
+          <div class="card-title">Fiche d'Entrée</div>
+          <div class="card-text">Capturez le nom du client, téléphone, modèle, numéro IMEI, et description de la panne.
+            Imprimez la copie du client immédiatement.</div>
+        </div>
+        <div class="card">
+          <span class="card-icon">🔄</span>
+          <div class="card-title">Cycle des Statuts</div>
+          <div class="card-text">Chaque réparation passe par des étapes claires : <strong style="color:var(--gold)">En
+              attente → En cours → Prêt → Récupéré</strong>.</div>
+        </div>
+        <div class="card">
+          <span class="card-icon">🛡️</span>
+          <div class="card-title">Suivi de Garantie</div>
+          <div class="card-text">Rakam calcule et surveille automatiquement la période de garantie de chaque réparation
+            terminée.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- POS & Inventory -->
+    <section class="section" id="pos">
+      <div class="section-number">03 — Module Ventes</div>
+      <h2 class="section-title">Ventes &amp; Stock</h2>
+      <div class="section-subtitle">نقطة البيع والمخزون</div>
+
+      <!-- Image: POS Screen -->
+      <div class="guide-img-container">
+        <img src="assets/guide/pos.png" alt="Module Ventes POS" class="guide-img">
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <span class="card-icon">📷</span>
+          <div class="card-title">Scan de Codes-barres</div>
+          <div class="card-text">Connectez n'importe quel scanner. Scannez un article pour l'ajouter instantanément à
+            une vente. Pas d'erreur manuelle.</div>
+        </div>
+        <div class="card">
+          <span class="card-icon">📱</span>
+          <div class="card-title">Échanges (Trade-In)</div>
+          <div class="card-text">Acceptez des appareils d'occasion. Enregistrez l'état et l'IMEI, et Rakam l'ajoute
+            automatiquement à votre stock pour la revente.</div>
+        </div>
+        <div class="card">
+          <span class="card-icon">⚠️</span>
+          <div class="card-title">Alertes de Stock</div>
+          <div class="card-text">Définissez un seuil minimum. Rakam vous alerte quand le stock baisse pour ne jamais
+            manquer de pièces essentielles.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Financials -->
+    <section class="section" id="finance">
+      <div class="section-number">04 — Module Financier</div>
+      <h2 class="section-title">Intelligence Financière</h2>
+      <div class="section-subtitle">الذكاء المالي</div>
+
+      <!-- Image: Finance Charts -->
+      <div class="guide-img-container">
+        <img src="assets/guide/finance.png" alt="Intelligence Financière" class="guide-img">
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <span class="card-icon">📅</span>
+          <div class="card-title">Clôture du Jour</div>
+          <div class="card-text">À la fin de la journée, vérifiez vos ventes, réparations et dépenses d'un seul coup
+            d'œil. Validez pour sceller vos registres.</div>
+        </div>
+        <div class="card">
+          <span class="card-icon">📈</span>
+          <div class="card-title">Analyse des Profits</div>
+          <div class="card-text">Suivi en temps réel de vos marges bénéficiaires. Identifiez vos services les plus
+            rentables en un clin d'œil.</div>
+        </div>
+        <div class="card">
+          <span class="card-icon">🗓️</span>
+          <div class="card-title">Résumés Mensuels</div>
+          <div class="card-text">Des graphiques élégants pour visualiser vos tendances et prendre de meilleures
+            décisions pour votre entreprise.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Daily Workflow -->
+    <section class="section" id="workflow">
+      <div class="section-number">05 — Utilisation Quotidienne</div>
+      <h2 class="section-title">Une Journée Type<br><em>avec Rakam</em></h2>
+      <div class="section-subtitle">يوم عمل نموذجي مع رقم</div>
+      <p class="section-intro">Suivez ce flux pour tirer le meilleur parti de Rakam chaque jour.</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">I</div>
+          <div class="step-body">
+            <div class="step-time">Matin</div>
+            <div class="step-title">Consulter le Tableau de Bord</div>
+            <div class="step-text">Ouvrez Rakam. Vérifiez les réparations en attente et les alertes de stock pour
+              organiser votre journée.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">II</div>
+          <div class="step-body">
+            <div class="step-time">Arrivée Client</div>
+            <div class="step-title">Réceptionner un Appareil</div>
+            <div class="step-text">Utilisez l'assistant de réception. Notez les détails et imprimez le bon pour le
+              client.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">III</div>
+          <div class="step-body">
+            <div class="step-time">Pendant la Réparation</div>
+            <div class="step-title">Mettre à Jour le Statut</div>
+            <div class="step-text">Passez le ticket en "En cours". Notez les pièces utilisées pour que le stock se mette
+              à jour automatiquement.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">IV</div>
+          <div class="step-body">
+            <div class="step-time">Réparation Terminée</div>
+            <div class="step-title">Prêt → Récupéré</div>
+            <div class="step-text">Marquez comme "Prêt". Quand le client paie, marquez "Récupéré". La garantie commence
+              alors automatiquement.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">V</div>
+          <div class="step-body">
+            <div class="step-time">Fin de Journée</div>
+            <div class="step-title">Clôture Journalière</div>
+            <div class="step-text">Vérifiez vos revenus et validez la clôture pour garder un historique comptable
+              parfait.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Changelog -->
+    <section class="section" id="changelog">
+      <div class="section-number">06 — Historique des Versions</div>
+      <h2 class="section-title">Mises à Jour</h2>
+      <div class="section-subtitle">سجل الإصدارات</div>
+
+      <div class="versions">
+        <div class="version">
+          <div class="version-tag">v1.4.2 <span class="version-current">ACTUEL</span></div>
+          <ul class="version-changes">
+            <li>Refonte du moteur d'impression thermique (80mm & 58mm)</li>
+            <li>Nouveau système de récupération après crash</li>
+            <li>Ajout d'un module de feedback direct</li>
+          </ul>
+        </div>
+        <div class="version">
+          <div class="version-tag">v1.4.0</div>
+          <ul class="version-changes">
+            <li>Support multi-format (A4/80mm/58mm)</li>
+            <li>Flux automatisé pour les reprises (Trade-In)</li>
+          </ul>
+        </div>
+        <div class="version">
+          <div class="version-tag">v1.3.0</div>
+          <ul class="version-changes">
+            <li>Verrouillage de sécurité des outils développeur</li>
+            <li>Affichage natif de l'historique des versions</li>
+          </ul>
+        </div>
+      </div>    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div>
+        <div class="footer-brand">Rakam — رقم</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:0.4rem">The complete ecosystem for phone repair
+          stores.</div>
+      </div>
+      <div class="footer-right">
+        © 2026 Rakam — رقم<br>
+        Developed with dedication by <strong style="color:var(--gold)">Allali Mohamed</strong><br>
+        Icons: Lucide React · Design: Artisan Premium Philosophy
+      </div>
+    </footer>
+
+  </main>
+
+  <script>
+    // Scroll progress bar
+    window.addEventListener('scroll', () => {
+      const el = document.documentElement;
+      const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+      document.getElementById('bar').style.width = pct + '%';
+    });
+
+    // Active nav link
+    const sections = document.querySelectorAll('section[id], footer');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { threshold: 0.3 });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+</body>
+
+</html>
