@@ -1,6 +1,6 @@
 {
-  "name": "rakam-dashboard",
-  "version": "1.4.2",
+  "name": "warshati-dashboard",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",

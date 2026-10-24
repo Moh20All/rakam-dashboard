@@ -1,43 +1,108 @@
 @import "tailwindcss";
 
+/* Dark mode follows the data-theme attribute set on <html> (see layout.js) */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 @theme {
-  --color-primary: #192643;
-  --color-accent: #c9a84c;
-  --color-background-light: #f6f7f8;
-  --color-background-dark: #14171e;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  /* Warshati brand */
+  --color-navy: #0c0f1a;
+  --color-navy-2: #161c2e;
+  --color-gold: #c9972b;
+  --color-gold-hi: #e2b04a;
+
+  /* Surfaces: light by default, swapped under [data-theme=dark] below */
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-raised: var(--raised);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-mute: var(--mute);
+  --color-faint: var(--faint);
+  --color-gold-ink: var(--gold-ink);
+}
+
+:root {
+  --bg: #f5f6f9;
+  --card: #ffffff;
+  --raised: #f0f2f6;
+  --line: #e3e6ee;
+  --ink: #111626;
+  --mute: #5b6478;
+  --faint: #8d95a7;
+  --gold-ink: #8a6512; /* gold text that passes AA on white */
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg: #0a0d16;
+  --card: #111522;
+  --raised: #181d2d;
+  --line: #242b3e;
+  --ink: #e8ebf3;
+  --mute: #98a1b6;
+  --faint: #6b7489;
+  --gold-ink: #e2b04a;
+  color-scheme: dark;
 }
 
 @layer base {
-  body {
-    font-family: 'Inter', sans-serif;
-    background-color: #0a0c10;
-    color: #cbd5e1;
-    -webkit-font-smoothing: antialiased;
-  }
+  html, body { background: var(--bg); color: var(--ink); }
+  body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+  ::selection { background: color-mix(in srgb, var(--color-gold) 35%, transparent); }
+  :focus-visible { outline: 2px solid var(--color-gold); outline-offset: 2px; }
+  .tnum { font-variant-numeric: tabular-nums; }
 }
 
-@layer utilities {
-  .animate-shine {
-    background-size: 200% auto;
-    animation: shine 3s linear infinite;
+@layer components {
+  .card { border-radius: 1rem; border: 1px solid var(--line); background: var(--card); }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    height: 2.5rem; padding-inline: 1rem; border-radius: .75rem;
+    font-size: .875rem; font-weight: 600; white-space: nowrap; cursor: pointer;
+    transition: background-color .15s, color .15s, border-color .15s;
   }
-
-  @keyframes shine {
-    to {
-      background-position: 200% center;
-    }
+  .btn:disabled { opacity: .5; pointer-events: none; }
+  .btn-gold { background: var(--color-gold); color: var(--color-navy); }
+  .btn-gold:hover { background: var(--color-gold-hi); }
+  .btn-ghost { border: 1px solid var(--line); background: var(--card); color: var(--ink); }
+  .btn-ghost:hover { background: var(--raised); }
+  .btn-danger { background: #dc2626; color: #fff; }
+  .btn-danger:hover { background: #b91c1c; }
+  .btn-sm { height: 2rem; padding-inline: .75rem; font-size: .75rem; border-radius: .5rem; }
+  .icon-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2rem; height: 2rem; border-radius: .5rem; color: var(--mute); cursor: pointer;
+    transition: background-color .15s, color .15s;
   }
-
-  .animate-fade-in {
-    animation: fadeIn 0.8s ease-out forwards;
+  .icon-btn:hover { background: var(--raised); color: var(--ink); }
+  .icon-btn:disabled { opacity: .5; pointer-events: none; }
+  .input {
+    width: 100%; height: 2.5rem; padding-inline: .875rem; border-radius: .75rem;
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    font-size: .875rem; outline: none; transition: border-color .15s, box-shadow .15s;
   }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+  .input::placeholder { color: var(--faint); }
+  .input:focus { border-color: var(--color-gold); box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-gold) 15%, transparent); }
+  textarea.input { height: auto; padding-block: .625rem; resize: vertical; }
+  .label { display: block; margin-bottom: .375rem; font-size: .75rem; font-weight: 600; color: var(--mute); }
+  .chip {
+    display: inline-flex; align-items: center; gap: .375rem; height: 2rem; padding-inline: .75rem;
+    border-radius: 999px; border: 1px solid var(--line); background: var(--card);
+    font-size: .75rem; font-weight: 600; color: var(--mute); cursor: pointer; transition: color .15s;
   }
-
-  .perspective-1000 {
-    perspective: 1000px;
-  }
+  .chip:hover { color: var(--ink); }
+  .chip[aria-pressed="true"] { background: var(--color-navy); border-color: var(--color-navy); color: #fff; }
+  [data-theme="dark"] .chip[aria-pressed="true"] { background: var(--color-gold); border-color: var(--color-gold); color: var(--color-navy); }
+  .th { padding: .75rem 1rem; text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--faint); white-space: nowrap; }
+  .td { padding: .75rem 1rem; font-size: .875rem; vertical-align: middle; }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+@keyframes toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes pop-in { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: none; } }

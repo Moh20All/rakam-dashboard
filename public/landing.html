@@ -1,0 +1,818 @@
+<title>Warshati — ورشتي</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Warshati — logiciel de gestion pour ateliers de réparation de téléphones : tickets, caisse, stock, dettes, catalogue d'appareils. Fonctionne sans internet.">
+<link rel="icon" href="/favicon.svg"><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Reem+Kufi:wght@500;700&display=swap">
+<style>
+/* Layout: one centered 1180px column; the hero pairs the thesis with a live repair ticket on thermal paper.
+   The brand is ink + gold (from the app and its logo), so the design is dark-first with a light variant. */
+:root {
+  color-scheme: dark;
+  --bg: #0b0e18;
+  --raised: #121827;
+  --sunk: #080a12;
+  --text: #eceef4;
+  --mute: #8d93a8;
+  --line: #222a3d;
+  --gold: #d3a43c;
+  --gold-hi: #f0cd74;
+  --gold-ink: #0b0e18;
+  --paper: #fbfaf6;
+  --paper-ink: #1a1c22;
+  --ok: #3fbf7f;
+  --warn: #e5a52b;
+  --bad: #e5675a;
+  --wa: #25d366;
+
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", "IBM Plex Sans Arabic", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --f-ar-display: "Reem Kufi", "IBM Plex Sans Arabic", "Segoe UI", sans-serif;
+
+  --s1: .8125rem; --s2: .9375rem; --s3: 1.0625rem; --s4: 1.375rem; --s5: 2rem; --s6: clamp(2.4rem, 5.6vw, 4.6rem);
+  --r: 14px;
+  --wrap: 1180px;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #f4f5f8; --raised: #ffffff; --sunk: #e9ebf1; --text: #0c0f1a; --mute: #5a6177;
+    --line: #dde1ea; --gold: #a97b17; --gold-hi: #c9972b; --gold-ink: #ffffff;
+  }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4f5f8; --raised: #ffffff; --sunk: #e9ebf1; --text: #0c0f1a; --mute: #5a6177;
+  --line: #dde1ea; --gold: #a97b17; --gold-hi: #c9972b; --gold-ink: #ffffff;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font: 400 var(--s3)/1.65 var(--f-body);
+  -webkit-font-smoothing: antialiased;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap {
+  max-width: var(--wrap); margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (min-width: 720px) { .wrap { padding-left: max(32px, env(safe-area-inset-left, 0px)); padding-right: max(32px, env(safe-area-inset-right, 0px)); } }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; letter-spacing: -.02em; line-height: 1.08; }
+html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3 { font-family: var(--f-ar-display); letter-spacing: 0; line-height: 1.35; }
+html[lang="ar"] body { font-family: "IBM Plex Sans Arabic", var(--f-body); }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 3px; border-radius: 6px; }
+.eyebrow { font: 500 var(--s1)/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+html[lang="ar"] .eyebrow { letter-spacing: 0; font-family: "IBM Plex Sans Arabic", var(--f-body); font-weight: 600; }
+.num { font-variant-numeric: tabular-nums; }
+.lede { color: var(--mute); max-width: 60ch; font-size: var(--s3); }
+
+/* ---------- Nav ---------- */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; align-items: center; gap: 16px; padding-block: 14px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 700 1.125rem/1 var(--f-display); }
+.brand .ar { font-family: var(--f-ar-display); color: var(--gold); font-weight: 700; }
+.mark { width: 34px; height: 34px; flex: none; display: grid; place-items: center; border-radius: 9px; background: linear-gradient(180deg, #1a2034, #0c0f1a); border: 1px solid rgba(201, 151, 43, .45); color: #e2b54f; font: 700 1.25rem/1 var(--f-ar-display); padding-bottom: 4px; }
+.nav-links { display: none; gap: 24px; margin-inline-start: auto; font-size: var(--s2); color: var(--mute); }
+.nav-links a { text-decoration: none; }
+.nav-links a:hover { color: var(--text); }
+@media (min-width: 900px) { .nav-links { display: flex; } }
+.langs { display: flex; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 999px; margin-inline-start: auto; }
+@media (min-width: 900px) { .langs { margin-inline-start: 8px; } }
+.langs button { all: unset; cursor: pointer; padding: 5px 10px; border-radius: 999px; font: 500 var(--s1)/1 var(--f-mono); color: var(--mute); }
+.langs button[aria-pressed="true"] { background: var(--gold); color: var(--gold-ink); }
+.langs button:focus-visible { outline: 2px solid var(--gold-hi); }
+
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border-radius: 999px; font: 600 var(--s2)/1 var(--f-body); text-decoration: none; border: 1px solid transparent; cursor: pointer; transition: transform .2s, background .2s; }
+.btn-gold { background: linear-gradient(180deg, var(--gold-hi), var(--gold)); color: #0b0e18; box-shadow: 0 8px 30px -10px color-mix(in srgb, var(--gold) 70%, transparent); }
+.btn-gold:hover { transform: translateY(-1px); }
+.btn-ghost { border-color: var(--line); color: var(--text); }
+.btn-ghost:hover { background: var(--raised); }
+.nav .btn { display: none; padding: 10px 16px; }
+@media (min-width: 560px) { .nav .btn { display: inline-flex; } }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; overflow: hidden; }
+.hero::before { content: ""; position: absolute; inset: -20% -10% auto auto; width: 70vmax; height: 70vmax; background: radial-gradient(closest-side, color-mix(in srgb, var(--gold) 16%, transparent), transparent); pointer-events: none; }
+.hero .wrap { position: relative; display: grid; gap: 48px; padding-block: 64px 72px; align-items: center; }
+@media (min-width: 980px) { .hero .wrap { grid-template-columns: 1.15fr .85fr; padding-block: 96px 104px; } }
+.hero h1 { font-size: var(--s6); font-weight: 800; margin-block: 18px 22px; }
+.hero h1 em { font-style: normal; color: var(--gold); }
+.hero .lede { font-size: 1.1875rem; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.facts { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 36px; color: var(--mute); font-size: var(--s1); }
+.facts span { display: inline-flex; align-items: center; gap: 8px; }
+.facts span::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+
+/* Thermal receipt: always paper, whatever the theme */
+.stage { position: relative; display: grid; justify-items: center; padding-block: 8px 40px; }
+.receipt {
+  width: min(340px, 100%); background: var(--paper); color: var(--paper-ink);
+  font: 400 .8125rem/1.55 var(--f-mono); padding: 22px 22px 30px; border-radius: 4px 4px 0 0;
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,.55), 0 0 0 1px rgba(0,0,0,.04);
+  transform: rotate(-1.6deg);
+  -webkit-mask: linear-gradient(#000 0 0) top/100% calc(100% - 9px) no-repeat, conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom/14px 9px repeat-x;
+          mask: linear-gradient(#000 0 0) top/100% calc(100% - 9px) no-repeat, conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom/14px 9px repeat-x;
+}
+html[dir="rtl"] .receipt { transform: rotate(1.6deg); }
+.receipt .shop { text-align: center; font-weight: 500; letter-spacing: .08em; }
+.receipt .sub { text-align: center; color: #6a6d76; font-size: .75rem; }
+.receipt hr { border: 0; border-top: 1px dashed #b9bbc2; margin: 12px 0; }
+.receipt .row { display: flex; justify-content: space-between; gap: 12px; }
+.receipt .row b { font-weight: 500; }
+.receipt .big { font-size: .9375rem; font-weight: 500; }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 12px; }
+.steps i { height: 4px; border-radius: 2px; background: #dcdde2; transition: background .4s; }
+.steps i.on { background: #1a1c22; }
+.status { margin-top: 8px; display: flex; justify-content: space-between; font-size: .75rem; }
+.status .pill { padding: 2px 8px; border-radius: 999px; background: #1a1c22; color: var(--paper); transition: background .4s; }
+.status .pill.ready { background: #1f8a55; }
+.barcode { height: 34px; margin-top: 14px; background: repeating-linear-gradient(90deg, #1a1c22 0 2px, transparent 2px 4px, #1a1c22 4px 5px, transparent 5px 8px, #1a1c22 8px 11px, transparent 11px 12px); }
+.wa {
+  position: absolute; inset-block-end: 0; inset-inline-end: max(0px, calc(50% - 230px));
+  width: min(270px, 86%); background: #0f2a1f; color: #e7fbef; border-radius: 14px 14px 4px 14px;
+  padding: 12px 14px; font-size: var(--s1); line-height: 1.5; box-shadow: 0 18px 40px -16px rgba(0,0,0,.6);
+  border: 1px solid #1f5a3d; transition: opacity .5s, transform .5s;
+}
+html[dir="rtl"] .wa { border-radius: 14px 14px 14px 4px; }
+.wa .who { display: flex; align-items: center; gap: 6px; font-weight: 600; color: var(--wa); margin-bottom: 4px; font-size: .75rem; }
+.wa .who::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--wa); }
+.wa.dim { opacity: .35; transform: translateY(6px); }
+
+/* ---------- Sections ---------- */
+section.block { padding-block: 88px; border-top: 1px solid var(--line); }
+.head { display: grid; gap: 14px; margin-bottom: 44px; max-width: 760px; }
+.head h2 { font-size: var(--s5); font-weight: 700; }
+@media (min-width: 720px) { .head h2 { font-size: 2.6rem; } }
+
+/* Day in the shop: real order of a working day */
+.day { display: grid; gap: 0; }
+@media (min-width: 860px) { .day { grid-template-columns: repeat(4, 1fr); } }
+.moment { padding: 26px 24px 30px; border-top: 1px solid var(--line); display: grid; gap: 10px; align-content: start; }
+@media (min-width: 860px) { .moment { border-top: 0; border-inline-start: 1px solid var(--line); } .moment:first-child { border-inline-start: 0; padding-inline-start: 0; } }
+.moment .time { font: 500 var(--s1)/1 var(--f-mono); color: var(--gold); }
+.moment h3 { font-size: var(--s4); font-weight: 700; }
+.moment p { color: var(--mute); font-size: var(--s2); }
+
+/* Split showcase */
+.split { display: grid; gap: 40px; align-items: start; }
+@media (min-width: 960px) { .split { grid-template-columns: .9fr 1.1fr; gap: 64px; } }
+.points { display: grid; gap: 18px; margin-top: 28px; padding: 0; list-style: none; }
+.points li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; font-size: var(--s2); }
+.points li::before { content: ""; width: 14px; height: 14px; margin-top: 5px; border-radius: 50%; border: 2px solid var(--gold); }
+.points b { color: var(--text); font-weight: 600; }
+.points span { color: var(--mute); }
+
+.panel { background: var(--raised); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.panel-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--line); font-size: var(--s1); color: var(--mute); }
+.tag { font: 500 .6875rem/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; padding: 5px 8px; border-radius: 6px; border: 1px solid var(--line); color: var(--mute); }
+
+/* Catalog demo */
+.search { display: flex; align-items: center; gap: 10px; padding: 12px 18px; border-bottom: 1px solid var(--line); }
+.search input { all: unset; flex: 1; font: 400 var(--s2)/1.4 var(--f-body); color: var(--text); min-width: 0; }
+.search input::placeholder { color: var(--mute); }
+.search svg { width: 18px; height: 18px; color: var(--mute); flex: none; }
+.cat { display: grid; }
+@media (min-width: 640px) { .cat { grid-template-columns: 1fr 1fr; } }
+.list { list-style: none; margin: 0; padding: 6px; max-height: 360px; overflow-y: auto; border-bottom: 1px solid var(--line); }
+@media (min-width: 640px) { .list { border-bottom: 0; border-inline-end: 1px solid var(--line); } }
+.list button { all: unset; box-sizing: border-box; cursor: pointer; width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 9px; font-size: var(--s2); }
+.list button:hover { background: var(--sunk); }
+.list button[aria-selected="true"] { background: color-mix(in srgb, var(--gold) 14%, transparent); }
+.list button:focus-visible { outline: 2px solid var(--gold-hi); }
+.list .brand-s { color: var(--mute); font-size: var(--s1); display: block; }
+.dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.empty { padding: 18px; color: var(--mute); font-size: var(--s2); }
+.spec { padding: 20px 20px 24px; display: grid; gap: 16px; align-content: start; }
+.spec h3 { font-size: var(--s4); }
+html[lang="ar"] .spec h3 { font-family: var(--f-display); }
+.spec .b { color: var(--mute); font-size: var(--s1); }
+.vfm { display: grid; gap: 8px; padding: 14px; border-radius: 10px; background: var(--sunk); }
+.vfm-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: var(--s2); }
+.vfm-top strong { font: 700 1.5rem/1 var(--f-display); }
+.meter { height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; }
+.meter i { display: block; height: 100%; border-radius: 4px; transition: width .5s; }
+.vfm-label { font-weight: 600; font-size: var(--s2); }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; margin: 0; font-size: var(--s2); }
+.kv dt { color: var(--mute); }
+.kv dd { margin: 0; text-align: end; }
+
+/* Close demo */
+.close-rows { display: grid; }
+.close-row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; padding: 11px 18px; border-bottom: 1px solid var(--line); font-size: var(--s2); }
+.close-row label { color: var(--text); }
+.close-row small { display: block; color: var(--mute); font-size: .75rem; }
+.close-row .in { display: flex; align-items: center; gap: 6px; font-family: var(--f-mono); }
+.close-row .sign { width: 12px; text-align: center; color: var(--mute); }
+.close-row input { width: 9.5ch; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--sunk); color: var(--text); font: 500 var(--s2)/1 var(--f-mono); text-align: end; font-variant-numeric: tabular-nums; }
+.close-row input:focus { outline: 2px solid var(--gold); outline-offset: 0; border-color: transparent; }
+.close-row.minus .sign { color: var(--bad); }
+.close-total { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 18px; background: var(--sunk); flex-wrap: wrap; }
+.close-total .lbl { font-weight: 600; }
+.close-total .lbl small { display: block; font-weight: 400; color: var(--mute); font-size: .75rem; }
+.close-total output { font: 700 2rem/1 var(--f-display); color: var(--gold); font-variant-numeric: tabular-nums; }
+
+/* Debts */
+.ledger .line { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 14px 18px; border-bottom: 1px solid var(--line); font-size: var(--s2); }
+.ledger .line small { color: var(--mute); font-size: .75rem; grid-column: 1; }
+.ledger .amt { font-family: var(--f-mono); text-align: end; grid-row: 1 / span 2; grid-column: 2; align-self: center; font-variant-numeric: tabular-nums; }
+.ledger .amt.paid { color: var(--ok); }
+.ledger .amt.void { color: var(--mute); text-decoration: line-through; }
+.ledger .owed { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 18px; flex-wrap: wrap; }
+.ledger .owed strong { font: 700 1.5rem/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.wa-btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px; background: #0f2a1f; color: #c9f5da; border: 1px solid #1f5a3d; font: 600 var(--s1)/1 var(--f-body); }
+.wa-btn::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--wa); }
+
+/* Trust */
+.trust { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+@media (min-width: 720px) { .trust { grid-template-columns: repeat(3, 1fr); } }
+.trust > div { background: var(--bg); padding: 26px 24px; display: grid; gap: 8px; align-content: start; }
+.trust h3 { font-size: 1.125rem; font-weight: 700; }
+.trust p { color: var(--mute); font-size: var(--s2); }
+.trust .k { font: 700 1.75rem/1 var(--f-display); color: var(--gold); }
+html[lang="ar"] .trust .k { font-family: var(--f-display); }
+
+/* FAQ */
+.faq { display: grid; max-width: 820px; }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary { cursor: pointer; list-style: none; padding: 20px 0; display: flex; justify-content: space-between; gap: 16px; font: 600 var(--s3)/1.4 var(--f-body); }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font: 400 1.5rem/1 var(--f-mono); color: var(--gold); transition: transform .2s; }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq details p { padding-bottom: 22px; color: var(--mute); max-width: 65ch; }
+
+/* Final CTA */
+.final { text-align: center; padding-block: 104px; border-top: 1px solid var(--line); position: relative; overflow: hidden; }
+.final .glyph { font: 700 clamp(7rem, 22vw, 15rem)/1 var(--f-ar-display); color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--gold) 45%, transparent); position: absolute; inset: 50% auto auto 50%; transform: translate(-50%, -54%); pointer-events: none; user-select: none; }
+.final .wrap { position: relative; display: grid; justify-items: center; gap: 18px; }
+.final h2 { font-size: clamp(2rem, 4.4vw, 3.2rem); max-width: 18ch; }
+.final .lede { margin-inline: auto; }
+.contact { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 28px; margin-top: 14px; font: 500 var(--s2)/1.4 var(--f-mono); color: var(--mute); }
+.contact b { color: var(--text); font-weight: 500; }
+
+footer { border-top: 1px solid var(--line); }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-block: 28px; color: var(--mute); font-size: var(--s1); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Warshati">
+      <span class="mark" aria-hidden="true">و</span>
+      <span>Warshati</span><span class="ar">ورشتي</span>
+    </a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#day" data-i18n="nav_day"></a>
+      <a href="#catalog" data-i18n="nav_catalog"></a>
+      <a href="#money" data-i18n="nav_money"></a>
+      <a href="#faq" data-i18n="nav_faq"></a>
+    </nav>
+    <div class="langs" role="group" aria-label="Language">
+      <button type="button" id="lang-fr" data-lang="fr">FR</button>
+      <button type="button" id="lang-ar" data-lang="ar">ع</button>
+      <button type="button" id="lang-en" data-lang="en">EN</button>
+    </div>
+    <a class="btn btn-gold" href="#contact" data-i18n="cta_short"></a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow" data-i18n="hero_eyebrow"></p>
+        <h1 data-i18n-html="hero_title"></h1>
+        <p class="lede" data-i18n="hero_lede"></p>
+        <div class="cta-row">
+          <a class="btn btn-gold" href="#contact" data-i18n="cta_main"></a>
+          <a class="btn btn-ghost" href="#day" data-i18n="cta_tour"></a>
+        </div>
+        <div class="facts">
+          <span data-i18n="fact_offline"></span>
+          <span data-i18n="fact_lang"></span>
+          <span data-i18n="fact_print"></span>
+          <span data-i18n="fact_devices"></span>
+        </div>
+      </div>
+
+      <div class="stage" aria-label="Exemple de ticket de réparation">
+        <div class="receipt num" id="receipt">
+          <div class="shop">GSM EL AMIR</div>
+          <div class="sub">Bab Ezzouar · Alger</div>
+          <hr>
+          <div class="row"><span data-i18n="r_ticket"></span><b>TK-2026-0142</b></div>
+          <div class="row"><span data-i18n="r_date"></span><b>20/10/2026 10:14</b></div>
+          <div class="row"><span data-i18n="r_client"></span><b>Yacine B.</b></div>
+          <hr>
+          <div class="row"><span data-i18n="r_device"></span><b>Galaxy A35 5G</b></div>
+          <div class="row"><span data-i18n="r_issue"></span><b data-i18n="r_issue_v"></b></div>
+          <div class="row"><span>IMEI</span><b>3571 2410 •••• 882</b></div>
+          <hr>
+          <div class="row"><span data-i18n="r_price"></span><b class="money" data-v="14500"></b></div>
+          <div class="row"><span data-i18n="r_deposit"></span><b class="money" data-v="-4000"></b></div>
+          <div class="row big"><span data-i18n="r_rest"></span><b class="money" data-v="10500"></b></div>
+          <div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+          <div class="status"><span data-i18n="r_status"></span><span class="pill ready" id="pill"></span></div>
+          <div class="row" style="margin-top:6px"><span data-i18n="r_warranty"></span><b data-i18n="r_warranty_v"></b></div>
+          <div class="barcode" aria-hidden="true"></div>
+        </div>
+        <div class="wa" id="wa">
+          <div class="who">WhatsApp</div>
+          <span data-i18n="wa_msg"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="day">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow" data-i18n="day_eyebrow"></p>
+        <h2 data-i18n="day_title"></h2>
+      </div>
+      <div class="day">
+        <article class="moment"><span class="time">09:00</span><h3 data-i18n="d1_t"></h3><p data-i18n="d1_p"></p></article>
+        <article class="moment"><span class="time">12:30</span><h3 data-i18n="d2_t"></h3><p data-i18n="d2_p"></p></article>
+        <article class="moment"><span class="time">16:00</span><h3 data-i18n="d3_t"></h3><p data-i18n="d3_p"></p></article>
+        <article class="moment"><span class="time">19:30</span><h3 data-i18n="d4_t"></h3><p data-i18n="d4_p"></p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="catalog">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow" data-i18n="cat_eyebrow"></p>
+        <h2 style="font-size:clamp(2rem,3.6vw,2.6rem);margin-top:14px" data-i18n="cat_title"></h2>
+        <p class="lede" style="margin-top:16px" data-i18n="cat_lede"></p>
+        <ul class="points">
+          <li><div><b data-i18n="cp1_b"></b> <span data-i18n="cp1_s"></span></div></li>
+          <li><div><b data-i18n="cp2_b"></b> <span data-i18n="cp2_s"></span></div></li>
+          <li><div><b data-i18n="cp3_b"></b> <span data-i18n="cp3_s"></span></div></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <div class="panel-top"><span data-i18n="cat_panel"></span><span class="tag" data-i18n="try_it"></span></div>
+        <label class="search" for="q">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="search" autocomplete="off" data-i18n-ph="cat_search">
+        </label>
+        <div class="cat">
+          <ul class="list" id="list" role="listbox" aria-label="Appareils"></ul>
+          <div class="spec" id="spec" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="money">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow" data-i18n="money_eyebrow"></p>
+        <h2 style="font-size:clamp(2rem,3.6vw,2.6rem);margin-top:14px" data-i18n="money_title"></h2>
+        <p class="lede" style="margin-top:16px" data-i18n="money_lede"></p>
+        <ul class="points">
+          <li><div><b data-i18n="mp1_b"></b> <span data-i18n="mp1_s"></span></div></li>
+          <li><div><b data-i18n="mp2_b"></b> <span data-i18n="mp2_s"></span></div></li>
+          <li><div><b data-i18n="mp3_b"></b> <span data-i18n="mp3_s"></span></div></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <div class="panel-top"><span data-i18n="close_panel"></span><span class="tag" data-i18n="example"></span></div>
+        <div class="close-rows" id="close"></div>
+        <div class="close-total">
+          <div class="lbl"><span data-i18n="close_net"></span><small data-i18n="close_net_s"></small></div>
+          <output id="net" for="close" class="num"></output>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="debts">
+    <div class="wrap split">
+      <div class="panel ledger">
+        <div class="panel-top"><span>Karim Mansouri · 0661 •• •• 18</span><span class="tag" data-i18n="example"></span></div>
+        <div class="line"><span data-i18n="l1"></span><small>02/10/2026 · DT-2026-0031</small><span class="amt money" data-v="18000"></span></div>
+        <div class="line"><span data-i18n="l2"></span><small>09/10/2026 · <span data-i18n="l_cash"></span></small><span class="amt paid money" data-v="-6000"></span></div>
+        <div class="line"><span data-i18n="l3"></span><small>12/10/2026 · <span data-i18n="l3_s"></span></small><span class="amt void money" data-v="-5000"></span></div>
+        <div class="line"><span data-i18n="l4"></span><small>16/10/2026 · <span data-i18n="l_cash"></span></small><span class="amt paid money" data-v="-7500"></span></div>
+        <div class="owed"><div><span data-i18n="l_owed"></span><br><strong class="money" data-v="4500"></strong></div><span class="wa-btn" data-i18n="l_remind"></span></div>
+      </div>
+      <div>
+        <p class="eyebrow" data-i18n="debt_eyebrow"></p>
+        <h2 style="font-size:clamp(2rem,3.6vw,2.6rem);margin-top:14px" data-i18n="debt_title"></h2>
+        <p class="lede" style="margin-top:16px" data-i18n="debt_lede"></p>
+        <ul class="points">
+          <li><div><b data-i18n="dp1_b"></b> <span data-i18n="dp1_s"></span></div></li>
+          <li><div><b data-i18n="dp2_b"></b> <span data-i18n="dp2_s"></span></div></li>
+          <li><div><b data-i18n="dp3_b"></b> <span data-i18n="dp3_s"></span></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="trust">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow" data-i18n="trust_eyebrow"></p>
+        <h2 data-i18n="trust_title"></h2>
+      </div>
+      <div class="trust">
+        <div><span class="k">0</span><h3 data-i18n="t1_t"></h3><p data-i18n="t1_p"></p></div>
+        <div><span class="k">24 h</span><h3 data-i18n="t2_t"></h3><p data-i18n="t2_p"></p></div>
+        <div><span class="k">30</span><h3 data-i18n="t3_t"></h3><p data-i18n="t3_p"></p></div>
+        <div><span class="k">2</span><h3 data-i18n="t4_t"></h3><p data-i18n="t4_p"></p></div>
+        <div><span class="k">58 / 80</span><h3 data-i18n="t5_t"></h3><p data-i18n="t5_p"></p></div>
+        <div><span class="k">.xlsx</span><h3 data-i18n="t6_t"></h3><p data-i18n="t6_p"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="faq">
+    <div class="wrap">
+      <div class="head"><p class="eyebrow" data-i18n="faq_eyebrow"></p><h2 data-i18n="faq_title"></h2></div>
+      <div class="faq">
+        <details><summary data-i18n="q1"></summary><p data-i18n="a1"></p></details>
+        <details><summary data-i18n="q2"></summary><p data-i18n="a2"></p></details>
+        <details><summary data-i18n="q3"></summary><p data-i18n="a3"></p></details>
+        <details><summary data-i18n="q4"></summary><p data-i18n="a4"></p></details>
+        <details><summary data-i18n="q5"></summary><p data-i18n="a5"></p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="final" id="contact">
+    <span class="glyph" aria-hidden="true">ورشتي</span>
+    <div class="wrap">
+      <p class="eyebrow" data-i18n="final_eyebrow"></p>
+      <h2 data-i18n="final_title"></h2>
+      <p class="lede" data-i18n="final_lede"></p>
+      <div class="contact" id="contact-lines"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Warshati — ورشتي · Allali Mohamed · warshatidz.com</span>
+    <span data-i18n="foot"></span>
+  </div>
+</footer>
+
+<script>
+/* Fill these in to show your contact details in the last section. */
+const CONTACT = { whatsapp: "+213 671 22 22 27", waLink: "https://wa.me/213671222227", email: "" };
+
+const PHONES = [
+  ["Infinix","GT 30 Pro 5G",{ram:12,storage:256,battery:5500,screen:6.78,rearCamera:108,frontCamera:13,processor:"Dimensity 8350 Ultimate",os:"Android 15",has5G:true,vfm:100,label:"PERFORMANCE_BEAST"}],
+  ["OnePlus","Ace 5",{ram:12,storage:256,battery:6415,screen:6.78,rearCamera:50,frontCamera:16,processor:"Snapdragon 8 Gen3",os:"Android 15",has5G:true,vfm:94.6,label:"PERFORMANCE_BEAST"}],
+  ["Infinix","Note 50",{ram:8,storage:256,battery:5200,screen:6.78,rearCamera:50,frontCamera:13,processor:"Helio G100",os:"Android 15",has5G:false,vfm:94.3,label:"PERFORMANCE_BEAST"}],
+  ["Xiaomi","Redmi Note 13 5G",{ram:6,storage:128,battery:5000,screen:6.67,rearCamera:108,frontCamera:16,processor:"Dimensity 6080",os:"Android 13",has5G:true,vfm:91.6,label:"VALUE_KING"}],
+  ["Infinix","GT 20 Pro",{ram:8,storage:256,battery:5000,screen:6.78,rearCamera:108,frontCamera:32,processor:"Dimensity 8200 Ultimate",os:"Android 14",has5G:true,vfm:83.8,label:"VALUE_KING"}],
+  ["Xiaomi","Redmi Note 13 Pro 5G",{ram:8,storage:128,battery:5100,screen:6.67,rearCamera:200,frontCamera:16,processor:"Snapdragon 7s Gen 2",os:"Android 13",has5G:true,vfm:73,label:"AVERAGE"}],
+  ["Samsung","Galaxy A35 5G",{ram:8,storage:128,battery:5000,screen:6.6,rearCamera:50,frontCamera:13,processor:"Exynos 1380",os:"Android 14",has5G:true,vfm:62.2,label:"AVERAGE"}],
+  ["Samsung","Galaxy S24",{ram:8,storage:128,battery:4000,screen:6.2,rearCamera:50,frontCamera:12,processor:"Exynos 2400",os:"Android 14",has5G:true,vfm:55.1,label:"AVERAGE"}],
+  ["Samsung","Galaxy A55 5G",{ram:12,storage:256,battery:5000,screen:6.6,rearCamera:50,frontCamera:32,processor:"Exynos 1480",os:"Android 14",has5G:true,vfm:40.5,label:"OVERPRICED"}],
+  ["Apple","iPhone 15",{ram:6,storage:128,battery:3349,screen:6.1,rearCamera:48,frontCamera:12,processor:"Bionic A16",os:"iOS 17",has5G:true,vfm:35.7,label:"OVERPRICED"}],
+  ["Google","Pixel 8 5G",{ram:8,storage:128,battery:4575,screen:6.2,rearCamera:50,frontCamera:10.5,processor:"Tensor G3",os:"Android 14",has5G:true,vfm:35.7,label:"OVERPRICED"}],
+  ["Apple","iPhone 13",{ram:4,storage:128,battery:3240,screen:6.1,rearCamera:12,frontCamera:12,processor:"Bionic A15",os:"iOS 15",has5G:true,vfm:13.8,label:"OVERPRICED"}]
+];
+const VFM_COLOR = { PERFORMANCE_BEAST: "#8b6cf0", VALUE_KING: "#3fbf7f", AVERAGE: "#e5a52b", OVERPRICED: "#e5675a" };
+
+const CLOSE = [
+  ["c_sales", "c_sales_s", 18500, 1],
+  ["c_repairs", "c_repairs_s", 12000, 1],
+  ["c_deposits", "c_deposits_s", 4000, 1],
+  ["c_debts", "c_debts_s", 7500, 1],
+  ["c_refunds", "c_refunds_s", 1500, -1],
+  ["c_expenses", "c_expenses_s", 2200, -1],
+  ["c_suppliers", "c_suppliers_s", 9000, -1]
+];
+
+const T = {
+fr: {
+  cur: "DA",
+  nav_day: "Une journée", nav_catalog: "Catalogue", nav_money: "Caisse", nav_faq: "Questions",
+  cta_short: "Demander une démo", cta_main: "Demander une démo gratuite", cta_tour: "Voir une journée avec Warshati",
+  hero_eyebrow: "Logiciel pour réparateurs de téléphones",
+  hero_title: "Votre atelier, <em>enfin en ordre.</em>",
+  hero_lede: "Tickets de réparation, caisse, stock, dettes clients et fournisseurs : Warshati tient tout au même endroit, sur votre PC, même quand internet est coupé.",
+  fact_offline: "Fonctionne sans internet", fact_lang: "Français · العربية · English", fact_print: "Tickets 58 et 80 mm", fact_devices: "1 213 appareils intégrés",
+  r_ticket: "Ticket", r_date: "Date", r_client: "Client", r_device: "Appareil", r_issue: "Panne", r_issue_v: "Écran cassé",
+  r_price: "Prix", r_deposit: "Acompte", r_rest: "Reste à payer", r_status: "Statut", r_warranty: "Garantie", r_warranty_v: "90 jours",
+  st: ["Reçu", "En réparation", "Prêt", "Livré"],
+  wa_msg: "Bonjour Yacine, votre Galaxy A35 5G est prêt. Reste à payer : 10 500 DA. — GSM El Amir",
+  day_eyebrow: "Une journée dans l'atelier", day_title: "Du premier client du matin à la clôture du soir.",
+  d1_t: "Réception", d1_p: "Le client arrive avec un écran cassé. Choisissez l'appareil dans la liste, notez la panne et l'acompte, imprimez le ticket. Une minute.",
+  d2_t: "Vente au comptoir", d2_p: "Un chargeur, une coque, un téléphone d'occasion. Scannez le code-barres. S'il manque de l'argent, le reste devient une dette en un clic.",
+  d3_t: "Prêt à récupérer", d3_p: "La réparation est finie. Warshati prévient le client sur WhatsApp avec le montant restant, et sort les pièces utilisées du stock.",
+  d4_t: "Clôture du jour", d4_p: "Le soir, Warshati calcule exactement ce qui doit être dans le tiroir et votre vrai bénéfice. Vous comptez, vous fermez.",
+  cat_eyebrow: "Catalogue d'appareils", cat_title: "617 téléphones, 578 portables et 18 consoles déjà dans l'application.",
+  cat_lede: "Plus besoin de taper « Samsung Galaxy A35 5G » à chaque ticket. Cherchez, choisissez, et la fiche technique complète s'affiche.",
+  cp1_b: "Recherche instantanée.", cp1_s: "Par marque ou modèle, dans les tickets, les reprises et le stock.",
+  cp2_b: "Rapport qualité-prix.", cp2_s: "Une note de 0 à 100 pour conseiller le client qui hésite entre deux téléphones.",
+  cp3_b: "Appareil absent ?", cp3_s: "Tapez-le une fois, Warshati s'en souvient pour la prochaine fois.",
+  cat_panel: "Appareils · Téléphones", try_it: "Essayez", cat_search: "Chercher un téléphone… ex. Redmi",
+  cat_empty: "Aucun téléphone ne correspond. Dans Warshati, vous pourriez l'ajouter à la main.",
+  vfm_title: "Qualité-prix",
+  vfm: { PERFORMANCE_BEAST: "Bête de performance", VALUE_KING: "Excellent rapport qualité-prix", AVERAGE: "Rapport moyen", OVERPRICED: "Trop cher pour sa valeur" },
+  k_ram: "Mémoire", k_storage: "Stockage", k_battery: "Batterie", k_screen: "Écran", k_cam: "Caméras", k_cpu: "Processeur", k_os: "Système", k_net: "Réseau",
+  money_eyebrow: "Caisse et bénéfice", money_title: "Le soir, le tiroir et l'écran disent la même chose.",
+  money_lede: "Warshati compte chaque entrée et chaque sortie du jour : ventes, réparations livrées, acomptes, paiements de dettes, remboursements, dépenses et fournisseurs.",
+  mp1_b: "Caisse nette et vrai bénéfice,", mp1_s: "affichés séparément. Un acompte n'est pas encore un bénéfice.",
+  mp2_b: "Rapport mensuel", mp2_s: "avec les catégories qui rapportent le plus, exportable en Excel.",
+  mp3_b: "Impossible de vendre", mp3_s: "un article qui n'est plus en stock ou d'encaisser plus que le dû.",
+  close_panel: "Clôture du 20/10/2026", example: "Exemple",
+  c_sales: "Ventes au comptoir", c_sales_s: "encaissées", c_repairs: "Réparations livrées", c_repairs_s: "reste payé à la livraison",
+  c_deposits: "Acomptes reçus", c_deposits_s: "sur les nouveaux tickets", c_debts: "Paiements de dettes", c_debts_s: "clients",
+  c_refunds: "Remboursements", c_refunds_s: "rendus aux clients", c_expenses: "Dépenses", c_expenses_s: "loyer, électricité, café…",
+  c_suppliers: "Paiements fournisseurs", c_suppliers_s: "pièces et accessoires",
+  close_net: "Caisse nette du jour", close_net_s: "ce qui doit être dans le tiroir",
+  debt_eyebrow: "Dettes", debt_title: "Le client qui paie « la semaine prochaine » ne s'oublie plus.",
+  debt_lede: "Chaque dette a son historique : qui doit quoi, depuis quand, ce qui a été payé. Les fournisseurs aussi.",
+  dp1_b: "Anciennes dettes.", dp1_s: "Reprenez le cahier : saisissez ce qu'on vous devait avant Warshati, avec la date d'origine.",
+  dp2_b: "Erreur de saisie ?", dp2_s: "Annulez le paiement avec un motif. Rien n'est effacé, tout reste traçable.",
+  dp3_b: "Reçu et rappel.", dp3_s: "Imprimez un reçu pour chaque paiement, envoyez un rappel poli sur WhatsApp.",
+  l1: "Vente à crédit · Redmi Note 13 5G", l2: "Paiement", l3: "Paiement annulé", l3_s: "saisi deux fois", l4: "Paiement", l_cash: "espèces",
+  l_owed: "Reste à payer", l_remind: "Envoyer un rappel",
+  trust_eyebrow: "Vos données", trust_title: "Tout reste chez vous, sur votre PC.",
+  t1_t: "Abonnement cloud", t1_p: "Vos clients, vos chiffres et votre stock sont stockés sur votre ordinateur. Personne d'autre n'y a accès.",
+  t2_t: "Sauvegarde automatique", t2_p: "Une copie chaque jour, et une restauration complète si votre PC tombe en panne.",
+  t3_t: "Jours hors ligne", t3_p: "Internet sert seulement à activer la licence. Ensuite, Warshati continue de fonctionner même coupé un mois.",
+  t4_t: "Rôles", t4_p: "Le propriétaire voit tout. Le vendeur vend et répare, sans accès aux bénéfices ni aux réglages.",
+  t5_t: "Imprimantes thermiques", t5_p: "Tickets de réparation, reçus de vente et de paiement, au format de votre imprimante.",
+  t6_t: "Export Excel", t6_p: "Ventes, dépenses, dettes et stock, prêts à envoyer à votre comptable.",
+  faq_eyebrow: "Questions", faq_title: "Ce qu'on nous demande le plus.",
+  q1: "Faut-il internet pour l'utiliser ?", a1: "Seulement pour activer la licence la première fois. Après, tout fonctionne hors ligne. Warshati vérifie la licence quand internet revient, et vous laisse 30 jours sans connexion.",
+  q2: "Et si mon ordinateur tombe en panne ?", a2: "Warshati fait une sauvegarde automatique chaque jour. Copiez-la sur une clé USB ; sur un nouveau PC, restaurez-la et vous retrouvez tout.",
+  q3: "L'application est-elle en arabe ?", a3: "Oui. L'arabe, le français et l'anglais sont complets, avec une mise en page de droite à gauche en arabe. Vous changez de langue à tout moment.",
+  q4: "Mes vendeurs peuvent-ils l'utiliser ?", a4: "Oui. Créez un compte par vendeur. Ils vendent, créent des tickets et encaissent ; ils ne voient ni les bénéfices, ni les réglages, ni les annulations.",
+  q5: "Les nouveaux téléphones arrivent-ils dans le catalogue ?", a5: "Oui, chaque mise à jour de Warshati apporte la liste à jour. Les appareils que vous avez ajoutés vous-même sont conservés.",
+  final_eyebrow: "Commencer", final_title: "Voyez votre propre boutique dans Warshati.",
+  final_lede: "On l'installe avec vous, on reprend vos articles et vos anciennes dettes, et vous faites votre première clôture le soir même.",
+  c_wa: "WhatsApp", c_mail: "E-mail", c_soon: "Coordonnées bientôt disponibles",
+  foot: "Fait en Algérie pour les ateliers de réparation."
+},
+ar: {
+  cur: "دج",
+  nav_day: "يوم في المحل", nav_catalog: "دليل الأجهزة", nav_money: "الصندوق", nav_faq: "أسئلة",
+  cta_short: "اطلب عرضاً", cta_main: "اطلب عرضاً مجانياً", cta_tour: "شاهد يوماً مع ورشتي",
+  hero_eyebrow: "برنامج لمحلات تصليح الهواتف",
+  hero_title: "ورشتك، <em>منظّمة أخيراً.</em>",
+  hero_lede: "تذاكر التصليح، الصندوق، المخزون، ديون الزبائن والموردين: ورشتي يجمع كل شيء في مكان واحد، على حاسوبك، حتى عند انقطاع الإنترنت.",
+  fact_offline: "يعمل بدون إنترنت", fact_lang: "العربية · Français · English", fact_print: "طباعة 58 و80 مم", fact_devices: "1213 جهازاً مدمجاً",
+  r_ticket: "التذكرة", r_date: "التاريخ", r_client: "الزبون", r_device: "الجهاز", r_issue: "العطل", r_issue_v: "شاشة مكسورة",
+  r_price: "السعر", r_deposit: "العربون", r_rest: "الباقي", r_status: "الحالة", r_warranty: "الضمان", r_warranty_v: "90 يوماً",
+  st: ["مستلم", "قيد التصليح", "جاهز", "مُسلَّم"],
+  wa_msg: "السلام عليكم ياسين، هاتفك Galaxy A35 5G جاهز. الباقي: 10 500 دج. — GSM El Amir",
+  day_eyebrow: "يوم في الورشة", day_title: "من أول زبون في الصباح إلى غلق الصندوق في المساء.",
+  d1_t: "الاستلام", d1_p: "يأتي الزبون بشاشة مكسورة. اختر الجهاز من القائمة، سجّل العطل والعربون، واطبع التذكرة. دقيقة واحدة.",
+  d2_t: "البيع في المحل", d2_p: "شاحن، غلاف، هاتف مستعمل. امسح الباركود. إذا نقص المال، يتحول الباقي إلى دين بنقرة واحدة.",
+  d3_t: "جاهز للاستلام", d3_p: "انتهى التصليح. يُعلم ورشتي الزبون عبر واتساب بالمبلغ الباقي، ويُخرج القطع المستعملة من المخزون.",
+  d4_t: "إغلاق اليوم", d4_p: "في المساء، يحسب ورشتي بالضبط ما يجب أن يكون في الدرج وربحك الحقيقي. تعدّ، وتغلق.",
+  cat_eyebrow: "دليل الأجهزة", cat_title: "617 هاتفاً و578 حاسوباً محمولاً و18 جهاز ألعاب موجودة في التطبيق.",
+  cat_lede: "لا داعي لكتابة « Samsung Galaxy A35 5G » في كل تذكرة. ابحث، اختر، وتظهر المواصفات الكاملة.",
+  cp1_b: "بحث فوري.", cp1_s: "بالعلامة أو الطراز، في التذاكر والاستبدال والمخزون.",
+  cp2_b: "القيمة مقابل السعر.", cp2_s: "تقييم من 0 إلى 100 لنصح الزبون المتردد بين هاتفين.",
+  cp3_b: "الجهاز غير موجود؟", cp3_s: "اكتبه مرة واحدة، ويتذكره ورشتي في المرة القادمة.",
+  cat_panel: "الأجهزة · الهواتف", try_it: "جرّب", cat_search: "ابحث عن هاتف… مثلاً Redmi",
+  cat_empty: "لا يوجد هاتف مطابق. في ورشتي، يمكنك إضافته يدوياً.",
+  vfm_title: "القيمة مقابل السعر",
+  vfm: { PERFORMANCE_BEAST: "هارب في الأداء", VALUE_KING: "قيمة جيدة مقارنة بالسعر", AVERAGE: "متوسط", OVERPRICED: "غالي على قيمته" },
+  k_ram: "الذاكرة", k_storage: "التخزين", k_battery: "البطارية", k_screen: "الشاشة", k_cam: "الكاميرات", k_cpu: "المعالج", k_os: "النظام", k_net: "الشبكة",
+  money_eyebrow: "الصندوق والربح", money_title: "في المساء، الدرج والشاشة يقولان نفس الشيء.",
+  money_lede: "يحسب ورشتي كل دخول وخروج في اليوم: المبيعات، التصليحات المسلّمة، العربون، تسديد الديون، الاسترجاعات، المصاريف والموردين.",
+  mp1_b: "النقد الصافي والربح الحقيقي،", mp1_s: "كل واحد على حدة. العربون ليس ربحاً بعد.",
+  mp2_b: "تقرير شهري", mp2_s: "مع الأصناف الأكثر ربحاً، قابل للتصدير إلى Excel.",
+  mp3_b: "لا يمكن بيع", mp3_s: "سلعة نفدت من المخزون أو قبض أكثر من المستحق.",
+  close_panel: "إغلاق يوم 20/10/2026", example: "مثال",
+  c_sales: "مبيعات المحل", c_sales_s: "مقبوضة", c_repairs: "تصليحات مسلّمة", c_repairs_s: "الباقي المدفوع عند التسليم",
+  c_deposits: "العربون المقبوض", c_deposits_s: "على التذاكر الجديدة", c_debts: "تسديد الديون", c_debts_s: "من الزبائن",
+  c_refunds: "الاسترجاعات", c_refunds_s: "المبالغ المعادة للزبائن", c_expenses: "المصاريف", c_expenses_s: "كراء، كهرباء، قهوة…",
+  c_suppliers: "دفعات الموردين", c_suppliers_s: "قطع وإكسسوارات",
+  close_net: "النقد الصافي لليوم", close_net_s: "ما يجب أن يكون في الدرج",
+  debt_eyebrow: "الديون", debt_title: "الزبون الذي يقول « الأسبوع القادم » لن يُنسى بعد اليوم.",
+  debt_lede: "لكل دين سجله: من يدين بماذا، منذ متى، وما الذي دُفع. والموردون أيضاً.",
+  dp1_b: "الديون القديمة.", dp1_s: "انقل الكراس: أدخل ما كان لك قبل ورشتي، بتاريخه الأصلي.",
+  dp2_b: "خطأ في الإدخال؟", dp2_s: "ألغِ الدفعة مع ذكر السبب. لا يُحذف شيء، وكل شيء يبقى مسجلاً.",
+  dp3_b: "وصل وتذكير.", dp3_s: "اطبع وصلاً لكل دفعة، وأرسل تذكيراً لطيفاً عبر واتساب.",
+  l1: "بيع بالدين · Redmi Note 13 5G", l2: "دفعة", l3: "دفعة ملغاة", l3_s: "أُدخلت مرتين", l4: "دفعة", l_cash: "نقداً",
+  l_owed: "الباقي", l_remind: "إرسال تذكير",
+  trust_eyebrow: "بياناتك", trust_title: "كل شيء يبقى عندك، على حاسوبك.",
+  t1_t: "اشتراك سحابي", t1_p: "زبائنك وأرقامك ومخزونك محفوظة على حاسوبك. لا أحد غيرك يصل إليها.",
+  t2_t: "نسخ احتياطي تلقائي", t2_p: "نسخة كل يوم، واسترجاع كامل إذا تعطل حاسوبك.",
+  t3_t: "يوماً بدون إنترنت", t3_p: "الإنترنت فقط لتفعيل الرخصة. بعدها يعمل ورشتي حتى لو انقطع شهراً.",
+  t4_t: "صلاحيات", t4_p: "المالك يرى كل شيء. البائع يبيع ويصلّح، دون الوصول إلى الأرباح أو الإعدادات.",
+  t5_t: "طابعات حرارية", t5_p: "تذاكر التصليح ووصولات البيع والدفع، بمقاس طابعتك.",
+  t6_t: "تصدير Excel", t6_p: "المبيعات والمصاريف والديون والمخزون، جاهزة للمحاسب.",
+  faq_eyebrow: "أسئلة", faq_title: "أكثر ما يُسأل عنه.",
+  q1: "هل يحتاج إلى إنترنت؟", a1: "فقط لتفعيل الرخصة أول مرة. بعدها كل شيء يعمل بدون اتصال. يتحقق ورشتي من الرخصة عند عودة الإنترنت، ويمنحك 30 يوماً بدون اتصال.",
+  q2: "وإذا تعطل حاسوبي؟", a2: "يصنع ورشتي نسخة احتياطية تلقائية كل يوم. انسخها على فلاشة؛ وعلى حاسوب جديد، استرجعها وتجد كل شيء.",
+  q3: "هل التطبيق بالعربية؟", a3: "نعم. العربية والفرنسية والإنجليزية كاملة، مع واجهة من اليمين إلى اليسار بالعربية. تغيّر اللغة متى شئت.",
+  q4: "هل يمكن لبائعيّ استعماله؟", a4: "نعم. أنشئ حساباً لكل بائع. يبيعون وينشئون التذاكر ويقبضون؛ ولا يرون الأرباح ولا الإعدادات ولا الإلغاءات.",
+  q5: "هل تصل الهواتف الجديدة إلى الدليل؟", a5: "نعم، كل تحديث لورشتي يجلب القائمة المحدثة. والأجهزة التي أضفتها بنفسك تبقى محفوظة.",
+  final_eyebrow: "ابدأ", final_title: "شاهد محلك أنت داخل ورشتي.",
+  final_lede: "نثبّته معك، ننقل سلعك وديونك القديمة، وتغلق أول يوم لك في نفس المساء.",
+  c_wa: "واتساب", c_mail: "البريد", c_soon: "معلومات الاتصال قريباً",
+  foot: "صُنع في الجزائر لمحلات التصليح."
+},
+en: {
+  cur: "DZD",
+  nav_day: "A day", nav_catalog: "Catalog", nav_money: "Cash", nav_faq: "Questions",
+  cta_short: "Book a demo", cta_main: "Book a free demo", cta_tour: "See a day with Warshati",
+  hero_eyebrow: "Software for phone repair shops",
+  hero_title: "Your workshop, <em>finally in order.</em>",
+  hero_lede: "Repair tickets, cash register, stock, customer and supplier debts: Warshati keeps it all in one place, on your PC, even when the internet is down.",
+  fact_offline: "Works without internet", fact_lang: "English · Français · العربية", fact_print: "58 and 80 mm receipts", fact_devices: "1,213 devices built in",
+  r_ticket: "Ticket", r_date: "Date", r_client: "Customer", r_device: "Device", r_issue: "Fault", r_issue_v: "Broken screen",
+  r_price: "Price", r_deposit: "Deposit", r_rest: "Left to pay", r_status: "Status", r_warranty: "Warranty", r_warranty_v: "90 days",
+  st: ["Received", "In repair", "Ready", "Collected"],
+  wa_msg: "Hello Yacine, your Galaxy A35 5G is ready. Left to pay: 10,500 DZD. — GSM El Amir",
+  day_eyebrow: "A day in the workshop", day_title: "From the first customer in the morning to closing the till at night.",
+  d1_t: "Check-in", d1_p: "A customer brings a broken screen. Pick the device from the list, note the fault and deposit, print the ticket. One minute.",
+  d2_t: "Counter sale", d2_p: "A charger, a case, a used phone. Scan the barcode. If they are short, the rest becomes a debt in one click.",
+  d3_t: "Ready for pickup", d3_p: "The repair is done. Warshati tells the customer on WhatsApp with the amount left, and takes the parts used out of stock.",
+  d4_t: "Daily close", d4_p: "At night, Warshati works out exactly what should be in the drawer and your real profit. You count, you close.",
+  cat_eyebrow: "Device catalog", cat_title: "617 phones, 578 laptops and 18 consoles already in the app.",
+  cat_lede: "No more typing “Samsung Galaxy A35 5G” on every ticket. Search, pick, and the full spec sheet appears.",
+  cp1_b: "Instant search.", cp1_s: "By brand or model, in tickets, trade-ins and stock.",
+  cp2_b: "Value for money.", cp2_s: "A 0–100 score to advise a customer torn between two phones.",
+  cp3_b: "Device missing?", cp3_s: "Type it once and Warshati remembers it next time.",
+  cat_panel: "Devices · Phones", try_it: "Try it", cat_search: "Search a phone… e.g. Redmi",
+  cat_empty: "No phone matches. In Warshati, you could add it by hand.",
+  vfm_title: "Value for money",
+  vfm: { PERFORMANCE_BEAST: "Performance beast", VALUE_KING: "Value king", AVERAGE: "Average value", OVERPRICED: "Overpriced" },
+  k_ram: "Memory", k_storage: "Storage", k_battery: "Battery", k_screen: "Screen", k_cam: "Cameras", k_cpu: "Processor", k_os: "System", k_net: "Network",
+  money_eyebrow: "Cash and profit", money_title: "At night, the drawer and the screen agree.",
+  money_lede: "Warshati counts every movement of the day: sales, collected repairs, deposits, debt payments, refunds, expenses and suppliers.",
+  mp1_b: "Net cash and real profit,", mp1_s: "shown separately. A deposit isn't profit yet.",
+  mp2_b: "Monthly report", mp2_s: "with your most profitable categories, exportable to Excel.",
+  mp3_b: "You can't sell", mp3_s: "an item that is out of stock, or take more than is owed.",
+  close_panel: "Close of 20/10/2026", example: "Example",
+  c_sales: "Counter sales", c_sales_s: "paid", c_repairs: "Collected repairs", c_repairs_s: "balance paid on pickup",
+  c_deposits: "Deposits received", c_deposits_s: "on new tickets", c_debts: "Debt payments", c_debts_s: "from customers",
+  c_refunds: "Refunds", c_refunds_s: "given back to customers", c_expenses: "Expenses", c_expenses_s: "rent, power, coffee…",
+  c_suppliers: "Supplier payments", c_suppliers_s: "parts and accessories",
+  close_net: "Today's net cash", close_net_s: "what should be in the drawer",
+  debt_eyebrow: "Debts", debt_title: "The customer who pays “next week” is never forgotten again.",
+  debt_lede: "Every debt has its history: who owes what, since when, and what has been paid. Suppliers too.",
+  dp1_b: "Old debts.", dp1_s: "Move your notebook in: enter what you were owed before Warshati, with the original date.",
+  dp2_b: "Typing mistake?", dp2_s: "Cancel the payment with a reason. Nothing is erased; everything stays traceable.",
+  dp3_b: "Receipt and reminder.", dp3_s: "Print a receipt for every payment, send a polite WhatsApp reminder.",
+  l1: "Credit sale · Redmi Note 13 5G", l2: "Payment", l3: "Cancelled payment", l3_s: "entered twice", l4: "Payment", l_cash: "cash",
+  l_owed: "Left to pay", l_remind: "Send a reminder",
+  trust_eyebrow: "Your data", trust_title: "Everything stays with you, on your PC.",
+  t1_t: "Cloud subscription", t1_p: "Your customers, figures and stock are stored on your computer. Nobody else can reach them.",
+  t2_t: "Automatic backup", t2_p: "One copy every day, and a full restore if your PC breaks down.",
+  t3_t: "Days offline", t3_p: "The internet is only needed to activate the license. After that, Warshati keeps working even a month offline.",
+  t4_t: "Roles", t4_p: "The owner sees everything. Sellers sell and repair, without access to profits or settings.",
+  t5_t: "Thermal printers", t5_p: "Repair tickets, sale and payment receipts, sized for your printer.",
+  t6_t: "Excel export", t6_p: "Sales, expenses, debts and stock, ready for your accountant.",
+  faq_eyebrow: "Questions", faq_title: "What people ask us most.",
+  q1: "Does it need the internet?", a1: "Only to activate the license the first time. After that everything works offline. Warshati checks the license when the internet is back and gives you 30 days without a connection.",
+  q2: "What if my computer breaks down?", a2: "Warshati makes an automatic backup every day. Copy it to a USB stick; on a new PC, restore it and everything is back.",
+  q3: "Is the app in Arabic?", a3: "Yes. Arabic, French and English are complete, with a right-to-left layout in Arabic. Switch language at any time.",
+  q4: "Can my sellers use it?", a4: "Yes. Create one account per seller. They sell, open tickets and take payments; they don't see profits, settings or cancellations.",
+  q5: "Do new phones reach the catalog?", a5: "Yes, every Warshati update brings the latest list. Devices you added yourself are kept.",
+  final_eyebrow: "Get started", final_title: "See your own shop inside Warshati.",
+  final_lede: "We install it with you, bring in your items and old debts, and you do your first daily close that same evening.",
+  c_wa: "WhatsApp", c_mail: "Email", c_soon: "Contact details coming soon",
+  foot: "Made in Algeria for repair workshops."
+}
+};
+
+let lang = "fr";
+let selected = 3;
+let step = 2;
+
+const fmt = n => Math.round(n).toLocaleString("fr-FR").replace(/ | /g, " ");
+const money = n => (n < 0 ? "− " : "") + fmt(Math.abs(n)) + " " + T[lang].cur;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function applyText() {
+  const t = T[lang];
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t[el.dataset.i18n] ?? ""; });
+  document.querySelectorAll("[data-i18n-html]").forEach(el => { el.innerHTML = t[el.dataset.i18nHtml] ?? ""; });
+  document.querySelectorAll("[data-i18n-ph]").forEach(el => { el.placeholder = t[el.dataset.i18nPh] ?? ""; });
+  document.querySelectorAll(".money").forEach(el => { el.textContent = money(Number(el.dataset.v)); });
+  document.querySelectorAll(".langs button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+  renderStep(); renderList(); renderClose(); renderContact();
+}
+
+function setLang(l) {
+  lang = l;
+  try { localStorage.setItem("warshati-lang", l); } catch (e) {}
+  applyText();
+}
+
+/* Hero ticket status */
+function renderStep() {
+  const t = T[lang];
+  document.querySelectorAll(".steps i").forEach((el, i) => el.classList.toggle("on", i <= step));
+  const pill = document.getElementById("pill");
+  pill.textContent = t.st[step];
+  pill.classList.toggle("ready", step >= 2);
+  document.getElementById("wa").classList.toggle("dim", step < 2);
+}
+
+/* Catalog demo */
+function renderList() {
+  const t = T[lang];
+  const q = document.getElementById("q").value.trim().toLowerCase();
+  const list = document.getElementById("list");
+  const hits = PHONES.map((p, i) => [p, i]).filter(([p]) => (p[0] + " " + p[1]).toLowerCase().includes(q));
+  if (!hits.length) { list.innerHTML = `<li class="empty">${esc(t.cat_empty)}</li>`; renderSpec(-1); return; }
+  if (!hits.some(([, i]) => i === selected)) selected = hits[0][1];
+  list.innerHTML = hits.map(([p, i]) =>
+    `<li><button type="button" role="option" id="dev-${i}" data-i="${i}" aria-selected="${i === selected}">
+      <span><span class="brand-s">${esc(p[0])}</span>${esc(p[1])}</span>
+      <span class="dot" style="background:${VFM_COLOR[p[2].label]}" title="${esc(t.vfm[p[2].label])}"></span>
+    </button></li>`).join("");
+  renderSpec(selected);
+}
+
+function renderSpec(i) {
+  const box = document.getElementById("spec");
+  if (i < 0) { box.innerHTML = ""; return; }
+  const t = T[lang];
+  const [brand, model, s] = PHONES[i];
+  const color = VFM_COLOR[s.label];
+  const rows = [
+    [t.k_ram, s.ram + " GB"], [t.k_storage, s.storage + " GB"], [t.k_battery, fmt(s.battery) + " mAh"],
+    [t.k_screen, s.screen + "″"], [t.k_cam, s.rearCamera + " + " + s.frontCamera + " MP"],
+    [t.k_cpu, s.processor], [t.k_os, s.os], [t.k_net, s.has5G ? "5G" : "4G"]
+  ];
+  box.innerHTML = `
+    <div><div class="b">${esc(brand)}</div><h3>${esc(model)}</h3></div>
+    <div class="vfm">
+      <div class="vfm-top"><span>${esc(t.vfm_title)}</span><strong class="num">${s.vfm}<small style="font-size:.9rem;color:var(--mute)"> /100</small></strong></div>
+      <div class="meter"><i style="width:${s.vfm}%;background:${color}"></i></div>
+      <div class="vfm-label" style="color:${color}">${esc(t.vfm[s.label])}</div>
+    </div>
+    <dl class="kv num">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`;
+}
+
+/* Daily close demo */
+const closeValues = CLOSE.map(c => c[2]);
+function renderClose() {
+  const t = T[lang];
+  const box = document.getElementById("close");
+  box.innerHTML = CLOSE.map(([k, s, , sign], i) =>
+    `<div class="close-row ${sign < 0 ? "minus" : ""}">
+      <label for="cl-${i}">${esc(t[k])}<small>${esc(t[s])}</small></label>
+      <span class="in"><span class="sign">${sign < 0 ? "−" : "+"}</span><input id="cl-${i}" data-i="${i}" type="text" inputmode="numeric" value="${fmt(closeValues[i])}" aria-label="${esc(t[k])}"></span>
+    </div>`).join("");
+  updateNet();
+}
+function updateNet() {
+  const net = CLOSE.reduce((sum, c, i) => sum + c[3] * closeValues[i], 0);
+  document.getElementById("net").textContent = money(net);
+}
+
+function renderContact() {
+  const t = T[lang];
+  const box = document.getElementById("contact-lines");
+  const parts = [];
+  if (CONTACT.whatsapp) parts.push(`<a href="${CONTACT.waLink}" target="_blank" rel="noopener" style="color:inherit">${esc(t.c_wa)} · <b dir="ltr">${esc(CONTACT.whatsapp)}</b></a>`);
+  if (CONTACT.email) parts.push(`<span>${esc(t.c_mail)} · <b dir="ltr">${esc(CONTACT.email)}</b></span>`);
+  box.innerHTML = parts.length ? parts.join("") : `<span>${esc(t.c_soon)}</span>`;
+}
+
+document.querySelectorAll(".langs button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
+document.getElementById("q").addEventListener("input", renderList);
+document.getElementById("list").addEventListener("click", e => {
+  const b = e.target.closest("button[data-i]");
+  if (!b) return;
+  selected = Number(b.dataset.i);
+  document.querySelectorAll("#list button").forEach(x => x.setAttribute("aria-selected", String(x === b)));
+  renderSpec(selected);
+});
+document.getElementById("close").addEventListener("input", e => {
+  if (!e.target.matches("input")) return;
+  const v = Number(e.target.value.replace(/\D/g, "")) || 0;
+  closeValues[Number(e.target.dataset.i)] = Math.min(v, 99999999);
+  updateNet();
+});
+document.getElementById("close").addEventListener("focusout", e => {
+  if (e.target.matches("input")) e.target.value = fmt(closeValues[Number(e.target.dataset.i)]);
+});
+
+try { const saved = localStorage.getItem("warshati-lang"); if (saved && T[saved]) lang = saved; } catch (e) {}
+applyText();
+
+/* The ticket walks through its statuses; with reduced motion it stays on "Ready" */
+if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  setInterval(() => { step = (step + 1) % 4; renderStep(); }, 2400);
+}
+</script>

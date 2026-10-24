@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Warshati — ورشتي · Website & admin
 
-## Getting Started
+Next.js app that serves:
 
-First, run the development server:
+- `/` — the public landing page (`public/landing.html`, FR / AR / EN)
+- `/guide` — the user guide (`public/guide.html`)
+- `/dashboard` — the private admin: licenses, customers, feedback and crash reports
+
+## Environment variables
+
+| Name | What |
+| --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
+| `SUPABASE_SERVICE_ROLE_KEY` | Service-role key (server only — never put it in the desktop app) |
+| `DASHBOARD_PASSWORD` | Admin password |
+| `SESSION_SECRET` | Optional. Long random string used to sign the login cookie. If unset, it is derived from the password and the service key, so changing the password signs everyone out. |
+
+## Database
+
+Run `supabase/dashboard-upgrade.sql` once in the Supabase SQL editor. It adds the columns the
+dashboard uses (last seen, prices, notes, feedback status), the login-attempts table, and locks
+the tables so the public key inside the desktop app can only send feedback and crash reports.
+
+"Last seen" and "version in use" come from the `license` Edge Function in the Warshati app repo
+(`supabase/functions/license`), which records each successful license check.
+
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev   # http://localhost:3000
+npm run build
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
