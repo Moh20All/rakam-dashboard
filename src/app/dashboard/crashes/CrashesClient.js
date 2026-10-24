@@ -57,7 +57,7 @@ export default function CrashesClient({ crashes }) {
           return (
             <article key={g.sig} className={`card overflow-hidden ${fixed ? 'opacity-70' : ''}`}>
               <button onClick={() => setOpenSig(isOpen ? null : g.sig)} className="flex w-full items-start gap-3 p-4 text-left hover:bg-raised/50 transition-colors">
-                <span className={`mt-0.5 inline-flex size-8 shrink-0 items-center justify-center rounded-lg ${fixed ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'}`}>
+                <span className={`mt-0.5 inline-flex size-8 shrink-0 items-center justify-center rounded-lg ${fixed ? 'bg-success-soft text-success' : 'bg-destructive-soft text-destructive'}`}>
                   {fixed ? <CheckCircle2 className="size-4" /> : <Bug className="size-4" />}
                 </span>
                 <div className="min-w-0 flex-1">
@@ -99,16 +99,16 @@ function CrashGroupDetail({ g, ids, fixed, run, onDelete }) {
         <div className="flex flex-wrap gap-1.5">
           {g.items.slice(0, 12).map((x, i) => (
             <button key={x.id} className="chip" aria-pressed={pick === i} onClick={() => setPick(i)}>
-              {x.resolved ? <CheckCircle2 className="size-3 text-emerald-500" /> : null} v{x.app_version} · {relTime(x.created_at)}
+              {x.resolved ? <CheckCircle2 className="size-3 text-success" /> : null} v{x.app_version} · {relTime(x.created_at)}
             </button>
           ))}
         </div>
       )}
 
       {c.context && (
-        <div className="flex gap-2 rounded-xl border border-amber-500/30 bg-amber-500/5 p-3 text-sm">
-          <MessageCircleWarning className="mt-0.5 size-4 shrink-0 text-amber-500" />
-          <div><p className="text-xs font-semibold text-amber-700 dark:text-amber-400">What the user was doing</p><p className="mt-0.5" dir="auto">{c.context}</p></div>
+        <div className="flex gap-2 rounded-md border border-transparent bg-warning-soft p-3 text-sm">
+          <MessageCircleWarning className="mt-0.5 size-4 shrink-0 text-warning" />
+          <div><p className="text-xs font-semibold text-warning-soft-foreground">What the user was doing</p><p className="mt-0.5" dir="auto">{c.context}</p></div>
         </div>
       )}
 
@@ -117,7 +117,7 @@ function CrashGroupDetail({ g, ids, fixed, run, onDelete }) {
           <span className="flex items-center gap-1.5 text-xs font-semibold text-mute"><Terminal className="size-3.5" /> Stack trace · {dateTime(c.created_at)}</span>
           <CopyButton text={trace} label="Copy" className="btn btn-ghost btn-sm" />
         </div>
-        <pre className="max-h-80 overflow-auto rounded-xl bg-navy p-4 font-mono text-[11.5px] leading-relaxed text-amber-200/90 whitespace-pre-wrap">{trace}</pre>
+        <pre className="max-h-80 overflow-auto rounded-md bg-inverse p-4 font-mono text-[11.5px] leading-relaxed text-inverse-foreground whitespace-pre-wrap">{trace}</pre>
         {c.os && <p className="mt-1.5 truncate text-xs text-faint" title={c.os}>{c.os}</p>}
       </div>
 
@@ -127,12 +127,12 @@ function CrashGroupDetail({ g, ids, fixed, run, onDelete }) {
       </div>
 
       <div className="flex flex-wrap gap-2">
-        {note !== (g.latest.admin_note || '') && <button className="btn btn-gold btn-sm" onClick={() => run(() => setCrashNote(ids, note))}>Save note</button>}
+        {note !== (g.latest.admin_note || '') && <button className="btn btn-primary btn-sm" onClick={() => run(() => setCrashNote(ids, note))}>Save note</button>}
         {fixed
           ? <button className="btn btn-ghost btn-sm" onClick={() => run(() => setCrashesResolved(ids, false))}><RotateCcw className="size-3.5" /> Reopen</button>
           : <button className="btn btn-ghost btn-sm" onClick={() => run(() => setCrashesResolved(ids, true))}><CheckCircle2 className="size-3.5" /> Mark {g.items.length > 1 ? `all ${g.items.length}` : ''} fixed</button>}
         <div className="flex-1" />
-        <button className="icon-btn hover:text-red-500" onClick={onDelete} aria-label="Delete group"><Trash2 className="size-4" /></button>
+        <button className="icon-btn hover:text-destructive" onClick={onDelete} aria-label="Delete group"><Trash2 className="size-4" /></button>
       </div>
     </div>
   );

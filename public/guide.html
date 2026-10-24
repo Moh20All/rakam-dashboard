@@ -7,24 +7,24 @@
   <title>Warshati — ورشتي | User Guide</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Mono:wght@300;400&family=Noto+Naskh+Arabic:wght@400;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap"
     rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0804;
-      --bg2: #120f0a;
-      --bg3: #1a1510;
-      --gold: #c9a84c;
-      --gold-light: #e8c97a;
-      --gold-dim: #7a6330;
-      --cream: #f0e8d5;
-      --cream-dim: #a89878;
-      --text: #ddd0b8;
-      --text-dim: #7a6e60;
-      --border: rgba(201, 168, 76, 0.18);
-      --border-strong: rgba(201, 168, 76, 0.4);
+      --bg: #1A1F1D;
+      --bg2: #232A26;
+      --bg3: #2C3430;
+      --gold: #C6EB3F;
+      --gold-light: #D6F36E;
+      --gold-dim: #B4DA2C;
+      --cream: #F3F1EA;
+      --cream-dim: #A3B4AB;
+      --text: #E8EFEA;
+      --text-dim: #A3B4AB;
+      --border: rgba(198, 235, 63, 0.18);
+      --border-strong: rgba(198, 235, 63, 0.4);
       --sidebar-w: 260px;
-      --accent: #c9a84c;
+      --accent: #C6EB3F;
     }
 
     *,
@@ -42,7 +42,7 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'DM Mono', monospace;
+      font-family: 'IBM Plex Mono', monospace;
       font-size: 14px;
       line-height: 1.7;
       overflow-x: hidden;
@@ -54,8 +54,8 @@
       position: fixed;
       inset: 0;
       background-image:
-        repeating-linear-gradient(60deg, transparent, transparent 60px, rgba(201, 168, 76, 0.025) 60px, rgba(201, 168, 76, 0.025) 61px),
-        repeating-linear-gradient(-60deg, transparent, transparent 60px, rgba(201, 168, 76, 0.025) 60px, rgba(201, 168, 76, 0.025) 61px);
+        repeating-linear-gradient(60deg, transparent, transparent 60px, rgba(198, 235, 63, 0.025) 60px, rgba(198, 235, 63, 0.025) 61px),
+        repeating-linear-gradient(-60deg, transparent, transparent 60px, rgba(198, 235, 63, 0.025) 60px, rgba(198, 235, 63, 0.025) 61px);
       pointer-events: none;
       z-index: 0;
     }
@@ -85,7 +85,7 @@
     }
 
     .logo-en {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
       font-size: 1.6rem;
       font-weight: 600;
       color: var(--gold);
@@ -94,7 +94,7 @@
     }
 
     .logo-ar {
-      font-family: 'Noto Naskh Arabic', serif;
+      font-family: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
       font-size: 1.2rem;
       color: var(--gold-dim);
       direction: rtl;
@@ -132,7 +132,7 @@
     .nav-link:hover,
     .nav-link.active {
       color: var(--gold-light);
-      background: rgba(201, 168, 76, 0.06);
+      background: rgba(198, 235, 63, 0.06);
     }
 
     .nav-link.active::before {
@@ -176,9 +176,9 @@
       position: absolute;
       right: -2rem;
       bottom: -4rem;
-      font-family: 'Noto Naskh Arabic', serif;
+      font-family: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
       font-size: 28rem;
-      color: rgba(201, 168, 76, 0.04);
+      color: rgba(198, 235, 63, 0.04);
       line-height: 1;
       pointer-events: none;
       user-select: none;
@@ -204,7 +204,7 @@
     }
 
     .hero-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
       font-size: clamp(3rem, 6vw, 5.5rem);
       font-weight: 300;
       color: var(--cream);
@@ -218,7 +218,7 @@
     }
 
     .hero-title-ar {
-      font-family: 'Noto Naskh Arabic', serif;
+      font-family: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
       font-size: clamp(2rem, 4vw, 3.5rem);
       color: var(--gold-dim);
       line-height: 1.3;
@@ -246,7 +246,7 @@
       font-size: 11px;
       letter-spacing: 0.1em;
       color: var(--gold);
-      background: rgba(201, 168, 76, 0.05);
+      background: rgba(198, 235, 63, 0.05);
     }
 
     /* ── Section ── */
@@ -264,7 +264,7 @@
     }
 
     .section-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
       font-size: clamp(2rem, 3.5vw, 3rem);
       font-weight: 300;
       color: var(--cream);
@@ -273,7 +273,7 @@
     }
 
     .section-subtitle {
-      font-family: 'Noto Naskh Arabic', serif;
+      font-family: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
       font-size: 1.1rem;
       color: var(--gold-dim);
       direction: rtl;
@@ -331,7 +331,7 @@
     }
 
     .card-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
       font-size: 1.2rem;
       color: var(--gold-light);
       margin-bottom: 0.5rem;
@@ -412,7 +412,7 @@
       align-items: center;
       justify-content: center;
       font-size: 12px;
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
       font-weight: 600;
       flex-shrink: 0;
       position: relative;
@@ -439,7 +439,7 @@
     }
 
     .step-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
       font-size: 1.25rem;
       color: var(--cream);
       margin-bottom: 0.5rem;
@@ -472,10 +472,10 @@
     }
 
     .pillar-num {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
       font-size: 5rem;
       font-weight: 300;
-      color: rgba(201, 168, 76, 0.08);
+      color: rgba(198, 235, 63, 0.08);
       position: absolute;
       top: -1rem;
       right: 1rem;
@@ -489,7 +489,7 @@
     }
 
     .pillar-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
       font-size: 1.15rem;
       color: var(--gold-light);
       margin-bottom: 0.8rem;
@@ -539,7 +539,7 @@
     }
 
     .setup-card-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
       font-size: 1.2rem;
       color: var(--gold);
       margin-bottom: 1rem;
@@ -563,7 +563,7 @@
     .setup-step-n {
       width: 22px;
       height: 22px;
-      background: rgba(201, 168, 76, 0.12);
+      background: rgba(198, 235, 63, 0.12);
       border: 1px solid var(--gold-dim);
       color: var(--gold);
       font-size: 10px;
@@ -582,7 +582,7 @@
     /* ── Tip box ── */
     .tip {
       border-left: 2px solid var(--gold);
-      background: rgba(201, 168, 76, 0.05);
+      background: rgba(198, 235, 63, 0.05);
       padding: 1rem 1.5rem;
       margin: 2rem 0;
       font-size: 12px;
@@ -591,7 +591,7 @@
 
     .tip strong {
       color: var(--gold);
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
       font-size: 1rem;
       display: block;
       margin-bottom: 0.3rem;
@@ -623,7 +623,7 @@
     }
 
     .version-tag {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
       font-size: 1rem;
       color: var(--gold);
       white-space: nowrap;
@@ -674,7 +674,7 @@
     }
 
     .footer-brand {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
       font-size: 1.4rem;
       color: var(--gold);
     }
@@ -810,6 +810,7 @@
   <!-- ── Sidebar ── -->
   <nav class="sidebar">
     <div class="sidebar-logo">
+      <img src="/mark-trace-tile.svg" alt="" style="display:block; width:40px; height:40px; margin-bottom:10px;">
       <div class="logo-en">Warshati</div>
       <div class="logo-ar">ورشتي</div>
       <div class="logo-tag">User Guide · v1.4.2</div>

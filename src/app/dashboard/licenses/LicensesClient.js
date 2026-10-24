@@ -58,7 +58,7 @@ export default function LicensesClient({ licenses, initialState, initialQuery })
     <>
       <PageHeader title="Licenses" subtitle={`${licenses.length} keys for ${new Set(licenses.map((l) => l.customer_id)).size} shops`}>
         <button onClick={exportCsv} className="btn btn-ghost" disabled={!rows.length}><Download className="size-4" /> Export</button>
-        <Link href="/dashboard/new" className="btn btn-gold"><Plus className="size-4" /> New license</Link>
+        <Link href="/dashboard/new" className="btn btn-primary"><Plus className="size-4" /> New license</Link>
       </PageHeader>
 
       <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center">
@@ -84,7 +84,7 @@ export default function LicensesClient({ licenses, initialState, initialQuery })
       <div className="card overflow-hidden">
         {rows.length === 0 ? (
           <EmptyState icon={KeyRound} title={licenses.length ? 'No match' : 'No licenses yet'}>
-            {licenses.length ? 'Try another search or filter.' : <Link className="text-gold-ink font-semibold" href="/dashboard/new">Create the first one →</Link>}
+            {licenses.length ? 'Try another search or filter.' : <Link className="text-primary font-semibold" href="/dashboard/new">Create the first one →</Link>}
           </EmptyState>
         ) : (<>
           {/* Phones: one card per key */}
@@ -202,10 +202,10 @@ function RowMenu({ license, onRevoke, onReactivate, onReset }) {
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="card absolute right-0 z-20 mt-1 w-48 p-1 shadow-xl" style={{ animation: 'pop-in .12s ease-out' }} onClick={() => setOpen(false)}>
+          <div className="card absolute right-0 z-20 mt-1 w-48 p-1 shadow-pop" style={{ animation: 'pop-in .12s ease-out' }} onClick={() => setOpen(false)}>
             {license.machine_id && <button className={item} onClick={onReset}><Unlink className="size-4 text-mute" /> Unlink PC</button>}
             {license.is_active
-              ? <button className={`${item} text-red-600 dark:text-red-400`} onClick={onRevoke}><Ban className="size-4" /> Revoke</button>
+              ? <button className={`${item} text-destructive`} onClick={onRevoke}><Ban className="size-4" /> Revoke</button>
               : <button className={item} onClick={onReactivate}><RotateCcw className="size-4 text-mute" /> Reactivate</button>}
           </div>
         </>

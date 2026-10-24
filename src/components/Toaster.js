@@ -23,10 +23,10 @@ export function ToastProvider({ children }) {
       {children}
       <div className="fixed bottom-4 right-4 z-[100] flex w-[min(24rem,calc(100vw-2rem))] flex-col gap-2" aria-live="polite">
         {toasts.map((t) => (
-          <div key={t.id} className="card flex items-start gap-3 px-4 py-3 shadow-lg" style={{ animation: 'toast-in .2s ease-out' }}>
+          <div key={t.id} className="card flex items-start gap-3 px-4 py-3 shadow-pop" style={{ animation: 'toast-in .2s ease-out' }}>
             {t.type === 'error'
-              ? <AlertTriangle className="mt-0.5 size-4 shrink-0 text-red-500" />
-              : <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />}
+              ? <AlertTriangle className="mt-0.5 size-4 shrink-0 text-destructive" />
+              : <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-success" />}
             <p className="flex-1 text-sm font-medium">{t.message}</p>
             <button className="text-faint hover:text-ink" onClick={() => setToasts((x) => x.filter((y) => y.id !== t.id))} aria-label="Dismiss">
               <X className="size-4" />

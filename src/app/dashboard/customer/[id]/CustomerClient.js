@@ -92,12 +92,12 @@ export default function CustomerClient({ customer }) {
             <div><label className="label" htmlFor="c-phone">Phone</label><input id="c-phone" name="phone" type="tel" defaultValue={customer.phone || ''} className="input" /></div>
             <div><label className="label" htmlFor="c-address">City / address</label><input id="c-address" name="address" defaultValue={customer.address || ''} className="input" /></div>
             <div><label className="label" htmlFor="c-notes">Private notes</label><textarea id="c-notes" name="notes" rows={4} defaultValue={customer.notes || ''} className="input" /></div>
-            <button type="submit" disabled={saving || !dirty} className="btn btn-gold w-full">
+            <button type="submit" disabled={saving || !dirty} className="btn btn-primary w-full">
               {saving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />} {dirty ? 'Save changes' : 'Saved'}
             </button>
           </form>
           <div className="mt-6 border-t border-line pt-4">
-            <button className="btn btn-ghost btn-sm w-full text-red-600 dark:text-red-400" onClick={() => setConfirm({ kind: 'deleteCustomer' })}>
+            <button className="btn btn-ghost btn-sm w-full text-destructive" onClick={() => setConfirm({ kind: 'deleteCustomer' })}>
               <Trash2 className="size-3.5" /> Delete customer
             </button>
           </div>
@@ -173,7 +173,7 @@ function LicenseCard({ l, customer, run, setConfirm }) {
           <input className="input" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Note (e.g. Counter PC)" />
           <input className="input tnum" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="Price DA" inputMode="numeric" />
           <div className="flex gap-2">
-            <button className="btn btn-gold" onClick={saveNote}>Save</button>
+            <button className="btn btn-primary" onClick={saveNote}>Save</button>
             <button className="btn btn-ghost" onClick={() => setEditing(false)}>Cancel</button>
           </div>
         </div>
@@ -186,11 +186,11 @@ function LicenseCard({ l, customer, run, setConfirm }) {
 
       <div className="mt-4 flex flex-wrap gap-2 border-t border-line pt-4">
         {l.is_active
-          ? <button className="btn btn-ghost btn-sm text-red-600 dark:text-red-400" onClick={() => setConfirm({ kind: 'revoke', l })}><Ban className="size-3.5" /> Revoke</button>
+          ? <button className="btn btn-ghost btn-sm text-destructive" onClick={() => setConfirm({ kind: 'revoke', l })}><Ban className="size-3.5" /> Revoke</button>
           : <button className="btn btn-ghost btn-sm" onClick={() => run(() => setLicenseActive(l.id, true))}><RotateCcw className="size-3.5" /> Reactivate</button>}
         {l.machine_id && <button className="btn btn-ghost btn-sm" onClick={() => setConfirm({ kind: 'reset', l })}><Unlink className="size-3.5" /> Unlink PC</button>}
         <div className="flex-1" />
-        <button className="icon-btn hover:text-red-500" onClick={() => setConfirm({ kind: 'deleteLicense', l })} title="Delete key" aria-label="Delete key"><Trash2 className="size-4" /></button>
+        <button className="icon-btn hover:text-destructive" onClick={() => setConfirm({ kind: 'deleteLicense', l })} title="Delete key" aria-label="Delete key"><Trash2 className="size-4" /></button>
       </div>
     </div>
   );

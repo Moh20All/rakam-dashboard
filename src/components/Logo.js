@@ -1,20 +1,20 @@
+/* eslint-disable @next/next/no-img-element -- a tiny static SVG, no optimisation needed */
+
+// Trace app tile (design system assets/mark-trace-tile.svg). Sized by the className.
 export function LogoMark({ className = 'size-9' }) {
-  return (
-    <span className={`${className} relative inline-flex shrink-0 items-center justify-center rounded-xl bg-navy ring-1 ring-gold/40`}>
-      <span className="font-bold text-gold-hi leading-none" style={{ fontFamily: 'Tahoma, "Segoe UI", sans-serif', fontSize: '1.15em' }}>و</span>
-    </span>
-  );
+  return <img src="/mark-trace-tile.svg" alt="" className={`${className} shrink-0`} />;
 }
 
+// For graphite (inverse) grounds: sidebar, phone top bar, login panel
 export function Logo({ sub }) {
   return (
-    <span className="flex items-center gap-3 text-white">
-      <LogoMark />
+    <span className="flex items-center gap-2.5 text-inverse-foreground">
+      <LogoMark className="size-[34px]" />
       <span className="leading-tight">
-        <span className="block font-bold tracking-tight text-[15px]">
-          Warshati <span className="text-gold-hi font-semibold" style={{ fontFamily: 'Tahoma, sans-serif' }}>ورشتي</span>
+        <span className="block font-bold text-[15px] leading-[18px]">
+          Warshati <span className="text-flux font-arabic">ورشتي</span>
         </span>
-        {sub && <span className="block text-[11px] text-white/50">{sub}</span>}
+        {sub && <span className="block text-[11px] leading-[14px] opacity-75">{sub}</span>}
       </span>
     </span>
   );

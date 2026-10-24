@@ -35,7 +35,7 @@ export default function NewLicensePage() {
 
       <form onSubmit={submit} className="mt-6 space-y-6">
         <section className="card p-6">
-          <h2 className="mb-5 flex items-center gap-2 font-semibold"><UserRound className="size-4 text-gold-ink" /> Shop</h2>
+          <h2 className="mb-5 flex items-center gap-2 font-semibold"><UserRound className="size-4 text-primary" /> Shop</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
               <label className="label" htmlFor="name">Shop or owner name *</label>
@@ -57,11 +57,11 @@ export default function NewLicensePage() {
         </section>
 
         <section className="card p-6">
-          <h2 className="mb-5 flex items-center gap-2 font-semibold"><Sparkles className="size-4 text-gold-ink" /> License</h2>
+          <h2 className="mb-5 flex items-center gap-2 font-semibold"><Sparkles className="size-4 text-primary" /> License</h2>
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
               <span className="label">Number of PCs</span>
-              <div className="flex h-10 items-center rounded-xl border border-line">
+              <div className="flex h-10 items-center rounded-md border border-line">
                 <button type="button" className="icon-btn ml-1" onClick={() => setCount(Math.max(1, count - 1))} aria-label="Fewer"><Minus className="size-4" /></button>
                 <span className="flex-1 text-center font-semibold tnum">{count}</span>
                 <button type="button" className="icon-btn mr-1" onClick={() => setCount(Math.min(10, count + 1))} aria-label="More"><Plus className="size-4" /></button>
@@ -81,7 +81,7 @@ export default function NewLicensePage() {
 
         <div className="flex justify-end gap-2">
           <Link href="/dashboard/licenses" className="btn btn-ghost">Cancel</Link>
-          <button type="submit" disabled={pending} className="btn btn-gold min-w-44">
+          <button type="submit" disabled={pending} className="btn btn-flux min-w-44">
             {pending ? <><Loader2 className="size-4 animate-spin" /> Creating…</> : `Create ${count > 1 ? `${count} keys` : 'key'}`}
           </button>
         </div>
@@ -95,30 +95,32 @@ function Success({ result, onAnother }) {
   return (
     <div className="mx-auto max-w-2xl" style={{ animation: 'pop-in .25s ease-out' }}>
       <div className="card overflow-hidden">
-        <div className="bg-navy px-6 py-8 text-center text-white">
-          <CheckCircle2 className="mx-auto size-12 text-gold-hi" />
-          <h1 className="mt-3 text-xl font-bold">{result.keys.length > 1 ? `${result.keys.length} keys are ready` : 'The key is ready'}</h1>
-          <p className="mt-1 text-sm text-white/60">for {result.name}</p>
+        <div className="flex items-center gap-3.5 bg-inverse px-6 py-5 text-inverse-foreground">
+          <span className="grid size-11 shrink-0 place-items-center rounded-full bg-flux text-flux-foreground"><CheckCircle2 className="size-6" /></span>
+          <div>
+            <h1 className="text-xl font-bold">{result.keys.length > 1 ? `${result.keys.length} keys are ready` : 'The key is ready'}</h1>
+            <p className="text-sm text-inverse-foreground/80">for {result.name}</p>
+          </div>
         </div>
         <div className="space-y-3 p-6">
           {result.keys.map((k) => (
-            <div key={k} className="flex items-center gap-3 rounded-xl border border-dashed border-gold/50 bg-gold/5 px-4 py-3">
-              <code className="flex-1 font-mono text-lg font-semibold tracking-wide break-all">{k}</code>
+            <div key={k} className="flex min-h-11 items-center gap-3 rounded-sm border-2 border-dashed border-flux-soft-foreground bg-flux-soft ps-3.5 pe-1 text-flux-soft-foreground">
+              <code className="flex-1 font-mono text-base font-semibold tracking-[.04em] break-all">{k}</code>
               <CopyButton text={k} />
             </div>
           ))}
 
-          <details className="rounded-xl border border-line">
-            <summary className="cursor-pointer px-4 py-3 text-sm font-semibold text-mute">Message preview</summary>
-            <pre className="whitespace-pre-wrap border-t border-line px-4 py-3 font-sans text-sm text-mute" dir="auto">{message}</pre>
+          <details className="rounded-md border border-line bg-muted">
+            <summary className="cursor-pointer px-3.5 py-2.5 text-[13px] font-medium">Message preview</summary>
+            <pre className="whitespace-pre-wrap border-t border-line px-3.5 py-2.5 font-sans text-[13px] leading-5" dir="auto">{message}</pre>
           </details>
 
-          <div className="flex flex-wrap gap-2 pt-2">
-            <WhatsAppKeyButton phone={result.phone} name={result.name} keys={result.keys} label="Send on WhatsApp" className="btn btn-ghost" />
+          <div className="flex flex-col gap-2 pt-2 sm:flex-row sm:flex-wrap">
+            <WhatsAppKeyButton phone={result.phone} name={result.name} keys={result.keys} label="Send on WhatsApp" className="btn btn-whatsapp" />
             <CopyButton text={message} label="Copy message" className="btn btn-ghost" />
-            <div className="flex-1" />
+            <div className="hidden flex-1 sm:block" />
             <button onClick={onAnother} className="btn btn-ghost">Create another</button>
-            <Link href={`/dashboard/customer/${result.customerId}`} className="btn btn-gold">Open customer</Link>
+            <Link href={`/dashboard/customer/${result.customerId}`} className="btn btn-primary">Open customer</Link>
           </div>
         </div>
       </div>

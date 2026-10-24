@@ -9,7 +9,7 @@ import { relTime, dateTime } from '@/lib/format';
 import { setFeedbackStatus, setFeedbackNote, deleteFeedback } from '../actions';
 
 const TYPE_ICON = { Bug, Suggestion: Lightbulb };
-const TYPE_TONE = { Bug: 'text-orange-500 bg-orange-500/10', Suggestion: 'text-amber-500 bg-amber-500/10' };
+const TYPE_TONE = { Bug: 'text-fbtype-bug-fg bg-fbtype-bug-bg', Suggestion: 'text-fbtype-suggestion-fg bg-fbtype-suggestion-bg' };
 
 // "Mozilla/5.0 (Windows NT 10.0; Win64; x64) ... Electron/34.x" -> "Windows 10/11 · Electron 34"
 function shortOs(ua) {
@@ -84,7 +84,7 @@ export default function FeedbackClient({ feedback }) {
           return (
             <article key={f.id} className={isOpen ? 'bg-raised/40' : ''}>
               <button onClick={() => open(f)} className="flex w-full items-start gap-3 px-5 py-4 text-left hover:bg-raised/50 transition-colors">
-                <span className={`mt-0.5 inline-flex size-8 shrink-0 items-center justify-center rounded-lg ${TYPE_TONE[f.type] || 'text-sky-500 bg-sky-500/10'}`}><Icon className="size-4" /></span>
+                <span className={`mt-0.5 inline-flex size-8 shrink-0 items-center justify-center rounded-lg ${TYPE_TONE[f.type] || 'text-fbtype-other-fg bg-fbtype-other-bg'}`}><Icon className="size-4" /></span>
                 <div className="min-w-0 flex-1">
                   <p className={`text-sm ${isOpen ? 'whitespace-pre-wrap' : 'truncate'} ${statusOf(f) === 'new' ? 'font-semibold' : ''}`} dir="auto">{f.message}</p>
                   <p className="mt-1 text-xs text-faint">{f.type} · v{f.app_version} · {relTime(f.created_at)}</p>
@@ -120,13 +120,13 @@ function FeedbackDetail({ f, run, onDelete, statusOf, shortOs }) {
         <textarea className="input" rows={2} value={note} onChange={(e) => setNote(e.target.value)} placeholder="What you did about it, who reported it…" />
       </div>
       <div className="flex flex-wrap gap-2">
-        {note !== (f.admin_note || '') && <button className="btn btn-gold btn-sm" onClick={() => run(() => setFeedbackNote(f.id, note))}>Save note</button>}
+        {note !== (f.admin_note || '') && <button className="btn btn-primary btn-sm" onClick={() => run(() => setFeedbackNote(f.id, note))}>Save note</button>}
         {statusOf(f) !== 'done'
           ? <button className="btn btn-ghost btn-sm" onClick={() => run(() => setFeedbackStatus(f.id, 'done'), 'Marked as done')}><Check className="size-3.5" /> Mark done</button>
           : <button className="btn btn-ghost btn-sm" onClick={() => run(() => setFeedbackStatus(f.id, 'seen'), 'Reopened')}><Eye className="size-3.5" /> Reopen</button>}
         <CopyButton text={f.message} label="Copy" className="btn btn-ghost btn-sm" />
         <div className="flex-1" />
-        <button className="icon-btn hover:text-red-500" onClick={onDelete} aria-label="Delete"><Trash2 className="size-4" /></button>
+        <button className="icon-btn hover:text-destructive" onClick={onDelete} aria-label="Delete"><Trash2 className="size-4" /></button>
       </div>
     </div>
   );

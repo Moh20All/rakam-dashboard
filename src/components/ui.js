@@ -21,7 +21,7 @@ export function CopyButton({ text, label, className = 'icon-btn' }) {
   }
   return (
     <button type="button" onClick={copy} className={className} title={label || 'Copy'} aria-label={label || 'Copy'}>
-      {done ? <Check className="size-4 text-emerald-500" /> : <Copy className="size-4" />}
+      {done ? <Check className="size-4 text-success" /> : <Copy className="size-4" />}
       {label && <span>{done ? 'Copied' : label}</span>}
     </button>
   );
@@ -35,7 +35,7 @@ export function WhatsAppKeyButton({ phone, name, keys, label, className = 'icon-
       href={waLink(phone, licenseMessage(name || '', keys))}
       target="_blank" rel="noreferrer"
       onClick={(e) => e.stopPropagation()}
-      className={`${className} text-emerald-600 dark:text-emerald-400`}
+      className={className.includes('btn-whatsapp') ? className : `${className} text-whatsapp`}
       title="Send on WhatsApp" aria-label="Send on WhatsApp"
     >
       <MessageCircle className="size-4" />
@@ -45,22 +45,23 @@ export function WhatsAppKeyButton({ phone, name, keys, label, className = 'icon-
 }
 
 const STATE_STYLES = {
-  active: ['Activated', 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400', 'bg-emerald-500'],
-  waiting: ['Waiting', 'bg-amber-500/10 text-amber-700 dark:text-amber-400', 'bg-amber-500'],
-  revoked: ['Revoked', 'bg-slate-500/10 text-slate-600 dark:text-slate-400', 'bg-slate-400'],
-  quiet: ['Quiet', 'bg-orange-500/10 text-orange-700 dark:text-orange-400', 'bg-orange-500'],
-  new: ['New', 'bg-sky-500/10 text-sky-700 dark:text-sky-400', 'bg-sky-500'],
-  seen: ['Seen', 'bg-violet-500/10 text-violet-700 dark:text-violet-400', 'bg-violet-500'],
-  done: ['Done', 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400', 'bg-emerald-500'],
-  open: ['Open', 'bg-red-500/10 text-red-700 dark:text-red-400', 'bg-red-500'],
-  resolved: ['Resolved', 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400', 'bg-emerald-500'],
+  // Design system status tokens (status.md: Admin portal statuses)
+  active: ['Activated', 'bg-license-activated-bg text-license-activated-fg'],
+  waiting: ['Waiting', 'bg-license-waiting-bg text-license-waiting-fg'],
+  revoked: ['Revoked', 'bg-license-revoked-bg text-license-revoked-fg'],
+  quiet: ['Quiet', 'bg-license-quiet-bg text-license-quiet-fg'],
+  new: ['New', 'bg-feedback-new-bg text-feedback-new-fg'],
+  seen: ['Seen', 'bg-feedback-seen-bg text-feedback-seen-fg'],
+  done: ['Done', 'bg-feedback-done-bg text-feedback-done-fg'],
+  open: ['Open', 'bg-crash-open-bg text-crash-open-fg'],
+  resolved: ['Resolved', 'bg-crash-fixed-bg text-crash-fixed-fg'],
 };
 
 export function StatusBadge({ state, label }) {
-  const [text, cls, dot] = STATE_STYLES[state] || STATE_STYLES.revoked;
+  const [text, cls] = STATE_STYLES[state] || STATE_STYLES.revoked;
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold whitespace-nowrap ${cls}`}>
-      <span className={`size-1.5 rounded-full ${dot}`} />
+    <span className={`inline-flex items-center gap-[5px] h-[22px] rounded-full px-[9px] text-xs leading-4 font-semibold whitespace-nowrap ${cls}`}>
+      <span className="size-1.5 rounded-full bg-current" />
       {label || text}
     </span>
   );
@@ -69,7 +70,7 @@ export function StatusBadge({ state, label }) {
 export function Avatar({ name, muted }) {
   const letters = (name || '?').trim().split(/\s+/).map((w) => w[0]).join('').toUpperCase().slice(0, 2);
   return (
-    <span className={`inline-flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-bold ${muted ? 'bg-raised text-faint' : 'bg-gold/15 text-gold-ink'}`}>
+    <span className={`inline-flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-bold ${muted ? 'bg-muted text-muted-foreground' : 'bg-primary-soft text-primary-soft-foreground'}`}>
       {letters}
     </span>
   );
@@ -78,7 +79,7 @@ export function Avatar({ name, muted }) {
 export function EmptyState({ icon: Icon, title, children }) {
   return (
     <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
-      {Icon && <span className="mb-4 inline-flex size-12 items-center justify-center rounded-2xl bg-raised text-faint"><Icon className="size-6" /></span>}
+      {Icon && <span className="mb-3 inline-flex size-11 items-center justify-center rounded-full bg-muted text-muted-foreground"><Icon className="size-5" /></span>}
       <p className="font-semibold">{title}</p>
       {children && <div className="mt-1 max-w-sm text-sm text-mute">{children}</div>}
     </div>

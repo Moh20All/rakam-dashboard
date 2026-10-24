@@ -21,7 +21,7 @@ export default async function CustomerPage({ params }) {
     return (
       <div className="card p-10 text-center">
         <p className="font-semibold">This customer does not exist anymore.</p>
-        <Link href="/dashboard/licenses" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-gold-ink"><ArrowLeft className="size-4" /> Back to licenses</Link>
+        <Link href="/dashboard/licenses" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary"><ArrowLeft className="size-4" /> Back to licenses</Link>
       </div>
     );
   }

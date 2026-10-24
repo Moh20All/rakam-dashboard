@@ -32,7 +32,7 @@ export default function ConfirmDialog({ open, title, body, confirmLabel = 'Confi
       ref={ref}
       onClose={onClose}
       onClick={(e) => { if (e.target === ref.current && !busy) onClose(); }}
-      className="m-auto w-[min(28rem,calc(100vw-2rem))] rounded-2xl border border-line bg-card p-0 text-ink shadow-2xl backdrop:bg-navy/60 backdrop:backdrop-blur-[2px]"
+      className="m-auto w-[min(28rem,calc(100vw-2rem))] rounded-lg border border-line bg-card p-0 text-ink shadow-dialog backdrop:bg-overlay"
     >
       <div className="p-6" style={{ animation: 'pop-in .15s ease-out' }}>
         <h2 className="text-lg font-bold">{title}</h2>
@@ -45,7 +45,7 @@ export default function ConfirmDialog({ open, title, body, confirmLabel = 'Confi
         )}
         <div className="mt-6 flex justify-end gap-2">
           <button className="btn btn-ghost" onClick={onClose} disabled={busy}>Cancel</button>
-          <button className={`btn ${danger ? 'btn-danger' : 'btn-gold'}`} onClick={confirm} disabled={busy || blocked}>
+          <button className={`btn ${danger ? 'btn-danger' : 'btn-primary'}`} onClick={confirm} disabled={busy || blocked}>
             {busy && <Loader2 className="size-4 animate-spin" />}
             {confirmLabel}
           </button>

@@ -45,12 +45,12 @@ export default async function OverviewPage() {
   for (const l of licenses) {
     const who = l.customers?.name || 'Unknown';
     const href = `/dashboard/customer/${l.customer_id}`;
-    events.push({ at: l.created_at, icon: KeyRound, tone: 'text-gold-ink', text: <>Key created for <b>{who}</b></>, href });
-    if (l.activated_at) events.push({ at: l.activated_at, icon: Zap, tone: 'text-emerald-500', text: <><b>{who}</b> activated Warshati</>, href });
-    if (l.revoked_at) events.push({ at: l.revoked_at, icon: Ban, tone: 'text-slate-400', text: <>Key revoked for <b>{who}</b></>, href });
+    events.push({ at: l.created_at, icon: KeyRound, tone: 'text-primary', text: <>Key created for <b>{who}</b></>, href });
+    if (l.activated_at) events.push({ at: l.activated_at, icon: Zap, tone: 'text-success', text: <><b>{who}</b> activated Warshati</>, href });
+    if (l.revoked_at) events.push({ at: l.revoked_at, icon: Ban, tone: 'text-muted-foreground', text: <>Key revoked for <b>{who}</b></>, href });
   }
-  for (const f of feedback) events.push({ at: f.created_at, icon: MessageSquareText, tone: 'text-sky-500', text: <>{f.type || 'Feedback'}: <span className="text-mute">“{String(f.message).slice(0, 70)}{String(f.message).length > 70 ? '…' : ''}”</span></>, href: '/dashboard/feedback' });
-  for (const c of crashes) events.push({ at: c.created_at, icon: Bug, tone: 'text-red-500', text: <>Crash in v{c.app_version}: <span className="font-mono text-xs text-mute">{String(c.error).split('\n')[0].slice(0, 60)}</span></>, href: '/dashboard/crashes' });
+  for (const f of feedback) events.push({ at: f.created_at, icon: MessageSquareText, tone: 'text-info', text: <>{f.type || 'Feedback'}: <span className="text-mute">“{String(f.message).slice(0, 70)}{String(f.message).length > 70 ? '…' : ''}”</span></>, href: '/dashboard/feedback' });
+  for (const c of crashes) events.push({ at: c.created_at, icon: Bug, tone: 'text-destructive', text: <>Crash in v{c.app_version}: <span className="font-mono text-xs text-mute">{String(c.error).split('\n')[0].slice(0, 60)}</span></>, href: '/dashboard/crashes' });
   events.sort((a, b) => new Date(b.at) - new Date(a.at));
 
   const hour = now.getHours();
@@ -59,12 +59,12 @@ export default async function OverviewPage() {
   return (
     <>
       <PageHeader title={`${greeting} 👋`} subtitle="Here is how Warshati is doing.">
-        <Link href="/dashboard/new" className="btn btn-gold"><Plus className="size-4" /> New license</Link>
+        <Link href="/dashboard/new" className="btn btn-primary"><Plus className="size-4" /> New license</Link>
       </PageHeader>
 
       {!upgraded && (
-        <div className="card mb-6 flex flex-wrap items-center gap-4 border-gold/40 bg-gold/5 p-4">
-          <Database className="size-5 text-gold-ink" />
+        <div className="card mb-6 flex flex-wrap items-center gap-4 border-flux-soft-foreground bg-flux-soft p-4">
+          <Database className="size-5 text-primary" />
           <div className="flex-1 min-w-60 text-sm">
             <b>One step left:</b> run <code className="font-mono text-xs">supabase/dashboard-upgrade.sql</code> in the Supabase SQL editor
             to turn on “last seen”, prices, feedback statuses and login protection.
@@ -74,13 +74,13 @@ export default async function OverviewPage() {
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Kpi icon={Store} label="Shops" value={shops} hint={`${licenses.length} keys in total`} />
-        <Kpi icon={Zap} label="Activated" value={activated} hint={`${revoked} revoked`} tone="text-emerald-500" />
-        <Kpi icon={Hourglass} label="Waiting" value={waiting} hint="Not activated yet" tone="text-amber-500" href="/dashboard/licenses?state=waiting" />
-        <Kpi icon={Wallet} label="Revenue" value={money(revenue)} hint={`${money(revenueMonth)} this month · ${newThisMonth} new key${newThisMonth === 1 ? '' : 's'}`} tone="text-gold-ink" />
-        <Kpi icon={Activity} label="Open today" value={upgraded ? seenToday : '—'} hint="Shops whose app checked in" tone="text-sky-500" />
-        <Kpi icon={MoonStar} label="Quiet shops" value={upgraded ? quiet.length : '—'} hint={`No check-in for ${QUIET_DAYS}+ days`} tone="text-orange-500" href="/dashboard/licenses?state=quiet" />
-        <Kpi icon={MessageSquareText} label="New feedback" value={newFeedback} hint={`${feedback.length} in total`} tone="text-sky-500" href="/dashboard/feedback" />
-        <Kpi icon={Bug} label="Open crashes" value={openCrashes} hint={`${crashes.length} reports in total`} tone="text-red-500" href="/dashboard/crashes" />
+        <Kpi icon={Zap} label="Activated" value={activated} hint={`${revoked} revoked`} tone="text-success" />
+        <Kpi icon={Hourglass} label="Waiting" value={waiting} hint="Not activated yet" tone="text-warning" href="/dashboard/licenses?state=waiting" />
+        <Kpi icon={Wallet} label="Revenue" value={money(revenue)} hint={`${money(revenueMonth)} this month · ${newThisMonth} new key${newThisMonth === 1 ? '' : 's'}`} tone="text-primary" />
+        <Kpi icon={Activity} label="Open today" value={upgraded ? seenToday : '—'} hint="Shops whose app checked in" tone="text-info" />
+        <Kpi icon={MoonStar} label="Quiet shops" value={upgraded ? quiet.length : '—'} hint={`No check-in for ${QUIET_DAYS}+ days`} tone="text-license-quiet-fg" href="/dashboard/licenses?state=quiet" />
+        <Kpi icon={MessageSquareText} label="New feedback" value={newFeedback} hint={`${feedback.length} in total`} tone="text-info" href="/dashboard/feedback" />
+        <Kpi icon={Bug} label="Open crashes" value={openCrashes} hint={`${crashes.length} reports in total`} tone="text-destructive" href="/dashboard/crashes" />
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-5">
@@ -113,7 +113,7 @@ export default async function OverviewPage() {
                 <div key={m.label} className="flex h-full flex-1 flex-col items-center gap-2">
                   <div className="flex w-full flex-1 flex-col items-center justify-end gap-1">
                     <span className="text-xs font-semibold tnum">{m.n || ''}</span>
-                    <div className="w-full rounded-t-lg bg-gold" style={{ height: `${(m.n / maxMonth) * 100}%`, minHeight: m.n ? 6 : 2, opacity: m.n ? 1 : 0.25 }} />
+                    <div className="w-full rounded-t-lg bg-primary" style={{ height: `${(m.n / maxMonth) * 100}%`, minHeight: m.n ? 6 : 2, opacity: m.n ? 1 : 0.25 }} />
                   </div>
                   <span className="text-[11px] text-faint">{m.label}</span>
                 </div>
@@ -130,7 +130,7 @@ export default async function OverviewPage() {
                 {versionList.map(([v, n]) => (
                   <li key={v} className="text-sm">
                     <div className="mb-1 flex justify-between"><span className="font-mono">v{v}</span><span className="text-mute tnum">{n} shop{n > 1 ? 's' : ''}</span></div>
-                    <div className="h-1.5 rounded-full bg-raised"><div className="h-full rounded-full bg-navy dark:bg-gold" style={{ width: `${(n / activated) * 100}%` }} /></div>
+                    <div className="h-1.5 rounded-full bg-raised"><div className="h-full rounded-full bg-primary" style={{ width: `${(n / activated) * 100}%` }} /></div>
                   </li>
                 ))}
               </ul>
@@ -144,7 +144,7 @@ export default async function OverviewPage() {
               <ul className="mt-3 divide-y divide-line">
                 {quiet.slice(0, 5).map((l) => (
                   <li key={l.id}>
-                    <Link href={`/dashboard/customer/${l.customer_id}`} className="flex items-center justify-between py-2.5 text-sm hover:text-gold-ink">
+                    <Link href={`/dashboard/customer/${l.customer_id}`} className="flex items-center justify-between py-2.5 text-sm hover:text-primary">
                       <span className="font-medium">{l.customers?.name}</span>
                       <span className="flex items-center gap-1 text-xs text-faint">{relTime(l.last_seen_at)} <ArrowRight className="size-3" /></span>
                     </Link>
@@ -170,6 +170,6 @@ function Kpi({ icon: Icon, label, value, hint, tone = 'text-ink', href }) {
     </>
   );
   return href
-    ? <Link href={href} className="card block p-4 transition-colors hover:border-gold/50">{body}</Link>
+    ? <Link href={href} className="card block p-4 transition-colors hover:border-flux-soft-foreground">{body}</Link>
     : <div className="card p-4">{body}</div>;
 }
