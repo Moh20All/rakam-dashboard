@@ -30,8 +30,8 @@ function fromB64url(str) {
   return Uint8Array.from(s, (c) => c.charCodeAt(0));
 }
 
-export async function createSessionToken() {
-  const exp = Date.now() + SESSION_DAYS * 86400000;
+export async function createSessionToken(days = SESSION_DAYS) {
+  const exp = Date.now() + days * 86400000;
   const sig = await crypto.subtle.sign('HMAC', await signingKey(), enc.encode(`admin.${exp}`));
   return `${exp}.${toB64url(sig)}`;
 }
