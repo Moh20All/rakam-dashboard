@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { KeyRound, Store, Hourglass, Wallet, Activity, MoonStar, MessageSquareText, Bug, Zap, Plus, Database, ArrowRight, Ban } from 'lucide-react';
-import { getLicenses, getFeedback, getCrashes, hasUpgrade } from '@/lib/data';
+import { KeyRound, Store, Hourglass, Wallet, Activity, MoonStar, MessageSquareText, Bug, Zap, Plus, Database, ArrowRight, Ban, ClipboardList } from 'lucide-react';
+import { getLicenses, getFeedback, getCrashes, hasUpgrade, getRegistrations } from '@/lib/data';
 import { licenseState, isQuiet, relTime, money, QUIET_DAYS } from '@/lib/format';
 import { PageHeader } from '@/components/ui';
 
@@ -9,7 +9,7 @@ export const metadata = { title: 'Overview' };
 const DAY = 86400000;
 
 export default async function OverviewPage() {
-  const [licenses, feedback, crashes, upgraded] = await Promise.all([getLicenses(), getFeedback(), getCrashes(), hasUpgrade()]);
+  const [licenses, feedback, crashes, upgraded, registrations] = await Promise.all([getLicenses(), getFeedback(), getCrashes(), hasUpgrade(), getRegistrations()]);
 
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
@@ -42,6 +42,7 @@ export default async function OverviewPage() {
 
   // Activity feed
   const events = [];
+  for (const r of registrations) events.push({ at: r.created_at, icon: ClipboardList, tone: 'text-flux-soft-foreground', text: <>New sign-up: <b>{r.shop_name}</b> <span className="text-mute">· {r.commune_name}, {r.wilaya_name}</span></>, href: '/dashboard/registrations' });
   for (const l of licenses) {
     const who = l.customers?.name || 'Unknown';
     const href = `/dashboard/customer/${l.customer_id}`;

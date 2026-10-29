@@ -23,13 +23,20 @@ export async function getCrashes() {
   return data || [];
 }
 
-/** Badge numbers for the sidebar: new feedback, open crashes */
+/** Sign-ups from /register. Empty until supabase/registrations.sql has been run. */
+export async function getRegistrations() {
+  const { data, error } = await supabase.from('registrations').select('*').order('created_at', { ascending: false }).limit(2000);
+  return error ? [] : data || [];
+}
+
+/** Badge numbers for the sidebar: new sign-ups, new feedback, open crashes */
 export async function getNavCounts() {
-  const [fb, cr] = await Promise.all([
+  const [rg, fb, cr] = await Promise.all([
+    supabase.from('registrations').select('id', { count: 'exact', head: true }).eq('status', 'new'),
     supabase.from('feedback').select('id', { count: 'exact', head: true }).eq('status', 'new'),
     supabase.from('crash_reports').select('id', { count: 'exact', head: true }).eq('resolved', false),
   ]);
-  return { feedback: fb.error ? 0 : fb.count || 0, crashes: cr.error ? 0 : cr.count || 0 };
+  return { registrations: rg.error ? 0 : rg.count || 0, feedback: fb.error ? 0 : fb.count || 0, crashes: cr.error ? 0 : cr.count || 0 };
 }
 
 /** True once supabase/dashboard-upgrade.sql has been run */

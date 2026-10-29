@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, CheckCircle2, Loader2, Minus, Plus, Sparkles, UserRound } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { ArrowLeft, CheckCircle2, ClipboardList, Loader2, Minus, Plus, Sparkles, UserRound } from 'lucide-react';
 import { createCustomerWithLicenses } from '../actions';
 import { CopyButton, WhatsAppKeyButton } from '@/components/ui';
 import { useRunAction } from '@/components/Toaster';
@@ -10,8 +11,12 @@ import { licenseMessage } from '@/lib/format';
 
 export default function NewLicensePage() {
   const run = useRunAction();
+  // Opened from Sign-ups > Create license: the form comes filled in (?reg=…&name=…)
+  const params = useSearchParams();
+  const pre = (k) => params.get(k) || '';
+  const fromSignup = pre('reg');
   const [pending, setPending] = useState(false);
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(Math.min(10, Math.max(1, Number(pre('count')) || 1)));
   const [result, setResult] = useState(null);
 
   async function submit(e) {
@@ -34,24 +39,30 @@ export default function NewLicensePage() {
       <p className="mt-1 text-sm text-mute">Add the shop, then send the key on WhatsApp in one click.</p>
 
       <form onSubmit={submit} className="mt-6 space-y-6">
+        {fromSignup && (
+          <div className="flex items-center gap-2 rounded-md bg-primary-soft px-4 py-3 text-sm text-primary-soft-foreground">
+            <ClipboardList className="size-4" /> Filled in from a sign-up. It will be marked as a customer once the key is created.
+            <input type="hidden" name="registration_id" value={fromSignup} />
+          </div>
+        )}
         <section className="card p-6">
           <h2 className="mb-5 flex items-center gap-2 font-semibold"><UserRound className="size-4 text-primary" /> Shop</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
               <label className="label" htmlFor="name">Shop or owner name *</label>
-              <input id="name" name="name" required maxLength={120} className="input" placeholder="e.g. Atelier Phone Bab Ezzouar" autoFocus />
+              <input id="name" name="name" required maxLength={120} className="input" placeholder="e.g. Atelier Phone Bab Ezzouar" autoFocus defaultValue={pre('name')} />
             </div>
             <div>
               <label className="label" htmlFor="phone">Phone (WhatsApp)</label>
-              <input id="phone" name="phone" type="tel" className="input" placeholder="0555 12 34 56" />
+              <input id="phone" name="phone" type="tel" className="input" placeholder="0555 12 34 56" defaultValue={pre('phone')} />
             </div>
             <div>
               <label className="label" htmlFor="address">City / address</label>
-              <input id="address" name="address" className="input" placeholder="Alger, Bab Ezzouar" />
+              <input id="address" name="address" className="input" placeholder="Alger, Bab Ezzouar" defaultValue={pre('address')} />
             </div>
             <div className="sm:col-span-2">
               <label className="label" htmlFor="notes">Private notes</label>
-              <textarea id="notes" name="notes" rows={3} className="input" placeholder="How they found you, what they asked for…" />
+              <textarea id="notes" name="notes" rows={3} className="input" placeholder="How they found you, what they asked for…" defaultValue={pre('notes')} />
             </div>
           </div>
         </section>

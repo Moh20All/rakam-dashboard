@@ -54,6 +54,9 @@ export async function createCustomerWithLicenses(formData) {
     await supabase.from('customers').delete().eq('id', customer.id); // no orphan customer
     return res;
   }
+  // Created from a sign-up (Sign-ups > Create license): mark it converted and link the customer
+  const registrationId = clean(formData.get('registration_id'), 64);
+  if (registrationId) await supabase.from('registrations').update({ status: 'converted', customer_id: customer.id }).eq('id', registrationId);
   refresh();
   return { ok: true, customerId: customer.id, keys: res.keys };
 }
@@ -190,4 +193,34 @@ export async function deleteCrashes(ids) {
   if (error) return { error: 'Could not delete.' };
   revalidatePath('/dashboard', 'layout');
   return { ok: true, message: 'Deleted' };
+}
+
+
+/* ---------- Sign-ups (/register) ---------- */
+
+const REG_STATUSES = ['new', 'contacted', 'converted', 'declined'];
+
+export async function setRegistrationStatus(ids, status) {
+  await requireAdmin();
+  if (!REG_STATUSES.includes(status)) return { error: 'Unknown status.' };
+  const { error } = await supabase.from('registrations').update({ status }).in('id', [].concat(ids));
+  if (error) return { error: 'Could not update the sign-up. Run supabase/registrations.sql first.' };
+  revalidatePath('/dashboard', 'layout');
+  return { ok: true };
+}
+
+export async function setRegistrationNote(id, note) {
+  await requireAdmin();
+  const { error } = await supabase.from('registrations').update({ admin_note: clean(note, 2000) }).eq('id', id);
+  if (error) return { error: 'Could not save the note.' };
+  revalidatePath('/dashboard/registrations');
+  return { ok: true, message: 'Note saved' };
+}
+
+export async function deleteRegistration(id) {
+  await requireAdmin();
+  const { error } = await supabase.from('registrations').delete().eq('id', id);
+  if (error) return { error: 'Could not delete.' };
+  revalidatePath('/dashboard', 'layout');
+  return { ok: true, message: 'Sign-up deleted' };
 }

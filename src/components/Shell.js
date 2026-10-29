@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, KeyRound, Plus, MessageSquareText, Bug, BookOpen, Globe, LogOut, Menu, X, Moon, Sun } from 'lucide-react';
+import { LayoutDashboard, KeyRound, Plus, MessageSquareText, Bug, BookOpen, Globe, LogOut, Menu, X, Moon, Sun, ClipboardList } from 'lucide-react';
 import { Logo } from './Logo';
 import { ToastProvider } from './Toaster';
 import { logoutAction } from '@/app/login/actions';
@@ -11,6 +11,7 @@ import { logoutAction } from '@/app/login/actions';
 const NAV = [
   { href: '/dashboard', label: 'Overview', icon: LayoutDashboard, exact: true },
   { href: '/dashboard/licenses', label: 'Licenses', icon: KeyRound, alsoActive: '/dashboard/customer' },
+  { href: '/dashboard/registrations', label: 'Sign-ups', icon: ClipboardList, countKey: 'registrations' },
   { href: '/dashboard/feedback', label: 'Feedback', icon: MessageSquareText, countKey: 'feedback' },
   { href: '/dashboard/crashes', label: 'Crashes', icon: Bug, countKey: 'crashes' },
 ];

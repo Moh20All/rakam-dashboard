@@ -55,6 +55,10 @@ const STATE_STYLES = {
   done: ['Done', 'bg-feedback-done-bg text-feedback-done-fg'],
   open: ['Open', 'bg-crash-open-bg text-crash-open-fg'],
   resolved: ['Resolved', 'bg-crash-fixed-bg text-crash-fixed-fg'],
+  // Sign-ups (/register); "new" reuses the feedback style above
+  contacted: ['Contacted', 'bg-tone-amber-bg text-tone-amber-fg'],
+  converted: ['Customer', 'bg-tone-green-bg text-tone-green-fg'],
+  declined: ['Declined', 'bg-tone-gray-bg text-tone-gray-fg'],
 };
 
 export function StatusBadge({ state, label }) {
