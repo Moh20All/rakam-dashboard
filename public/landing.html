@@ -245,6 +245,21 @@ html[lang="ar"] .spec h3 { font-family: var(--f-display); }
 html[lang="ar"] .trust .k { font-family: var(--f-display); }
 
 /* FAQ */
+/* Pricing: three plans, VIP highlighted */
+.plans { display: grid; gap: 16px; }
+@media (min-width: 900px) { .plans { grid-template-columns: repeat(3, 1fr); align-items: stretch; } }
+.plan { border: 1px solid var(--line); border-radius: var(--r); padding: 28px 24px; display: grid; gap: 14px; align-content: start; background: var(--bg); position: relative; }
+.plan.vip { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold) inset; }
+.plan .tag { position: absolute; top: -11px; inset-inline-start: 20px; background: var(--gold); color: var(--gold-ink); font: 600 var(--s1)/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; }
+.plan h3 { font-size: 1.25rem; font-weight: 700; }
+.plan .price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; }
+.plan .price b { font: 700 2.2rem/1 var(--f-display); color: var(--gold); }
+.plan .price s { color: var(--mute); font-size: var(--s2); }
+.plan .price span { color: var(--mute); font-size: var(--s2); width: 100%; }
+.plan ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.plan li { display: flex; gap: 10px; color: var(--text); font-size: var(--s2); }
+.plan li::before { content: "✓"; color: var(--gold); font-weight: 700; }
+.plan .btn { justify-self: start; margin-top: 6px; }
 .faq { display: grid; max-width: 820px; }
 .faq details { border-bottom: 1px solid var(--line); }
 .faq summary { cursor: pointer; list-style: none; padding: 20px 0; display: flex; justify-content: space-between; gap: 16px; font: 600 var(--s3)/1.4 var(--f-body); }
@@ -281,7 +296,8 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
       <a href="#day" data-i18n="nav_day"></a>
       <a href="#catalog" data-i18n="nav_catalog"></a>
       <a href="#money" data-i18n="nav_money"></a>
-      <a href="#faq" data-i18n="nav_faq"></a>
+      <a href="#pricing" data-i18n="nav_price"></a>
+<a href="#faq" data-i18n="nav_faq"></a>
     </nav>
     <div class="langs" role="group" aria-label="Language">
       <button type="button" id="lang-fr" data-lang="fr">FR</button>
@@ -444,6 +460,33 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     </div>
   </section>
 
+  <section class="block" id="pricing">
+    <div class="wrap">
+      <div class="head"><p class="eyebrow" data-i18n="p_eyebrow"></p><h2 data-i18n="p_title"></h2></div>
+      <div class="plans">
+        <div class="plan">
+          <h3 data-i18n="p1_name"></h3>
+          <div class="price" data-i18n-html="p1_price"></div>
+          <ul data-i18n-html="p1_list"></ul>
+          <a class="btn btn-ghost" href="/register" data-reg data-i18n="cta_short"></a>
+        </div>
+        <div class="plan">
+          <h3 data-i18n="p2_name"></h3>
+          <div class="price" data-i18n-html="p2_price"></div>
+          <ul data-i18n-html="p2_list"></ul>
+          <a class="btn btn-ghost" href="/register" data-reg data-i18n="cta_short"></a>
+        </div>
+        <div class="plan vip">
+          <span class="tag" data-i18n="p3_tag"></span>
+          <h3 data-i18n="p3_name"></h3>
+          <div class="price" data-i18n-html="p3_price"></div>
+          <ul data-i18n-html="p3_list"></ul>
+          <a class="btn btn-gold" href="/register" data-reg data-i18n="cta_short"></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="block" id="faq">
     <div class="wrap">
       <div class="head"><p class="eyebrow" data-i18n="faq_eyebrow"></p><h2 data-i18n="faq_title"></h2></div>
@@ -569,6 +612,19 @@ fr: {
   final_eyebrow: "Commencer", final_title: "Voyez votre propre boutique dans Warshati.",
   final_lede: "On l'installe avec vous, on reprend vos articles et vos anciennes dettes, et vous faites votre première clôture le soir même.",
   final_free: "Offre de lancement : les premiers ateliers inscrits ont Warshati gratuitement.",
+  nav_price: "Prix",
+  p_eyebrow: "Prix",
+  p_title: "Trois formules, sans surprise.",
+  p1_name: "Licence à vie",
+  p1_price: "<b>12 000 DA</b><s>15 000 DA</s><span>une seule fois · prix exclusif</span>",
+  p1_list: "<li>Warshati à vie sur votre PC</li><li>Toutes les mises à jour</li><li>Fonctionne sans internet</li>",
+  p2_name: "Cloud",
+  p2_price: "<b>5 000 DA</b><span>par an</span>",
+  p2_list: "<li>Services cloud</li><li>Application mobile connectée au logiciel</li>",
+  p3_tag: "La plus complète",
+  p3_name: "VIP",
+  p3_price: "<b>7 000 DA</b><span>par an</span>",
+  p3_list: "<li>Tout ce qui est inclus dans les autres formules</li><li>Réseau du magasin : plusieurs PC sur les mêmes données</li><li>Accès exclusif à toutes les nouvelles fonctionnalités à venir</li>",
   c_wa: "WhatsApp", c_mail: "E-mail", c_soon: "Coordonnées bientôt disponibles",
   foot: "Fait en Algérie pour les ateliers de réparation."
 },
@@ -633,6 +689,19 @@ ar: {
   final_eyebrow: "ابدأ", final_title: "شاهد محلك أنت داخل ورشتي.",
   final_lede: "نثبّته معك، ننقل سلعك وديونك القديمة، وتغلق أول يوم لك في نفس المساء.",
   final_free: "عرض الإطلاق: أوائل المحلات المسجّلة تحصل على ورشتي مجاناً.",
+  nav_price: "الأسعار",
+  p_eyebrow: "الأسعار",
+  p_title: "ثلاث باقات، بدون مفاجآت.",
+  p1_name: "ترخيص مدى الحياة",
+  p1_price: "<b><bdi>12 000</bdi> دج</b><s><bdi>15 000</bdi> دج</s><span>مرة واحدة · سعر حصري</span>",
+  p1_list: "<li>ورشتي مدى الحياة على حاسوبك</li><li>كل التحديثات</li><li>يعمل بدون إنترنت</li>",
+  p2_name: "السحابة",
+  p2_price: "<b><bdi>5 000</bdi> دج</b><span>في السنة</span>",
+  p2_list: "<li>خدمات سحابية</li><li>تطبيق الهاتف مربوط بالبرنامج</li>",
+  p3_tag: "الأشمل",
+  p3_name: "VIP",
+  p3_price: "<b><bdi>7 000</bdi> دج</b><span>في السنة</span>",
+  p3_list: "<li>كل ما في الباقات الأخرى</li><li>شبكة المحل: عدة حواسيب على نفس البيانات</li><li>وصول حصري لكل الميزات الجديدة القادمة</li>",
   c_wa: "واتساب", c_mail: "البريد", c_soon: "معلومات الاتصال قريباً",
   foot: "صُنع في الجزائر لمحلات التصليح."
 },
@@ -697,6 +766,19 @@ en: {
   final_eyebrow: "Get started", final_title: "See your own shop inside Warshati.",
   final_lede: "We install it with you, bring in your items and old debts, and you do your first daily close that same evening.",
   final_free: "Launch offer: the first workshops to sign up get Warshati for free.",
+  nav_price: "Pricing",
+  p_eyebrow: "Pricing",
+  p_title: "Three plans, no surprises.",
+  p1_name: "Lifetime license",
+  p1_price: "<b>12,000 DA</b><s>15,000 DA</s><span>one time · exclusive price</span>",
+  p1_list: "<li>Warshati forever on your PC</li><li>All updates</li><li>Works without internet</li>",
+  p2_name: "Cloud",
+  p2_price: "<b>5,000 DA</b><span>per year</span>",
+  p2_list: "<li>Cloud services</li><li>Mobile app connected to the software</li>",
+  p3_tag: "Most complete",
+  p3_name: "VIP",
+  p3_price: "<b>7,000 DA</b><span>per year</span>",
+  p3_list: "<li>Everything in the other plans</li><li>Shop network: several PCs on the same data</li><li>Exclusive access to all new upcoming features</li>",
   c_wa: "WhatsApp", c_mail: "Email", c_soon: "Contact details coming soon",
   foot: "Made in Algeria for repair workshops."
 }
