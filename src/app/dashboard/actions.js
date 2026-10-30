@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import { revalidatePath } from 'next/cache';
 import { supabase } from '@/lib/supabase';
 import { requireAdmin } from '@/lib/auth';
+import { validPlan, planName } from '@/lib/plans';
 
 const UPGRADE_HINT = 'Run supabase/dashboard-upgrade.sql in Supabase first.';
 
@@ -42,6 +43,7 @@ export async function createCustomerWithLicenses(formData) {
   const price = priceRaw ? Number(priceRaw) : null;
   if (price != null && (!Number.isFinite(price) || price < 0)) return { error: 'The price must be a number.' };
   const note = clean(formData.get('license_note'), 300);
+  const plan = validPlan(formData.get('plan'));
 
   const { data: customer, error: cErr } = await supabase
     .from('customers')
@@ -49,7 +51,7 @@ export async function createCustomerWithLicenses(formData) {
     .select('id').single();
   if (cErr) return { error: 'Could not save the customer.' };
 
-  const res = await insertLicenses(customer.id, count, price, note);
+  const res = await insertLicenses(customer.id, count, price, note, plan);
   if (res.error) {
     await supabase.from('customers').delete().eq('id', customer.id); // no orphan customer
     return res;
@@ -61,16 +63,17 @@ export async function createCustomerWithLicenses(formData) {
   return { ok: true, customerId: customer.id, keys: res.keys };
 }
 
-export async function addLicenses(customerId, count = 1, price = null, note = null) {
+export async function addLicenses(customerId, count = 1, price = null, note = null, plan = 1) {
   await requireAdmin();
-  const res = await insertLicenses(customerId, Math.min(10, Math.max(1, Number(count) || 1)), price, note);
+  const res = await insertLicenses(customerId, Math.min(10, Math.max(1, Number(count) || 1)), price, note, validPlan(plan));
   if (res.error) return res;
   refresh(customerId);
   return { ok: true, keys: res.keys, message: res.keys.length > 1 ? `${res.keys.length} keys created` : `Key created: ${res.keys[0]}` };
 }
 
-async function insertLicenses(customerId, count, price, note) {
+async function insertLicenses(customerId, count, price, note, plan = 1) {
   const extras = {};
+  if (plan !== 1) extras.plan = plan; // plan 1 is the column default (works before plans.sql)
   if (price != null) extras.price = price;
   if (note) extras.note = note;
   const rows = Array.from({ length: count }, () => ({ key: generateKey(), customer_id: customerId, ...extras }));
@@ -107,6 +110,15 @@ export async function updateLicenseNote(licenseId, note, price) {
   if (error) return dbError(error, 'Could not save.');
   refresh(data.customer_id);
   return { ok: true, message: 'Saved' };
+}
+
+/** Change a key's plan; the app picks it up on its next license check (startup) */
+export async function setLicensePlan(licenseId, plan) {
+  await requireAdmin();
+  const { data, error } = await supabase.from('licenses').update({ plan: validPlan(plan) }).eq('id', licenseId).select('customer_id').single();
+  if (error) return dbError(error, 'Could not change the plan. Run supabase/plans.sql first.');
+  refresh(data.customer_id);
+  return { ok: true, message: `Plan: ${planName(plan)}. The app updates on its next start.` };
 }
 
 export async function deleteLicense(licenseId) {

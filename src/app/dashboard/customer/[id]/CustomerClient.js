@@ -8,7 +8,8 @@ import { CopyButton, WhatsAppKeyButton, StatusBadge, Avatar } from '@/components
 import ConfirmDialog from '@/components/ConfirmDialog';
 import { useRunAction } from '@/components/Toaster';
 import { licenseState, isQuiet, relTime, shortDate, dateTime, money, waNumber } from '@/lib/format';
-import { updateCustomer, deleteCustomer, addLicenses, setLicenseActive, resetMachine, deleteLicense, updateLicenseNote } from '../../actions';
+import { updateCustomer, deleteCustomer, addLicenses, setLicenseActive, resetMachine, deleteLicense, updateLicenseNote, setLicensePlan } from '../../actions';
+import { PLANS } from '@/lib/plans';
 
 export default function CustomerClient({ customer }) {
   const router = useRouter();
@@ -33,7 +34,7 @@ export default function CustomerClient({ customer }) {
 
   async function addKey() {
     setAdding(true);
-    await run(() => addLicenses(customer.id, 1, licenses.at(-1)?.price ?? null));
+    await run(() => addLicenses(customer.id, 1, licenses.at(-1)?.price ?? null, null, licenses.at(-1)?.plan ?? 1));
     setAdding(false);
   }
 
@@ -154,6 +155,9 @@ function LicenseCard({ l, customer, run, setConfirm }) {
         <CopyButton text={l.key} />
         <WhatsAppKeyButton phone={customer.phone} name={customer.name} keys={[l.key]} />
         <div className="flex-1" />
+        <select className="input h-8 w-auto py-0 text-sm" value={l.plan ?? 1} onChange={(e) => run(() => setLicensePlan(l.id, e.target.value))} title="Plan" aria-label="Plan">
+          {PLANS.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+        </select>
         <StatusBadge state={isQuiet(l) ? 'quiet' : state} />
       </div>
 

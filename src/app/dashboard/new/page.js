@@ -7,6 +7,7 @@ import { ArrowLeft, CheckCircle2, ClipboardList, Loader2, Minus, Plus, Sparkles,
 import { createCustomerWithLicenses } from '../actions';
 import { CopyButton, WhatsAppKeyButton } from '@/components/ui';
 import { useRunAction } from '@/components/Toaster';
+import { PLANS } from '@/lib/plans';
 import { licenseMessage } from '@/lib/format';
 
 export default function NewLicensePage() {
@@ -69,7 +70,13 @@ export default function NewLicensePage() {
 
         <section className="card p-6">
           <h2 className="mb-5 flex items-center gap-2 font-semibold"><Sparkles className="size-4 text-primary" /> License</h2>
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-4">
+            <div>
+              <label className="label" htmlFor="plan">Plan</label>
+              <select id="plan" name="plan" className="input" defaultValue="1">
+                {PLANS.map((p) => <option key={p.id} value={p.id}>{p.name}: {p.desc}</option>)}
+              </select>
+            </div>
             <div>
               <span className="label">Number of PCs</span>
               <div className="flex h-10 items-center rounded-md border border-line">
