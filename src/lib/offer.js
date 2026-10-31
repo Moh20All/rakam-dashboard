@@ -2,4 +2,4 @@
 export const FREE_SPOTS = 5;
 
 // Shown on the success screen so shops can message right away (same number as the landing page)
-export const CONTACT_WHATSAPP = '213671222227';
+export const CONTACT_WHATSAPP = '213541677893';
