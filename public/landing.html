@@ -298,6 +298,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
       <a href="#money" data-i18n="nav_money"></a>
       <a href="#pricing" data-i18n="nav_price"></a>
 <a href="#faq" data-i18n="nav_faq"></a>
+      <a href="/guide" data-guide data-i18n="nav_guide"></a>
     </nav>
     <div class="langs" role="group" aria-label="Language">
       <button type="button" id="lang-fr" data-lang="fr">FR</button>
@@ -553,7 +554,7 @@ const CLOSE = [
 const T = {
 fr: {
   cur: "DA",
-  nav_day: "Une journée", nav_catalog: "Catalogue", nav_money: "Caisse", nav_faq: "Questions",
+  nav_day: "Une journée", nav_catalog: "Catalogue", nav_money: "Caisse", nav_faq: "Questions", nav_guide: "Guide",
   cta_short: "S'inscrire", cta_main: "Réserver ma place gratuite", cta_tour: "Voir une journée avec Warshati",
   hero_eyebrow: "Logiciel pour réparateurs de téléphones",
   hero_title: "Votre atelier, <em>enfin en ordre.</em>",
@@ -630,7 +631,7 @@ fr: {
 },
 ar: {
   cur: "دج",
-  nav_day: "يوم في المحل", nav_catalog: "دليل الأجهزة", nav_money: "الصندوق", nav_faq: "أسئلة",
+  nav_day: "يوم في المحل", nav_catalog: "دليل الأجهزة", nav_money: "الصندوق", nav_faq: "أسئلة", nav_guide: "الدليل",
   cta_short: "سجّل الآن", cta_main: "احجز مكانك المجاني", cta_tour: "شاهد يوماً مع ورشتي",
   hero_eyebrow: "برنامج لمحلات تصليح الهواتف",
   hero_title: "ورشتك، <em>منظّمة أخيراً.</em>",
@@ -707,7 +708,7 @@ ar: {
 },
 en: {
   cur: "DZD",
-  nav_day: "A day", nav_catalog: "Catalog", nav_money: "Cash", nav_faq: "Questions",
+  nav_day: "A day", nav_catalog: "Catalog", nav_money: "Cash", nav_faq: "Questions", nav_guide: "Guide",
   cta_short: "Sign up", cta_main: "Reserve my free spot", cta_tour: "See a day with Warshati",
   hero_eyebrow: "Software for phone repair shops",
   hero_title: "Your workshop, <em>finally in order.</em>",
@@ -801,6 +802,7 @@ function applyText() {
   document.querySelectorAll("[data-i18n-html]").forEach(el => { el.innerHTML = t[el.dataset.i18nHtml] ?? ""; });
   document.querySelectorAll("[data-i18n-ph]").forEach(el => { el.placeholder = t[el.dataset.i18nPh] ?? ""; });
   document.querySelectorAll("a[data-reg]").forEach(a => { a.href = "/register?lang=" + lang; });
+  document.querySelectorAll("a[data-guide]").forEach(a => { a.href = "/guide?lang=" + lang; });
   document.querySelectorAll(".money").forEach(el => { el.textContent = money(Number(el.dataset.v)); });
   document.querySelectorAll(".langs button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
   renderStep(); renderList(); renderClose(); renderContact();

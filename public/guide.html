@@ -81,7 +81,8 @@ html[lang="ar"] .brand .tag { font-family: var(--f-ar); }
 
 /* ---------- Intro ---------- */
 .intro { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
-.intro::before { content: ""; position: absolute; top: -150px; inset-inline-end: -110px; width: 320px; height: 320px; border-radius: 50%; background: var(--cta); pointer-events: none; }
+.intro::before { content: ""; position: absolute; top: -190px; inset-inline-end: -170px; width: 280px; height: 280px; border-radius: 50%; background: var(--cta); pointer-events: none; }
+@media (min-width: 900px) { .intro::before { top: -150px; inset-inline-end: -110px; width: 320px; height: 320px; } }
 .intro .wrap { position: relative; padding-block: 56px 48px; display: grid; gap: 22px; }
 @media (min-width: 900px) { .intro .wrap { padding-block: 80px 64px; } }
 .intro h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; max-width: 16ch; }
@@ -108,7 +109,7 @@ html[lang="ar"] .brand .tag { font-family: var(--f-ar); }
 @media (min-width: 1040px) {
   .toc { display: block; position: sticky; top: calc(var(--head) + 24px); align-self: start; max-height: calc(100vh - var(--head) - 48px); overflow-y: auto; padding-inline-end: 6px; }
 }
-.toc .grp { font: 500 .6875rem/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--mute); margin: 18px 0 6px; }
+.toc .grp { font: 500 .6875rem/1.5 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--mute); margin: 18px 0 6px; }
 html[lang="ar"] .toc .grp { letter-spacing: 0; font-family: var(--f-ar); font-weight: 600; font-size: .75rem; }
 .toc .grp:first-child { margin-top: 0; }
 .toc a { display: flex; gap: 10px; align-items: baseline; padding: 6px 10px; border-radius: 8px; text-decoration: none; color: var(--mute); font-size: .9375rem; line-height: 1.35; }
@@ -913,7 +914,7 @@ ar: [
       { steps: [
         "اختر الحاسوب الذي يبقى شغالاً طول اليوم. <span class=\"ui\">الإعدادات ← شبكة المحل</span> ← <span class=\"ui\">مشاركة</span>.",
         "إن سأل ويندوز هل يستعمل ورشتي الشبكة، اختر <b>السماح</b> (الشبكات الخاصة).",
-        "سجّل <b>رمز الربط</b> الظاهر (مثلاً K7QM-4XWP)."
+        "سجّل <b>رمز الربط</b> الظاهر، مثلاً <bdi dir=\"ltr\">K7QM-4XWP</bdi>."
       ] },
       { h: "على كل حاسوب آخر" },
       { steps: [
@@ -1352,7 +1353,7 @@ function setLang(l) {
   try { localStorage.setItem("warshati-lang", l); } catch (e) {}
   const here = location.hash;
   render();
-  if (here) document.querySelector(here)?.scrollIntoView();
+  if (here) document.getElementById(here.slice(1))?.scrollIntoView();
 }
 
 document.querySelectorAll(".langs button").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
@@ -1377,7 +1378,10 @@ window.addEventListener("scroll", () => up.classList.toggle("show", window.scrol
 up.addEventListener("click", () => window.scrollTo({ top: 0 }));
 
 render();
-if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
+// Opened on a chapter link: go there now, and again once fonts and layout have settled
+const toHash = () => { if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView(); };
+toHash();
+window.addEventListener("load", () => requestAnimationFrame(toHash));
 </script>
 </body>
 </html>
