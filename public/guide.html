@@ -1,1314 +1,1383 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-
+<!doctype html>
+<html lang="fr" dir="ltr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Warshati — ورشتي | User Guide</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
-  <style>
-    :root {
-      --bg: #1A1F1D;
-      --bg2: #232A26;
-      --bg3: #2C3430;
-      --gold: #C6EB3F;
-      --gold-light: #D6F36E;
-      --gold-dim: #B4DA2C;
-      --cream: #F3F1EA;
-      --cream-dim: #A3B4AB;
-      --text: #E8EFEA;
-      --text-dim: #A3B4AB;
-      --border: rgba(198, 235, 63, 0.18);
-      --border-strong: rgba(198, 235, 63, 0.4);
-      --sidebar-w: 260px;
-      --accent: #C6EB3F;
-    }
-
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 14px;
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
-
-    /* ── Geometric background ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        repeating-linear-gradient(60deg, transparent, transparent 60px, rgba(198, 235, 63, 0.025) 60px, rgba(198, 235, 63, 0.025) 61px),
-        repeating-linear-gradient(-60deg, transparent, transparent 60px, rgba(198, 235, 63, 0.025) 60px, rgba(198, 235, 63, 0.025) 61px);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* ── Sidebar ── */
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: var(--sidebar-w);
-      height: 100vh;
-      background: var(--bg2);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      z-index: 100;
-      overflow-y: auto;
-      padding-bottom: 2rem;
-    }
-
-    .sidebar-logo {
-      padding: 2rem 1.5rem 1.5rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
-
-    .logo-en {
-      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
-      font-size: 1.6rem;
-      font-weight: 600;
-      color: var(--gold);
-      letter-spacing: 0.08em;
-      line-height: 1;
-    }
-
-    .logo-ar {
-      font-family: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
-      font-size: 1.2rem;
-      color: var(--gold-dim);
-      direction: rtl;
-    }
-
-    .logo-tag {
-      font-size: 10px;
-      color: var(--text-dim);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-top: 0.4rem;
-    }
-
-    .nav-section-label {
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      padding: 1.5rem 1.5rem 0.5rem;
-    }
-
-    .nav-link {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.55rem 1.5rem;
-      color: var(--cream-dim);
-      text-decoration: none;
-      font-size: 12px;
-      letter-spacing: 0.05em;
-      transition: color 0.2s, background 0.2s;
-      position: relative;
-    }
-
-    .nav-link:hover,
-    .nav-link.active {
-      color: var(--gold-light);
-      background: rgba(198, 235, 63, 0.06);
-    }
-
-    .nav-link.active::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: var(--gold);
-    }
-
-    .nav-icon {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-      opacity: 0.7;
-    }
-
-    /* ── Main Content ── */
-    .main {
-      margin-left: var(--sidebar-w);
-      min-height: 100vh;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ── Hero ── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 6rem 5rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: 'ورشتي';
-      position: absolute;
-      right: -2rem;
-      bottom: -4rem;
-      font-family: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
-      font-size: 28rem;
-      color: rgba(198, 235, 63, 0.04);
-      line-height: 1;
-      pointer-events: none;
-      user-select: none;
-    }
-
-    .hero-kicker {
-      font-size: 11px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .hero-kicker::before {
-      content: '';
-      display: block;
-      width: 40px;
-      height: 1px;
-      background: var(--gold);
-    }
-
-    .hero-title {
-      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
-      font-size: clamp(3rem, 6vw, 5.5rem);
-      font-weight: 300;
-      color: var(--cream);
-      line-height: 1.1;
-      margin-bottom: 0.5rem;
-    }
-
-    .hero-title em {
-      font-style: italic;
-      color: var(--gold);
-    }
-
-    .hero-title-ar {
-      font-family: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      color: var(--gold-dim);
-      line-height: 1.3;
-      margin-bottom: 2rem;
-      direction: rtl;
-    }
-
-    .hero-desc {
-      max-width: 520px;
-      color: var(--text-dim);
-      font-size: 13px;
-      line-height: 1.8;
-      margin-bottom: 3rem;
-    }
-
-    .hero-badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-    }
-
-    .badge {
-      border: 1px solid var(--border-strong);
-      padding: 0.35rem 0.9rem;
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      color: var(--gold);
-      background: rgba(198, 235, 63, 0.05);
-    }
-
-    /* ── Section ── */
-    .section {
-      padding: 5rem;
-      border-top: 1px solid var(--border);
-      scroll-margin-top: 2rem;
-    }
-
-    .section-number {
-      font-size: 11px;
-      letter-spacing: 0.25em;
-      color: var(--gold-dim);
-      margin-bottom: 0.5rem;
-    }
-
-    .section-title {
-      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
-      font-size: clamp(2rem, 3.5vw, 3rem);
-      font-weight: 300;
-      color: var(--cream);
-      line-height: 1.2;
-      margin-bottom: 0.3rem;
-    }
-
-    .section-subtitle {
-      font-family: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
-      font-size: 1.1rem;
-      color: var(--gold-dim);
-      direction: rtl;
-      margin-bottom: 2.5rem;
-    }
-
-    .section-intro {
-      max-width: 560px;
-      color: var(--text-dim);
-      margin-bottom: 3rem;
-      font-size: 13px;
-    }
-
-    /* ── Feature Cards ── */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      margin-bottom: 2rem;
-    }
-
-    .card {
-      background: var(--bg2);
-      padding: 2rem;
-      transition: background 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--gold);
-      transition: width 0.4s ease;
-    }
-
-    .card:hover {
-      background: var(--bg3);
-    }
-
-    .card:hover::after {
-      width: 100%;
-    }
-
-    .card-icon {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      display: block;
-    }
-
-    .card-title {
-      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
-      font-size: 1.2rem;
-      color: var(--gold-light);
-      margin-bottom: 0.5rem;
-    }
-
-    .card-text {
-      font-size: 12px;
-      color: var(--text-dim);
-      line-height: 1.7;
-    }
-
-    /* ── Steps (Workflow) ── */
-    .steps {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      position: relative;
-    }
-
-    .steps::before {
-      content: '';
-      position: absolute;
-      left: 19px;
-      top: 0;
-      bottom: 0;
-      width: 1px;
-      background: var(--border-strong);
-    }
-
-    .step {
-      display: flex;
-      gap: 2rem;
-      padding: 2rem 0;
-      position: relative;
-      opacity: 0;
-      transform: translateX(-20px);
-      animation: stepIn 0.5s forwards;
-    }
-
-    .step:nth-child(1) {
-      animation-delay: 0.1s;
-    }
-
-    .step:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-
-    .step:nth-child(3) {
-      animation-delay: 0.3s;
-    }
-
-    .step:nth-child(4) {
-      animation-delay: 0.4s;
-    }
-
-    .step:nth-child(5) {
-      animation-delay: 0.5s;
-    }
-
-    .step:nth-child(6) {
-      animation-delay: 0.6s;
-    }
-
-    @keyframes stepIn {
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    .step-num {
-      width: 40px;
-      height: 40px;
-      border: 1px solid var(--border-strong);
-      background: var(--bg2);
-      color: var(--gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
-      font-weight: 600;
-      flex-shrink: 0;
-      position: relative;
-      z-index: 1;
-      transition: background 0.2s, border-color 0.2s;
-    }
-
-    .step:hover .step-num {
-      background: var(--gold);
-      color: var(--bg);
-      border-color: var(--gold);
-    }
-
-    .step-body {
-      flex: 1;
-    }
-
-    .step-time {
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      color: var(--gold-dim);
-      text-transform: uppercase;
-      margin-bottom: 0.3rem;
-    }
-
-    .step-title {
-      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
-      font-size: 1.25rem;
-      color: var(--cream);
-      margin-bottom: 0.5rem;
-    }
-
-    .step-text {
-      font-size: 12px;
-      color: var(--text-dim);
-    }
-
-    /* ── Pillars ── */
-    .pillars {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-    }
-
-    .pillar {
-      background: var(--bg2);
-      padding: 2.5rem 2rem;
-      position: relative;
-      overflow: hidden;
-      transition: background 0.2s;
-    }
-
-    .pillar:hover {
-      background: var(--bg3);
-    }
-
-    .pillar-num {
-      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
-      font-size: 5rem;
-      font-weight: 300;
-      color: rgba(198, 235, 63, 0.08);
-      position: absolute;
-      top: -1rem;
-      right: 1rem;
-      line-height: 1;
-      user-select: none;
-    }
-
-    .pillar-icon {
-      font-size: 1.6rem;
-      margin-bottom: 1rem;
-    }
-
-    .pillar-title {
-      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
-      font-size: 1.15rem;
-      color: var(--gold-light);
-      margin-bottom: 0.8rem;
-    }
-
-    .pillar-text {
-      font-size: 12px;
-      color: var(--text-dim);
-      line-height: 1.7;
-    }
-
-    .pillar-features {
-      list-style: none;
-      margin-top: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
-    .pillar-features li {
-      font-size: 11px;
-      color: var(--text-dim);
-      padding-left: 1rem;
-      position: relative;
-    }
-
-    .pillar-features li::before {
-      content: '—';
-      position: absolute;
-      left: 0;
-      color: var(--gold-dim);
-    }
-
-    /* ── Setup Steps ── */
-    .setup-block {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .setup-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      padding: 2rem;
-      position: relative;
-    }
-
-    .setup-card-title {
-      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
-      font-size: 1.2rem;
-      color: var(--gold);
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.7rem;
-    }
-
-    .setup-steps {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-    }
-
-    .setup-step {
-      display: flex;
-      gap: 0.8rem;
-      align-items: flex-start;
-    }
-
-    .setup-step-n {
-      width: 22px;
-      height: 22px;
-      background: rgba(198, 235, 63, 0.12);
-      border: 1px solid var(--gold-dim);
-      color: var(--gold);
-      font-size: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    .setup-step-text {
-      font-size: 12px;
-      color: var(--text-dim);
-    }
-
-    /* ── Tip box ── */
-    .tip {
-      border-left: 2px solid var(--gold);
-      background: rgba(198, 235, 63, 0.05);
-      padding: 1rem 1.5rem;
-      margin: 2rem 0;
-      font-size: 12px;
-      color: var(--cream-dim);
-    }
-
-    .tip strong {
-      color: var(--gold);
-      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
-      font-size: 1rem;
-      display: block;
-      margin-bottom: 0.3rem;
-    }
-
-    /* ── Versions ── */
-    .versions {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      border: 1px solid var(--border);
-    }
-
-    .version {
-      display: flex;
-      gap: 2rem;
-      padding: 1.5rem 2rem;
-      border-bottom: 1px solid var(--border);
-      transition: background 0.2s;
-      align-items: flex-start;
-    }
-
-    .version:last-child {
-      border-bottom: none;
-    }
-
-    .version:hover {
-      background: var(--bg3);
-    }
-
-    .version-tag {
-      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
-      font-size: 1rem;
-      color: var(--gold);
-      white-space: nowrap;
-      padding-top: 0.1rem;
-      min-width: 80px;
-    }
-
-    .version-current {
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      color: var(--bg);
-      background: var(--gold);
-      padding: 0.15rem 0.5rem;
-      margin-left: 0.5rem;
-      vertical-align: middle;
-    }
-
-    .version-changes {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
-
-    .version-changes li {
-      font-size: 12px;
-      color: var(--text-dim);
-      padding-left: 1rem;
-      position: relative;
-    }
-
-    .version-changes li::before {
-      content: '·';
-      position: absolute;
-      left: 0;
-      color: var(--gold-dim);
-    }
-
-    /* ── Footer ── */
-    .footer {
-      padding: 3rem 5rem;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .footer-brand {
-      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
-      font-size: 1.4rem;
-      color: var(--gold);
-    }
-
-    .footer-right {
-      text-align: right;
-      font-size: 11px;
-      color: var(--text-dim);
-      line-height: 1.8;
-    }
-
-    /* ── Divider ── */
-    .divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
-      margin: 3rem 0;
-    }
-
-    /* ── Scroll indicator ── */
-    .scroll-progress {
-      position: fixed;
-      top: 0;
-      left: var(--sidebar-w);
-      right: 0;
-      height: 2px;
-      background: var(--border);
-      z-index: 200;
-    }
-
-    .scroll-progress-bar {
-      height: 100%;
-      background: linear-gradient(90deg, var(--gold-dim), var(--gold));
-      width: 0%;
-      transition: width 0.1s;
-    }
-
-    /* ── Animations ── */
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .hero>* {
-      animation: fadeUp 0.8s ease forwards;
-      opacity: 0;
-    }
-
-    .hero .hero-kicker {
-      animation-delay: 0.1s;
-    }
-
-    .hero .hero-title {
-      animation-delay: 0.2s;
-    }
-
-    .hero .hero-title-ar {
-      animation-delay: 0.3s;
-    }
-
-    .hero .hero-desc {
-      animation-delay: 0.4s;
-    }
-
-    .hero .hero-badges {
-      animation-delay: 0.5s;
-    }
-
-    /* ── Responsive ── */
-    @media (max-width: 900px) {
-      .sidebar {
-        display: none;
-      }
-
-      .main {
-        margin-left: 0;
-      }
-
-      .section,
-      .hero {
-        padding: 3rem 2rem;
-      }
-
-      .pillars {
-        grid-template-columns: 1fr;
-      }
-
-      .setup-block {
-        grid-template-columns: 1fr;
-      }
-
-      .footer {
-        padding: 2rem;
-      }
-    }
-
-    /* ── Images Styling ── */
-    .guide-img-container {
-      margin: 2.5rem 0;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: #1a1a1a;
-    }
-
-    .guide-img {
-      width: 100%;
-      height: auto;
-      display: block;
-      transition: transform 0.4s ease;
-    }
-
-    .guide-img:hover {
-      transform: scale(1.02);
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guide Warshati — ورشتي</title>
+<meta name="description" content="Guide d'utilisation de Warshati : installation, réparations, caisse, stock, dettes, clôture du jour, impression, sauvegardes et réseau du magasin. En français, arabe et anglais.">
+<link rel="icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Same design system as the landing page: graphite ground, Board green, solder-flux lime; dark-first with a light variant.
+   Layout: sticky header, then a chapter list (sticky on wide screens) beside one reading column. */
+:root {
+  color-scheme: dark;
+  --bg: #1A1F1D; --raised: #232A26; --sunk: #141816; --text: #F3F1EA; --mute: #A3B4AB; --line: #2C3430;
+  --gold: #C6EB3F; --gold-hi: #D6F36E; --gold-ink: #14201B;
+  --cta: #C6EB3F; --cta-hi: #D6F36E; --cta-ink: #14201B; --cta-edge: #3B4A08;
+  --ok: #6FD39A; --warn: #F2C062; --bad: #FF8A80; --wa: #3FCF7E;
+  --note-bg: color-mix(in srgb, var(--gold) 9%, transparent);
+  --warn-bg: color-mix(in srgb, var(--warn) 10%, transparent);
+  --f-body: "IBM Plex Sans", "IBM Plex Sans Arabic", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --f-ar: "IBM Plex Sans Arabic", "IBM Plex Sans", "Segoe UI", sans-serif;
+  --r: 14px;
+  --head: 64px;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #F3F1EA; --raised: #FFFFFF; --sunk: #EAE6DB; --text: #14201B; --mute: #535C56; --line: #DDD7C9;
+    --gold: #0F4F3C; --gold-hi: #1B6FD8; --gold-ink: #FFFFFF; --ok: #17633B; --warn: #8A5300; --bad: #B3261E; --wa: #1D7A4B;
+  }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #F3F1EA; --raised: #FFFFFF; --sunk: #EAE6DB; --text: #14201B; --mute: #535C56; --line: #DDD7C9;
+  --gold: #0F4F3C; --gold-hi: #1B6FD8; --gold-ink: #FFFFFF; --ok: #17633B; --warn: #8A5300; --bad: #B3261E; --wa: #1D7A4B;
+}
+:root[data-theme="dark"] { color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--head) + 16px); }
+body { margin: 0; background: var(--bg); color: var(--text); font: 400 1rem/1.7 var(--f-body); -webkit-font-smoothing: antialiased; }
+html[lang="ar"] body { font-family: var(--f-ar); }
+h1, h2, h3 { margin: 0; letter-spacing: -.02em; line-height: 1.15; text-wrap: balance; }
+html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3 { letter-spacing: 0; line-height: 1.4; }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 3px; border-radius: 6px; }
+.eyebrow { font: 500 .8125rem/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+html[lang="ar"] .eyebrow { letter-spacing: 0; font-family: var(--f-ar); font-weight: 600; }
+.wrap { max-width: 1240px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+@media (min-width: 720px) { .wrap { padding-left: max(32px, env(safe-area-inset-left, 0px)); padding-right: max(32px, env(safe-area-inset-right, 0px)); } }
+
+/* ---------- Header ---------- */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; align-items: center; gap: 16px; height: var(--head); }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 700 1.0625rem/1 var(--f-body); }
+.brand img { width: 32px; height: 32px; display: block; }
+.brand .ar { font-family: var(--f-ar); color: var(--gold); }
+.brand .tag { font: 500 .75rem/1 var(--f-mono); color: var(--mute); border: 1px solid var(--line); border-radius: 6px; padding: 4px 7px; }
+html[lang="ar"] .brand .tag { font-family: var(--f-ar); }
+.top nav { display: none; gap: 22px; margin-inline-start: auto; font-size: .9375rem; color: var(--mute); }
+.top nav a { text-decoration: none; }
+.top nav a:hover { color: var(--text); }
+@media (min-width: 960px) { .top nav { display: flex; } }
+.langs { display: flex; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 999px; margin-inline-start: auto; }
+@media (min-width: 960px) { .langs { margin-inline-start: 6px; } }
+.langs button { all: unset; cursor: pointer; padding: 5px 10px; border-radius: 999px; font: 500 .8125rem/1 var(--f-mono); color: var(--mute); }
+.langs button[aria-pressed="true"] { background: var(--gold); color: var(--gold-ink); }
+.langs button:focus-visible { outline: 2px solid var(--gold-hi); }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 8px; font: 600 .9375rem/1 var(--f-body); text-decoration: none; border: 1px solid transparent; cursor: pointer; }
+.btn-cta { background: var(--cta); color: var(--cta-ink); border-color: var(--cta-edge); }
+.btn-cta:hover { background: var(--cta-hi); }
+.btn-ghost { border-color: var(--line); color: var(--text); background: transparent; }
+.btn-ghost:hover { background: var(--raised); }
+.top .btn { display: none; }
+@media (min-width: 600px) { .top .btn { display: inline-flex; } }
+
+/* ---------- Intro ---------- */
+.intro { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+.intro::before { content: ""; position: absolute; top: -150px; inset-inline-end: -110px; width: 320px; height: 320px; border-radius: 50%; background: var(--cta); pointer-events: none; }
+.intro .wrap { position: relative; padding-block: 56px 48px; display: grid; gap: 22px; }
+@media (min-width: 900px) { .intro .wrap { padding-block: 80px 64px; } }
+.intro h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; max-width: 16ch; }
+.intro h1 em { font-style: normal; color: var(--gold); }
+.intro .lede { color: var(--mute); max-width: 62ch; font-size: 1.125rem; }
+.search { position: relative; max-width: 560px; margin-top: 6px; }
+.search svg { position: absolute; inset-inline-start: 16px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--mute); pointer-events: none; }
+.search input { width: 100%; padding: 15px 18px; padding-inline-start: 46px; border-radius: 12px; border: 1px solid var(--line); background: var(--raised); color: var(--text); font: 400 1rem/1.3 var(--f-body); }
+.search input::placeholder { color: var(--mute); }
+.search input:focus { outline: 2px solid var(--gold); outline-offset: 0; border-color: transparent; }
+.quick { display: grid; gap: 12px; margin-top: 14px; }
+@media (min-width: 640px) { .quick { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1040px) { .quick { grid-template-columns: repeat(4, 1fr); } }
+.quick a { display: grid; gap: 6px; padding: 18px; border-radius: var(--r); border: 1px solid var(--line); background: var(--bg); text-decoration: none; transition: border-color .2s, transform .2s; }
+.quick a:hover { border-color: var(--gold); transform: translateY(-2px); }
+.quick b { font-size: 1.0625rem; }
+.quick span { color: var(--mute); font-size: .875rem; line-height: 1.5; }
+.quick i { font: 500 .75rem/1 var(--f-mono); font-style: normal; color: var(--gold); }
+
+/* ---------- Layout ---------- */
+.layout { display: grid; gap: 40px; padding-block: 40px 80px; }
+@media (min-width: 1040px) { .layout { grid-template-columns: 260px minmax(0, 1fr); gap: 56px; } }
+.toc { display: none; }
+@media (min-width: 1040px) {
+  .toc { display: block; position: sticky; top: calc(var(--head) + 24px); align-self: start; max-height: calc(100vh - var(--head) - 48px); overflow-y: auto; padding-inline-end: 6px; }
+}
+.toc .grp { font: 500 .6875rem/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--mute); margin: 18px 0 6px; }
+html[lang="ar"] .toc .grp { letter-spacing: 0; font-family: var(--f-ar); font-weight: 600; font-size: .75rem; }
+.toc .grp:first-child { margin-top: 0; }
+.toc a { display: flex; gap: 10px; align-items: baseline; padding: 6px 10px; border-radius: 8px; text-decoration: none; color: var(--mute); font-size: .9375rem; line-height: 1.35; }
+.toc a span { font: 500 .75rem/1 var(--f-mono); color: inherit; opacity: .7; min-width: 2ch; }
+.toc a:hover { color: var(--text); background: var(--raised); }
+.toc a[aria-current="true"] { color: var(--text); background: color-mix(in srgb, var(--gold) 14%, transparent); }
+.toc a[hidden] { display: none; }
+/* Small screens: chapter picker instead of the side list */
+.picker { display: block; }
+@media (min-width: 1040px) { .picker { display: none; } }
+.picker select { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--raised); color: var(--text); font: 500 .9375rem/1.3 var(--f-body); }
+
+/* ---------- Chapters ---------- */
+.chap { padding-block: 8px 56px; border-bottom: 1px solid var(--line); margin-bottom: 48px; display: grid; gap: 22px; min-width: 0; }
+.chap:last-of-type { border-bottom: 0; }
+.chap > header { display: grid; gap: 12px; }
+.chap h2 { font-size: clamp(1.75rem, 3.2vw, 2.4rem); font-weight: 700; }
+.chap .lede { color: var(--mute); font-size: 1.0625rem; max-width: 70ch; }
+.badges { display: flex; flex-wrap: wrap; gap: 8px; }
+.badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font: 600 .75rem/1.4 var(--f-body); border: 1px solid var(--line); color: var(--mute); }
+.badge.vip { border-color: var(--gold); color: var(--gold); }
+.badge.owner::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--warn); }
+.badge.new { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); }
+.chap h3 { font-size: 1.25rem; font-weight: 700; margin-top: 8px; }
+.chap p.txt { max-width: 72ch; }
+.chap p.txt b, .chap li b { font-weight: 600; }
+.steps { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; max-width: 76ch; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 30px 1fr; gap: 12px; align-items: start; }
+.steps li::before { content: counter(s); display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--gold); color: var(--gold); font: 600 .8125rem/1 var(--f-mono); margin-top: 1px; }
+.dots { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; max-width: 76ch; }
+.dots li { display: grid; grid-template-columns: 18px 1fr; gap: 10px; }
+.dots li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); margin-top: .65em; }
+kbd { display: inline-block; min-width: 1.6em; text-align: center; padding: 1px 6px; border-radius: 5px; border: 1px solid var(--line); border-bottom-width: 2px; background: var(--raised); font: 500 .8125rem/1.4 var(--f-mono); color: var(--text); white-space: nowrap; }
+.ui { font-weight: 600; color: var(--text); background: var(--raised); border: 1px solid var(--line); border-radius: 6px; padding: 0 6px; white-space: nowrap; }
+.flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.flow span { padding: 5px 12px; border-radius: 999px; background: var(--raised); border: 1px solid var(--line); font-size: .875rem; font-weight: 500; }
+.flow span.end { border-color: var(--gold); color: var(--gold); }
+.flow i { font-style: normal; color: var(--mute); }
+html[dir="rtl"] .flow i { transform: scaleX(-1); display: inline-block; }
+.note, .warn { border-radius: 12px; padding: 14px 16px; display: grid; grid-template-columns: 22px 1fr; gap: 10px; max-width: 80ch; font-size: .9375rem; }
+.note { background: var(--note-bg); border: 1px solid color-mix(in srgb, var(--gold) 30%, transparent); }
+.warn { background: var(--warn-bg); border: 1px solid color-mix(in srgb, var(--warn) 40%, transparent); }
+.note::before, .warn::before { font: 700 .9375rem/1.6 var(--f-mono); }
+.note::before { content: "i"; color: var(--gold); text-align: center; }
+.warn::before { content: "!"; color: var(--warn); text-align: center; }
+
+/* Screenshot in a window frame; click to enlarge */
+.shot { margin: 4px 0; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); background: var(--sunk); box-shadow: 0 24px 50px -28px rgba(0,0,0,.6); }
+.shot .bar { display: flex; align-items: center; gap: 6px; padding: 9px 12px; border-bottom: 1px solid var(--line); background: var(--raised); font: 500 .75rem/1 var(--f-mono); color: var(--mute); }
+html[lang="ar"] .shot .bar { font-family: var(--f-ar); }
+.shot .bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
+.shot .bar span { margin-inline-start: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.shot button { all: unset; display: block; width: 100%; cursor: zoom-in; }
+.shot img { display: block; width: 100%; height: auto; aspect-ratio: 1440 / 900; }
+.shot figcaption { padding: 10px 14px; font-size: .8125rem; color: var(--mute); border-top: 1px solid var(--line); }
+.pair { display: grid; gap: 16px; }
+@media (min-width: 900px) { .pair { grid-template-columns: 1fr 1fr; } }
+
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; max-width: 100%; }
+.tbl table { border-collapse: collapse; width: 100%; font-size: .9375rem; }
+.tbl th, .tbl td { padding: 10px 14px; text-align: start; border-bottom: 1px solid var(--line); vertical-align: top; }
+.tbl th { font: 500 .75rem/1.3 var(--f-mono); text-transform: uppercase; letter-spacing: .06em; color: var(--mute); background: var(--raised); }
+html[lang="ar"] .tbl th { font-family: var(--f-ar); letter-spacing: 0; font-size: .8125rem; }
+.tbl tr:last-child td { border-bottom: 0; }
+.tbl td:first-child { white-space: nowrap; }
+
+details.faq { border-bottom: 1px solid var(--line); max-width: 80ch; }
+details.faq summary { cursor: pointer; list-style: none; padding: 16px 0; display: flex; justify-content: space-between; gap: 16px; font-weight: 600; }
+details.faq summary::-webkit-details-marker { display: none; }
+details.faq summary::after { content: "+"; font: 400 1.4rem/1 var(--f-mono); color: var(--gold); transition: transform .2s; }
+details.faq[open] summary::after { transform: rotate(45deg); }
+details.faq p { padding-bottom: 18px; color: var(--mute); }
+
+.plans { display: grid; gap: 14px; }
+@media (min-width: 860px) { .plans { grid-template-columns: repeat(3, 1fr); } }
+.plan { border: 1px solid var(--line); border-radius: var(--r); padding: 22px 20px; display: grid; gap: 10px; align-content: start; }
+.plan.vip { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold) inset; }
+.plan h3 { margin: 0; font-size: 1.125rem; }
+.plan .price { font: 700 1.6rem/1.1 var(--f-body); color: var(--gold); }
+.plan .price small { display: block; font: 400 .875rem/1.4 var(--f-body); color: var(--mute); margin-top: 4px; }
+.plan ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; font-size: .9375rem; }
+.plan li { display: flex; gap: 8px; }
+.plan li::before { content: "✓"; color: var(--gold); font-weight: 700; }
+
+.empty { display: grid; gap: 10px; padding: 32px; border: 1px dashed var(--line); border-radius: var(--r); color: var(--mute); text-align: center; }
+.empty[hidden] { display: none; }
+.chap[hidden] { display: none; }
+
+.help { border: 1px solid var(--line); border-radius: var(--r); padding: 28px 24px; display: grid; gap: 12px; background: var(--raised); }
+.help h2 { font-size: 1.5rem; }
+.help p { color: var(--mute); }
+.help .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.wa-link { background: #0f2a1f; color: #c9f5da; border-color: #1f5a3d; }
+.wa-link:hover { background: #133627; }
+
+footer { border-top: 1px solid var(--line); }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-block: 26px; color: var(--mute); font-size: .8125rem; }
+
+.top-btn { position: fixed; inset-inline-end: 18px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--raised); color: var(--text); cursor: pointer; display: grid; place-items: center; opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 20; }
+.top-btn.show { opacity: 1; pointer-events: auto; }
+
+dialog.zoom { border: 0; padding: 0; background: transparent; max-width: min(1440px, 96vw); width: 96vw; }
+dialog.zoom::backdrop { background: rgba(8, 10, 9, .86); }
+dialog.zoom img { width: 100%; height: auto; border-radius: 10px; display: block; }
+dialog.zoom button { position: absolute; top: 10px; inset-inline-end: 10px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(0,0,0,.6); color: #fff; font-size: 1.4rem; cursor: pointer; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+  html { scroll-behavior: auto; }
+}
+@media print {
+  .top, .toc, .picker, .search, .quick, .top-btn, .help .row { display: none !important; }
+  body { background: #fff; color: #000; }
+  .chap { break-inside: avoid-page; }
+}
+</style>
 </head>
-
 <body>
 
-  <!-- Scroll progress -->
-  <div class="scroll-progress">
-    <div class="scroll-progress-bar" id="bar"></div>
-  </div>
-
-  <!-- ── Sidebar ── -->
-  <nav class="sidebar">
-    <div class="sidebar-logo">
-      <img src="/mark-trace-tile.svg" alt="" style="display:block; width:40px; height:40px; margin-bottom:10px;">
-      <div class="logo-en">Warshati</div>
-      <div class="logo-ar">ورشتي</div>
-      <div class="logo-tag">User Guide · v1.4.2</div>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Warshati">
+      <img src="/mark-trace-tile.svg" alt="">
+      <span>Warshati</span><span class="ar">ورشتي</span>
+      <span class="tag" data-t="tag"></span>
+    </a>
+    <nav aria-label="Site">
+      <a href="/" data-t="nav_home"></a>
+      <a href="/#pricing" data-t="nav_price"></a>
+      <a href="#help" data-t="nav_help"></a>
+    </nav>
+    <div class="langs" role="group" aria-label="Langue / اللغة / Language">
+      <button type="button" data-lang="fr">FR</button>
+      <button type="button" data-lang="ar">ع</button>
+      <button type="button" data-lang="en">EN</button>
     </div>
+    <a class="btn btn-cta" href="/register" data-reg data-t="cta"></a>
+  </div>
+</header>
 
-    <div class="nav-section-label">Introduction</div>
-    <a href="/" class="nav-link" style="color: var(--gold); border-bottom: 1px solid var(--border); margin-bottom: 0.5rem; padding-bottom: 0.8rem;">
-      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-      </svg>
-      Back to Home
-    </a>
-    <a href="#hero" class="nav-link active">
-      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-          d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-      </svg>
-      Overview
-    </a>
-    <a href="#activation" class="nav-link">
-      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-          d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-      </svg>
-      Activation
-    </a>
+<section class="intro">
+  <div class="wrap">
+    <p class="eyebrow" data-t="eyebrow"></p>
+    <h1 data-th="title"></h1>
+    <p class="lede" data-t="lede"></p>
+    <label class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" autocomplete="off" data-tp="search">
+    </label>
+    <div class="quick" id="quick"></div>
+  </div>
+</section>
 
-    <div class="nav-section-label">Core Features</div>
-    <a href="#pillars" class="nav-link">
-      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="9" stroke-width="1.5" />
-        <path stroke-linecap="round" stroke-width="1.5" d="M9 12l2 2 4-4" />
-      </svg>
-      The 6 Pillars
-    </a>
-    <a href="#repairs" class="nav-link">
-      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-        <circle cx="12" cy="12" r="3" stroke-width="1.5" />
-      </svg>
-      Repair Tracking
-    </a>
-    <a href="#pos" class="nav-link">
-      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <rect x="2" y="3" width="20" height="14" rx="2" stroke-width="1.5" />
-        <path stroke-linecap="round" stroke-width="1.5" d="M8 21h8M12 17v4" />
-      </svg>
-      POS & Inventory
-    </a>
-    <a href="#finance" class="nav-link">
-      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-      </svg>
-      Financials
-    </a>
-
-    <div class="nav-section-label">Daily Use</div>
-    <a href="#workflow" class="nav-link">
-      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-      Daily Workflow
-    </a>
-
-    <div class="nav-section-label">Reference</div>
-    <a href="#changelog" class="nav-link">
-      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-      </svg>
-      Changelog
-    </a>
-  </nav>
-
-  <!-- ── Main ── -->
-  <main class="main">
-
-    <!-- Hero -->
-    <section class="hero" id="hero">
-      <div class="hero-kicker">Official User Guide</div>
-      <h1 class="hero-title">The Digital<br><em>Nervous System</em><br>for Repair Shops.</h1>
-      <div class="hero-title-ar">النظام الرقمي المتكامل لمحلات الإصلاح</div>
-      <p class="hero-desc">
-        Warshati replaces chaotic paper trails and scattered spreadsheets with a unified, offline-first management
-        ecosystem — built for phone repair artisans who demand precision.
-      </p>
-      <div class="hero-badges">
-        <span class="badge">Fonctionne sans Internet</span>
-        <span class="badge">Technologie performante</span>
-        <span class="badge">Stockage local sécurisé</span>
-        <span class="badge">FR / AR / EN</span>
-        <span class="badge">Impression Thermique 58mm &amp; 80mm</span>
-        <span class="badge">v1.4.2</span>
+<div class="wrap layout">
+  <aside class="toc" id="toc" aria-label="Chapitres"></aside>
+  <main id="main">
+    <div class="picker"><select id="picker" aria-label="Chapitre"></select></div>
+    <div id="chapters"></div>
+    <div class="empty" id="empty" hidden></div>
+    <section class="help" id="help">
+      <p class="eyebrow" data-t="help_eyebrow"></p>
+      <h2 data-t="help_title"></h2>
+      <p data-t="help_text"></p>
+      <div class="row">
+        <a class="btn wa-link" href="https://wa.me/213671222227" target="_blank" rel="noopener"><span data-t="help_wa"></span> · <b dir="ltr">+213 671 22 22 27</b></a>
+        <a class="btn btn-ghost" href="/" data-t="nav_home"></a>
       </div>
     </section>
-
-    <!-- Activation -->
-    <section class="section" id="activation">
-      <div class="section-number">00 — Pour commencer</div>
-      <h2 class="section-title">Premier Lancement &amp; Activation</h2>
-      <div class="section-subtitle">بدء التشغيل والتفعيل</div>
-      <p class="section-intro">
-        Warshati est un outil professionnel sécurisé. Chaque installation est liée à l'appareil sur lequel elle est
-        utilisée.
-      </p>
-
-      <!-- Image: Activation Screen -->
-      <div class="guide-img-container">
-        <img src="assets/guide/activation.png" alt="Activation Warshati" class="guide-img">
-      </div>
-
-      <div class="setup-block">
-        <div class="setup-card">
-          <div class="setup-card-title">
-            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-            </svg>
-            Activation de la Licence
-          </div>
-          <div class="setup-steps">
-            <div class="setup-step">
-              <div class="setup-step-n">1</div>
-              <div class="setup-step-text">Lancez l'application. Un <strong style="color:var(--gold)">Identifiant
-                  unique</strong> est généré automatiquement pour votre appareil.</div>
-            </div>
-            <div class="setup-step">
-              <div class="setup-step-n">2</div>
-              <div class="setup-step-text">Entrez votre <strong style="color:var(--gold)">Clé d'Activation</strong>
-                reçue lors de votre achat.</div>
-            </div>
-            <div class="setup-step">
-              <div class="setup-step-n">3</div>
-              <div class="setup-step-text">La clé est vérifiée et liée à votre appareil. Une clé = un appareil.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="setup-card">
-          <div class="setup-card-title">
-            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2" />
-            </svg>
-            Assistant de Configuration
-          </div>
-          <div class="setup-steps">
-            <div class="setup-step">
-              <div class="setup-step-n">1</div>
-              <div class="setup-step-text">Entrez le <strong style="color:var(--gold)">Nom de votre Magasin</strong> —
-                affiché sur vos reçus et rapports.</div>
-            </div>
-            <div class="setup-step">
-              <div class="setup-step-n">2</div>
-              <div class="setup-step-text">Sélectionnez votre <strong style="color:var(--gold)">Devise</strong> : DA
-                (Dinar Algérien), EUR, ou USD.</div>
-            </div>
-            <div class="setup-step">
-              <div class="setup-step-n">3</div>
-              <div class="setup-step-text">Crée au profil d'<strong style="color:var(--gold)">Administrateur</strong> —
-                nom d'utilisateur et mot de passe sécurisé.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tip">
-        <strong>🔒 Note de Sécurité</strong>
-        Votre identifiant est lié à votre matériel. Si vous changez d'appareil, contactez notre équipe pour transférer
-        votre licence.
-      </div>
-    </section>
-
-    <!-- 6 Pillars -->
-    <section class="section" id="pillars">
-      <div class="section-number">01 — Fonctions Clés</div>
-      <h2 class="section-title">Les Six Piliers</h2>
-      <div class="section-subtitle">الأعمدة الستة</div>
-      <p class="section-intro">
-        Warshati est construit sur six systèmes connectés pour couvrir tous les aspects de votre activité.
-      </p>
-
-      <!-- Image: Dashboard Overview -->
-      <div class="guide-img-container">
-        <img src="assets/guide/dashboard.png" alt="Vue d'ensemble Dashboard" class="guide-img">
-      </div>
-
-      <div class="pillars">
-        <div class="pillar">
-          <div class="pillar-num">1</div>
-          <div class="pillar-icon">🔧</div>
-          <div class="pillar-title">Suivi des Réparations</div>
-          <div class="pillar-text">Gestion précise du cycle de vie de chaque appareil entrant dans votre atelier.</div>
-          <ul class="pillar-features">
-            <li>Fiche d'entrée avec capture IMEI</li>
-            <li>Tableau de bord des statuts en direct</li>
-            <li>Suivi automatique de la garantie</li>
-          </ul>
-        </div>
-
-        <div class="pillar">
-          <div class="pillar-num">2</div>
-          <div class="pillar-icon">🏪</div>
-          <div class="pillar-title">Ventes &amp; Stock</div>
-          <div class="pillar-text">Un système de caisse complet relié directement à votre inventaire.</div>
-          <ul class="pillar-features">
-            <li>Scan de codes-barres pour des ventes rapides</li>
-            <li>Échange d'appareils (Trade-In)</li>
-            <li>Alertes automatiques de stock faible</li>
-          </ul>
-        </div>
-
-        <div class="pillar">
-          <div class="pillar-num">3</div>
-          <div class="pillar-icon">📊</div>
-          <div class="pillar-title">Intelligence Financière</div>
-          <div class="pillar-text">Comptabilité intégrée conçue pour le métier de la réparation.</div>
-          <ul class="pillar-features">
-            <li>Clôture journalière en un clic</li>
-            <li>Analyse du bénéfice net en temps réel</li>
-            <li>Graphiques de tendances mensuelles</li>
-          </ul>
-        </div>
-
-        <div class="pillar">
-          <div class="pillar-num">4</div>
-          <div class="pillar-icon">📒</div>
-          <div class="pillar-title">Gestion des Dettes</div>
-          <div class="pillar-text">Ne perdez jamais la trace de l'argent dû — clients ou fournisseurs.</div>
-          <ul class="pillar-features">
-            <li>Historique des paiements partiels</li>
-            <li>Registre fournisseur lié aux achats</li>
-            <li>Résumés clairs des soldes</li>
-          </ul>
-        </div>
-
-        <div class="pillar">
-          <div class="pillar-num">5</div>
-          <div class="pillar-icon">🛡️</div>
-          <div class="pillar-title">Confidentialité Totale</div>
-          <div class="pillar-text">Vos données vous appartiennent — stockées localement sur votre ordinateur.</div>
-          <ul class="pillar-features">
-            <li>Fonctionne sans Internet</li>
-            <li>Sécurité par identifiant unique</li>
-            <li>Impression thermique 58mm &amp; 80mm</li>
-          </ul>
-        </div>
-
-        <div class="pillar">
-          <div class="pillar-num">6</div>
-          <div class="pillar-icon">🌍</div>
-          <div class="pillar-title">Support Arabe Complet</div>
-          <div class="pillar-text">Intégration profonde de la langue arabe pour une expérience naturelle.</div>
-          <ul class="pillar-features">
-            <li>Interface totalement adaptée à l'arabe</li>
-            <li>Changement de langue instantané</li>
-            <li>Aucun redémarrage requis</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- Repair Tracking Detail -->
-    <section class="section" id="repairs">
-      <div class="section-number">02 — Module Réparation</div>
-      <h2 class="section-title">Suivi des Réparations</h2>
-      <div class="section-subtitle">متابعة الإصلاحات</div>
-      <p class="section-intro">
-        Le cœur de Warshati. Chaque appareil est suivi de sa réception à sa remise au client.
-      </p>
-
-      <!-- Image: Repairs Dashboard -->
-      <div class="guide-img-container">
-        <img src="assets/guide/repairs.png" alt="Module Réparations" class="guide-img">
-      </div>
-
-      <div class="card-grid">
-        <div class="card">
-          <span class="card-icon">📋</span>
-          <div class="card-title">Fiche d'Entrée</div>
-          <div class="card-text">Capturez le nom du client, téléphone, modèle, numéro IMEI, et description de la panne.
-            Imprimez la copie du client immédiatement.</div>
-        </div>
-        <div class="card">
-          <span class="card-icon">🔄</span>
-          <div class="card-title">Cycle des Statuts</div>
-          <div class="card-text">Chaque réparation passe par des étapes claires : <strong style="color:var(--gold)">En
-              attente → En cours → Prêt → Récupéré</strong>.</div>
-        </div>
-        <div class="card">
-          <span class="card-icon">🛡️</span>
-          <div class="card-title">Suivi de Garantie</div>
-          <div class="card-text">Warshati calcule et surveille automatiquement la période de garantie de chaque réparation
-            terminée.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- POS & Inventory -->
-    <section class="section" id="pos">
-      <div class="section-number">03 — Module Ventes</div>
-      <h2 class="section-title">Ventes &amp; Stock</h2>
-      <div class="section-subtitle">نقطة البيع والمخزون</div>
-
-      <!-- Image: POS Screen -->
-      <div class="guide-img-container">
-        <img src="assets/guide/pos.png" alt="Module Ventes POS" class="guide-img">
-      </div>
-
-      <div class="card-grid">
-        <div class="card">
-          <span class="card-icon">📷</span>
-          <div class="card-title">Scan de Codes-barres</div>
-          <div class="card-text">Connectez n'importe quel scanner. Scannez un article pour l'ajouter instantanément à
-            une vente. Pas d'erreur manuelle.</div>
-        </div>
-        <div class="card">
-          <span class="card-icon">📱</span>
-          <div class="card-title">Échanges (Trade-In)</div>
-          <div class="card-text">Acceptez des appareils d'occasion. Enregistrez l'état et l'IMEI, et Warshati l'ajoute
-            automatiquement à votre stock pour la revente.</div>
-        </div>
-        <div class="card">
-          <span class="card-icon">⚠️</span>
-          <div class="card-title">Alertes de Stock</div>
-          <div class="card-text">Définissez un seuil minimum. Warshati vous alerte quand le stock baisse pour ne jamais
-            manquer de pièces essentielles.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Financials -->
-    <section class="section" id="finance">
-      <div class="section-number">04 — Module Financier</div>
-      <h2 class="section-title">Intelligence Financière</h2>
-      <div class="section-subtitle">الذكاء المالي</div>
-
-      <!-- Image: Finance Charts -->
-      <div class="guide-img-container">
-        <img src="assets/guide/finance.png" alt="Intelligence Financière" class="guide-img">
-      </div>
-
-      <div class="card-grid">
-        <div class="card">
-          <span class="card-icon">📅</span>
-          <div class="card-title">Clôture du Jour</div>
-          <div class="card-text">À la fin de la journée, vérifiez vos ventes, réparations et dépenses d'un seul coup
-            d'œil. Validez pour sceller vos registres.</div>
-        </div>
-        <div class="card">
-          <span class="card-icon">📈</span>
-          <div class="card-title">Analyse des Profits</div>
-          <div class="card-text">Suivi en temps réel de vos marges bénéficiaires. Identifiez vos services les plus
-            rentables en un clin d'œil.</div>
-        </div>
-        <div class="card">
-          <span class="card-icon">🗓️</span>
-          <div class="card-title">Résumés Mensuels</div>
-          <div class="card-text">Des graphiques élégants pour visualiser vos tendances et prendre de meilleures
-            décisions pour votre entreprise.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Daily Workflow -->
-    <section class="section" id="workflow">
-      <div class="section-number">05 — Utilisation Quotidienne</div>
-      <h2 class="section-title">Une Journée Type<br><em>avec Warshati</em></h2>
-      <div class="section-subtitle">يوم عمل نموذجي مع ورشتي</div>
-      <p class="section-intro">Suivez ce flux pour tirer le meilleur parti de Warshati chaque jour.</p>
-
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">I</div>
-          <div class="step-body">
-            <div class="step-time">Matin</div>
-            <div class="step-title">Consulter le Tableau de Bord</div>
-            <div class="step-text">Ouvrez Warshati. Vérifiez les réparations en attente et les alertes de stock pour
-              organiser votre journée.</div>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">II</div>
-          <div class="step-body">
-            <div class="step-time">Arrivée Client</div>
-            <div class="step-title">Réceptionner un Appareil</div>
-            <div class="step-text">Utilisez l'assistant de réception. Notez les détails et imprimez le bon pour le
-              client.</div>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">III</div>
-          <div class="step-body">
-            <div class="step-time">Pendant la Réparation</div>
-            <div class="step-title">Mettre à Jour le Statut</div>
-            <div class="step-text">Passez le ticket en "En cours". Notez les pièces utilisées pour que le stock se mette
-              à jour automatiquement.</div>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">IV</div>
-          <div class="step-body">
-            <div class="step-time">Réparation Terminée</div>
-            <div class="step-title">Prêt → Récupéré</div>
-            <div class="step-text">Marquez comme "Prêt". Quand le client paie, marquez "Récupéré". La garantie commence
-              alors automatiquement.</div>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">V</div>
-          <div class="step-body">
-            <div class="step-time">Fin de Journée</div>
-            <div class="step-title">Clôture Journalière</div>
-            <div class="step-text">Vérifiez vos revenus et validez la clôture pour garder un historique comptable
-              parfait.</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Changelog -->
-    <section class="section" id="changelog">
-      <div class="section-number">06 — Historique des Versions</div>
-      <h2 class="section-title">Mises à Jour</h2>
-      <div class="section-subtitle">سجل الإصدارات</div>
-
-      <div class="versions">
-        <div class="version">
-          <div class="version-tag">v1.4.2 <span class="version-current">ACTUEL</span></div>
-          <ul class="version-changes">
-            <li>Refonte du moteur d'impression thermique (80mm & 58mm)</li>
-            <li>Nouveau système de récupération après crash</li>
-            <li>Ajout d'un module de feedback direct</li>
-          </ul>
-        </div>
-        <div class="version">
-          <div class="version-tag">v1.4.0</div>
-          <ul class="version-changes">
-            <li>Support multi-format (A4/80mm/58mm)</li>
-            <li>Flux automatisé pour les reprises (Trade-In)</li>
-          </ul>
-        </div>
-        <div class="version">
-          <div class="version-tag">v1.3.0</div>
-          <ul class="version-changes">
-            <li>Verrouillage de sécurité des outils développeur</li>
-            <li>Affichage natif de l'historique des versions</li>
-          </ul>
-        </div>
-      </div>    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-      <div>
-        <div class="footer-brand">Warshati — ورشتي</div>
-        <div style="font-size:11px;color:var(--text-dim);margin-top:0.4rem">The complete ecosystem for phone repair
-          stores.</div>
-      </div>
-      <div class="footer-right">
-        © 2026 Warshati — ورشتي<br>
-        Developed with dedication by <strong style="color:var(--gold)">Allali Mohamed</strong><br>
-        Icons: Lucide React · Design: Artisan Premium Philosophy
-      </div>
-    </footer>
-
   </main>
+</div>
 
-  <script>
-    // Scroll progress bar
-    window.addEventListener('scroll', () => {
-      const el = document.documentElement;
-      const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
-      document.getElementById('bar').style.width = pct + '%';
+<footer>
+  <div class="wrap">
+    <span>© 2026 Warshati — ورشتي · Allali Mohamed · warshatydz.com</span>
+    <span data-t="foot"></span>
+  </div>
+</footer>
+
+<button class="top-btn" id="up" type="button" aria-label="↑">↑</button>
+<dialog class="zoom" id="zoom"><button type="button" id="zoom-close" aria-label="×">×</button><img id="zoom-img" alt=""></dialog>
+
+<script>
+/* ---------------------------------------------------------------
+   Texts. The page is built from these: the frame (T) and the chapters (C), in French, Arabic and English.
+   Chapter blocks: p (paragraph), steps (numbered), list (bullets), note, warn, flow (status chain),
+   shot / pair (screenshots, files in /assets/guide/<name>-<lang>.webp), table, faq, plans.
+   --------------------------------------------------------------- */
+const T = {
+fr: {
+  tag: "Guide", nav_home: "Accueil", nav_price: "Prix", nav_help: "Aide", cta: "S'inscrire",
+  eyebrow: "Guide d'utilisation · Warshati 1.6",
+  title: "Tout Warshati, <em>pas à pas.</em>",
+  lede: "Comment installer Warshati, recevoir une réparation, vendre au comptoir, suivre les dettes et fermer la caisse le soir. Chaque chapitre montre l'écran tel que vous le verrez.",
+  search: "Chercher dans le guide… ex. dette, imprimante, mot de passe",
+  toc: "Chapitres", empty: "Aucun chapitre ne parle de « {q} ».", empty_help: "Posez la question sur WhatsApp, on vous répond.",
+  zoom: "Cliquer pour agrandir",
+  groups: { start: "Démarrer", repairs: "Réparations", sales: "Ventes et stock", money: "Argent", admin: "Réglages", more: "Plus" },
+  owner: "Gérant seulement", vip: "Plan VIP", newb: "Nouveau",
+  help_eyebrow: "Besoin d'aide ?", help_title: "Une question qui n'est pas dans le guide ?",
+  help_text: "Écrivez-nous sur WhatsApp avec une photo de l'écran. On vous répond dans la journée.",
+  help_wa: "WhatsApp", foot: "Fait en Algérie pour les ateliers de réparation.",
+  quick: [
+    ["start", "01", "Première installation", "Activer la licence et créer votre boutique."],
+    ["repairs", "03", "Recevoir une réparation", "Du ticket au téléphone rendu au client."],
+    ["pos", "05", "Vendre au comptoir", "Scanner, encaisser, imprimer le reçu."],
+    ["close", "12", "Fermer la journée", "Ce qui doit être dans le tiroir, et le bénéfice."]
+  ]
+},
+ar: {
+  tag: "الدليل", nav_home: "الرئيسية", nav_price: "الأسعار", nav_help: "مساعدة", cta: "التسجيل",
+  eyebrow: "دليل الاستخدام · ورشتي 1.6",
+  title: "كل ورشتي، <em>خطوة بخطوة.</em>",
+  lede: "كيف تثبّت ورشتي، تستلم جهازاً للتصليح، تبيع في المحل، تتابع الديون وتغلق الصندوق في المساء. كل فصل يعرض الشاشة كما ستراها.",
+  search: "ابحث في الدليل… مثلاً: دين، طابعة، كلمة المرور",
+  toc: "الفصول", empty: "لا يوجد فصل يتحدث عن « {q} ».", empty_help: "اطرح سؤالك على واتساب وسنجيبك.",
+  zoom: "انقر للتكبير",
+  groups: { start: "البداية", repairs: "الصيانة", sales: "المبيعات والمخزون", money: "المال", admin: "الإعدادات", more: "المزيد" },
+  owner: "للمالك فقط", vip: "خطة VIP", newb: "جديد",
+  help_eyebrow: "تحتاج مساعدة؟", help_title: "سؤالك غير موجود في الدليل؟",
+  help_text: "راسلنا على واتساب مع صورة للشاشة، وسنرد عليك في نفس اليوم.",
+  help_wa: "واتساب", foot: "صُنع في الجزائر لورشات التصليح.",
+  quick: [
+    ["start", "01", "التثبيت الأول", "تفعيل الترخيص وإنشاء محلك."],
+    ["repairs", "03", "استلام جهاز للتصليح", "من التذكرة إلى تسليم الهاتف للزبون."],
+    ["pos", "05", "البيع في المحل", "امسح، اقبض، اطبع الإيصال."],
+    ["close", "12", "غلق اليوم", "ما يجب أن يكون في الدرج، والربح."]
+  ]
+},
+en: {
+  tag: "Guide", nav_home: "Home", nav_price: "Pricing", nav_help: "Help", cta: "Sign up",
+  eyebrow: "User guide · Warshati 1.6",
+  title: "All of Warshati, <em>step by step.</em>",
+  lede: "How to install Warshati, take in a repair, sell at the counter, follow debts and close the till at night. Every chapter shows the screen as you will see it.",
+  search: "Search the guide… e.g. debt, printer, password",
+  toc: "Chapters", empty: "No chapter talks about “{q}”.", empty_help: "Ask on WhatsApp and we will answer.",
+  zoom: "Click to enlarge",
+  groups: { start: "Getting started", repairs: "Repairs", sales: "Sales and stock", money: "Money", admin: "Settings", more: "More" },
+  owner: "Owner only", vip: "VIP plan", newb: "New",
+  help_eyebrow: "Need help?", help_title: "A question the guide does not answer?",
+  help_text: "Message us on WhatsApp with a photo of the screen. We answer the same day.",
+  help_wa: "WhatsApp", foot: "Made in Algeria for repair workshops.",
+  quick: [
+    ["start", "01", "First install", "Activate the license and create your shop."],
+    ["repairs", "03", "Take in a repair", "From the ticket to the phone back in the customer's hand."],
+    ["pos", "05", "Sell at the counter", "Scan, take the money, print the receipt."],
+    ["close", "12", "Close the day", "What should be in the drawer, and the profit."]
+  ]
+}
+};
+
+const C = {
+fr: [
+  { id: "start", g: "start", title: "Installation et activation", lede: "Warshati s'installe sur un PC Windows et fonctionne sans internet. Internet n'est nécessaire qu'à l'activation.",
+    blocks: [
+      { pair: [["activation", "L'écran d'activation"], ["login", "La connexion"]] },
+      { h: "Activer la licence" },
+      { steps: [
+        "Installez Warshati et ouvrez-le. L'écran <span class=\"ui\">Activation du Logiciel</span> s'affiche.",
+        "Tapez la clé reçue à l'achat (elle commence par <b>WARSHATI-</b>) et cliquez sur <span class=\"ui\">Activer l'Appareil</span>.",
+        "La clé est liée à ce PC. Gardez-la précieusement : elle sert aussi à récupérer le mot de passe."
+      ] },
+      { note: "Une clé = un PC. Pour changer d'ordinateur, contactez-nous : nous libérons la clé pour le nouveau PC." },
+      { h: "Créer la boutique (première fois)" },
+      { steps: [
+        "Saisissez le <b>nom de la boutique</b>, le téléphone et l'adresse : ils apparaissent sur les tickets et les reçus.",
+        "Choisissez la devise (DZD par défaut) et la garantie par défaut en jours (30).",
+        "Créez le <b>compte gérant</b> : votre nom, un email et un mot de passe d'au moins 6 caractères.",
+        "Connectez-vous avec cet email et ce mot de passe."
+      ] },
+      { h: "Sans internet ?" },
+      { p: "Warshati vérifie la licence à chaque démarrage quand internet est là. Sans connexion, il continue de fonctionner normalement pendant <b>30 jours</b> après la dernière vérification réussie." }
+    ] },
+  { id: "recover", g: "start", title: "Mot de passe oublié", badge: ["newb"], lede: "Le gérant a oublié son email ou son mot de passe ? La clé de licence suffit, même sans internet.",
+    blocks: [
+      { shot: "recover", cap: "Récupérer le compte avec la clé de licence" },
+      { steps: [
+        "Sur l'écran de connexion, cliquez sur <span class=\"ui\">Email ou mot de passe oublié ?</span>",
+        "Tapez la clé de licence de la boutique, puis <span class=\"ui\">Continuer</span>. Votre email s'affiche.",
+        "Choisissez un nouveau mot de passe (deux fois) et enregistrez. Connectez-vous avec le nouveau mot de passe."
+      ] },
+      { note: "Un vendeur qui oublie son mot de passe : le gérant le change dans <span class=\"ui\">Paramètres → Utilisateurs</span>." },
+      { warn: "Clé perdue aussi ? Contactez-nous sur WhatsApp : nous vous la redonnons après avoir vérifié que c'est bien vous. Après 5 clés fausses, la récupération est bloquée 5 minutes." }
+    ] },
+  { id: "tour", g: "start", title: "Se repérer", lede: "Le menu à gauche regroupe tout. Le tableau de bord montre l'essentiel de la journée.",
+    blocks: [
+      { shot: "dashboard", cap: "Tableau de bord" },
+      { list: [
+        "<b>Principal</b> : tableau de bord, clients, inventaire, catalogue d'appareils.",
+        "<b>Réparations</b> : réception, tickets, garantie, reprises.",
+        "<b>Ventes</b> : caisse et factures. <b>Finance</b> : dépenses, fournisseurs, créances, clôture, résumé mensuel.",
+        "<b>Paramètres</b> : boutique, utilisateurs, sauvegarde, réseau du magasin."
+      ] },
+      { p: "Le tableau de bord affiche les réparations en attente, le bénéfice net du jour, les impayés et le stock faible, avec les dernières réparations et ventes. Les boutons du haut lancent les actions courantes." },
+      { h: "Raccourcis clavier" },
+      { table: { head: ["Touche", "Action"], rows: [
+        ["<kbd>F1</kbd>", "Afficher tous les raccourcis"], ["<kbd>F2</kbd>", "Caisse (POS)"], ["<kbd>F3</kbd>", "Nouvelle réparation"],
+        ["<kbd>F4</kbd>", "Nouvelle réception"], ["<kbd>F6</kbd>", "Réparations"], ["<kbd>F7</kbd>", "Inventaire"], ["<kbd>F8</kbd>", "Créances"],
+        ["<kbd>F9</kbd>", "Clôture journalière"], ["<kbd>Ctrl</kbd> <kbd>K</kbd>", "Aller à la recherche"], ["<kbd>Esc</kbd>", "Fermer la fenêtre ouverte"],
+        ["<kbd>F10</kbd>", "Caisse : terminer la vente"], ["<kbd>Ctrl</kbd> <kbd>S</kbd> · <kbd>Ctrl</kbd> <kbd>P</kbd>", "Ticket : enregistrer · imprimer"]
+      ] } },
+      { note: "Langue : <span class=\"ui\">Paramètres → Boutique → Langue</span>. Français, العربية ou English, sans redémarrer." }
+    ] },
+  { id: "repairs", g: "repairs", title: "Recevoir et suivre une réparation", lede: "Chaque appareil a son ticket, de la réception jusqu'à la remise au client.",
+    blocks: [
+      { h: "Réception rapide (quand il y a du monde)" },
+      { shot: "checkins", cap: "Réparations → Réception" },
+      { steps: [
+        "<span class=\"ui\">Réception</span> (<kbd>F4</kbd>) → <span class=\"ui\">Nouvelle réception</span>.",
+        "Nom et téléphone du client, marque et modèle, IMEI, couleur, état visible et les mots exacts du client sur la panne.",
+        "Imprimez le reçu de réception pour le client (icône imprimante).",
+        "Plus tard, cliquez sur <span class=\"ui\">Convertir en ticket</span> : le ticket s'ouvre déjà rempli."
+      ] },
+      { h: "Créer un ticket de réparation" },
+      { shot: "ticket", cap: "Un ticket ouvert" },
+      { steps: [
+        "<span class=\"ui\">Nouvelle réparation</span> (<kbd>F3</kbd>), ou convertissez une réception.",
+        "Choisissez l'appareil dans la liste (téléphone, PC portable ou console) ou tapez-le à la main : Warshati s'en souviendra.",
+        "Remplissez la panne, le mot de passe de l'appareil, le prix final, l'acompte, la priorité et la date prévue.",
+        "<span class=\"ui\">Enregistrer</span> (<kbd>Ctrl</kbd> <kbd>S</kbd>), puis <span class=\"ui\">Imprimer le ticket</span> (<kbd>Ctrl</kbd> <kbd>P</kbd>)."
+      ] },
+      { note: "Un client avec le même téléphone est retrouvé automatiquement. L'acompte entre dans la caisse du jour." },
+      { h: "Les étapes d'une réparation" },
+      { flow: ["En diagnostic", "En attente de pièces", "En réparation", "Terminé", "Livré"] },
+      { list: [
+        "Changez l'étape avec les boutons <span class=\"ui\">Passer à</span> en haut du ticket.",
+        "<b>Terminé</b> demande le prix final. Cliquez ensuite sur <span class=\"ui\">Prévenir le client sur WhatsApp</span> : le message avec le reste à payer est prêt.",
+        "<b>Livré</b> : choisissez <b>Espèces</b> ou <b>Crédit</b>. Warshati crée la facture ; s'il reste de l'argent dû, il devient une dette du client.",
+        "<b>Annulé</b> arrête le ticket. Les pièces déjà prises ne reviennent pas seules en stock : retirez-les d'abord."
+      ] },
+      { h: "Pièces du stock" },
+      { p: "Dans <span class=\"ui\">Pièces du stock</span>, choisissez la pièce et la quantité : elle sort du stock et son coût s'ajoute au coût des pièces du ticket. La corbeille la remet en stock (tant que le ticket n'est pas facturé)." },
+      { shot: "tickets", cap: "Réparations : tous les tickets et leur étape" }
+    ] },
+  { id: "warranty", g: "repairs", title: "Garantie", lede: "Un client revient avec le même problème ? Retrouvez la réparation et voyez tout de suite si elle est encore sous garantie.",
+    blocks: [
+      { shot: "warranty", cap: "Réparations → Garantie" },
+      { steps: [
+        "<span class=\"ui\">Garantie</span> → <span class=\"ui\">Soumettre</span>. Cherchez par numéro de ticket, IMEI, nom ou téléphone du client.",
+        "Décrivez le nouveau problème et, si besoin, la responsabilité (défaut, casse…).",
+        "Warshati indique si la réclamation est <b>sous garantie</b> (date de livraison + jours de garantie du ticket).",
+        "<span class=\"ui\">Créer le ticket</span> ouvre une réparation urgente pour le même appareil, gratuite si elle est sous garantie."
+      ] },
+      { note: "Seuls les tickets livrés peuvent avoir une réclamation. La garantie par défaut se règle dans Paramètres → Boutique." }
+    ] },
+  { id: "pos", g: "sales", title: "Caisse (POS)", lede: "Vendre un accessoire, une pièce ou un téléphone en quelques secondes, avec ou sans scanner.",
+    blocks: [
+      { shot: "pos", cap: "Ventes → Caisse" },
+      { steps: [
+        "Scannez le code-barres, ou tapez le nom et appuyez sur <kbd>Entrée</kbd>. Vous pouvez aussi cliquer sur un article de la liste.",
+        "Ajustez la quantité et le prix si besoin. Ajoutez le client par son téléphone (obligatoire pour une vente à crédit).",
+        "Remise et crédit de reprise se déduisent du total.",
+        "Choisissez le mode de paiement, tapez le montant reçu et cliquez sur <span class=\"ui\">Terminer la vente</span> (<kbd>F10</kbd>).",
+        "Le reçu s'imprime : <kbd>Entrée</kbd> pour l'imprimer tout de suite."
+      ] },
+      { h: "Modes de paiement" },
+      { table: { head: ["Mode", "Quand l'utiliser"], rows: [
+        ["Espèces", "Le client paie tout maintenant."],
+        ["Crédit (totalité)", "Le client ne paie rien maintenant : toute la somme devient sa dette."],
+        ["Mixte (espèces + crédit)", "Il paie une partie : le reste devient sa dette."]
+      ] } },
+      { note: "Il manque de l'argent en espèces ? Cliquez sur <span class=\"ui\">Enregistrer le reste comme dette</span> : la vente passe en mixte." }
+    ] },
+  { id: "invoices", g: "sales", title: "Factures et remboursements", lede: "Toutes les ventes, avec leur statut. Le remboursement remet les articles en stock.",
+    blocks: [
+      { shot: "invoices", cap: "Ventes → Factures" },
+      { list: [
+        "Cherchez une facture, réimprimez le reçu, exportez la liste vers Excel.",
+        "<b>Rembourser</b> (gérant) : tous les articles reviennent en stock, une dette ouverte sur la vente est fermée, et Warshati vous dit combien rendre au client.",
+        "Une facture de réparation ne se rembourse pas ici : passez par la garantie."
+      ] },
+      { note: "Le remboursement est toujours total (toute la vente)." }
+    ] },
+  { id: "stock", g: "sales", title: "Inventaire", lede: "Téléphones neufs et d'occasion, pièces et accessoires : le stock baisse tout seul à chaque vente et à chaque pièce utilisée.",
+    blocks: [
+      { shot: "inventory", cap: "Inventaire" },
+      { list: [
+        "<b>Ajouter</b> (gérant) : type, nom, appareil compatible, code-barres ou IMEI, prix d'achat et de vente, quantité et seuil de stock faible.",
+        "Cochez « j'ai payé ce stock aujourd'hui » pour enregistrer la dépense en même temps.",
+        "<b>Réapprovisionnement rapide</b> : ajoute de la quantité et enregistre la dépense.",
+        "Quand la quantité atteint le seuil, l'article passe en <b>stock bas</b> et apparaît sur le tableau de bord.",
+        "Désactiver un article le cache des listes sans effacer son historique."
+      ] },
+      { note: "Les vendeurs ne voient pas les prix d'achat et ne peuvent pas modifier le stock." }
+    ] },
+  { id: "labels", g: "sales", title: "Étiquettes code-barres", badge: ["newb"], lede: "Imprimez des petites étiquettes avec code-barres et prix, à coller sur les coques, chargeurs et pièces.",
+    blocks: [
+      { shot: "labels", cap: "Inventaire → Étiquettes" },
+      { steps: [
+        "Dans <span class=\"ui\">Inventaire</span>, cliquez sur <span class=\"ui\">Étiquettes</span> (tous les articles) ou sur l'icône code-barres d'une ligne.",
+        "Choisissez la taille (30×20 à 58×40 mm) et l'imprimante d'étiquettes.",
+        "Gardez ou retirez le nom de la boutique et le prix, et le nombre d'étiquettes par article (1 chacun, = stock, ou aucune).",
+        "Vérifiez l'aperçu, puis <span class=\"ui\">Imprimer</span>."
+      ] },
+      { note: "Un article sans code-barres en reçoit un automatiquement : le scanner de la caisse le trouvera." }
+    ] },
+  { id: "devices", g: "sales", title: "Catalogue d'appareils", lede: "617 téléphones, 578 PC portables et 18 consoles déjà dans l'application, avec leurs caractéristiques.",
+    blocks: [
+      { shot: "devices", cap: "Principal → Appareils" },
+      { list: [
+        "Choisissez l'appareil dans les tickets, les réceptions, les reprises et le stock : plus besoin de le taper.",
+        "Chaque téléphone a une note <b>qualité-prix</b> de 0 à 100 pour conseiller un client qui hésite.",
+        "Un appareil absent ? Tapez-le une fois, il sera proposé la prochaine fois.",
+        "Photos des téléphones : <span class=\"ui\">Paramètres → Catalogue d'appareils</span> (environ 15 Mo, téléchargées une seule fois)."
+      ] }
+    ] },
+  { id: "tradeins", g: "sales", title: "Reprises", lede: "Vous rachetez le téléphone d'un client : il entre directement dans votre stock d'occasion.",
+    blocks: [
+      { shot: "tradeins", cap: "Réparations → Reprises" },
+      { steps: [
+        "<span class=\"ui\">Reprises</span> → nouvelle reprise. Client, appareil, IMEI, couleur, stockage, état et valeur proposée.",
+        "Choisissez le paiement : <b>espèces</b> (une dépense est enregistrée) ou <b>avoir en magasin</b>.",
+        "<span class=\"ui\">Évaluer</span> : le téléphone est ajouté au stock comme téléphone d'occasion, avec un prix de vente proposé (valeur + 30 %) que vous pouvez changer."
+      ] },
+      { note: "Avoir en magasin : à la caisse, tapez le montant dans <b>Crédit de reprise</b>." }
+    ] },
+  { id: "customers", g: "money", title: "Clients", lede: "Chaque client a sa fiche : réparations, achats, dettes et reprises.",
+    blocks: [
+      { shot: "customers", cap: "Principal → Clients" },
+      { list: [
+        "Les clients sont créés tout seuls depuis les tickets, la caisse et les dettes. Vous pouvez aussi les ajouter à la main.",
+        "Ouvrez un client pour voir tout son historique avec la boutique.",
+        "Le numéro sert à WhatsApp : un numéro local (06…, 05…, 07…) reçoit l'indicatif +213 automatiquement."
+      ] }
+    ] },
+  { id: "debts", g: "money", title: "Dettes clients", lede: "Le cahier des dettes, mais qui calcule tout seul et rappelle le client sur WhatsApp.",
+    blocks: [
+      { shot: "debts", cap: "Finance → Créances" },
+      { list: [
+        "Les dettes se créent seules : vente à crédit ou mixte, réparation livrée à crédit.",
+        "<span class=\"ui\">Payer</span> : tapez le montant reçu. La dette passe en partiel puis en réglé. Warshati propose d'imprimer un reçu.",
+        "<span class=\"ui\">Rappel WhatsApp</span> : message prêt avec le montant restant.",
+        "<span class=\"ui\">Paiements</span> : l'historique de chaque dette."
+      ] },
+      { h: "Dettes d'avant Warshati" },
+      { p: "<span class=\"ui\">Ajouter une dette</span> (gérant) : pour l'argent qu'un client devait déjà, par exemple dans votre cahier. Elle ne compte pas dans les ventes du jour ; ses paiements, oui." },
+      { h: "Corriger un paiement erroné" },
+      { p: "Dans <span class=\"ui\">Paiements</span>, <span class=\"ui\">Annuler le paiement</span> (gérant) avec une raison. Rien n'est effacé : une ligne d'annulation est ajoutée aujourd'hui et la caisse du jour baisse du même montant." }
+    ] },
+  { id: "suppliers", g: "money", title: "Fournisseurs et achats", badge: ["owner"], lede: "Vos fournisseurs, vos bons de commande et ce que vous leur devez.",
+    blocks: [
+      { shot: "suppliers", cap: "Finance → Fournisseurs" },
+      { steps: [
+        "Ajoutez le fournisseur, puis ouvrez-le → <span class=\"ui\">Nouveau bon de commande</span>.",
+        "Ajoutez les articles, quantités et prix unitaires. Le stock augmente tout de suite et le prix d'achat de l'article est mis à jour.",
+        "Payé comptant : une dépense est enregistrée. À crédit : une dette fournisseur est créée.",
+        "Onglet <b>Dettes</b> : <span class=\"ui\">Payer</span> le fournisseur, voir les paiements, ou <span class=\"ui\">Ajouter une dette existante</span> d'avant Warshati."
+      ] }
+    ] },
+  { id: "expenses", g: "money", title: "Dépenses", lede: "Loyer, électricité, transport, achats de stock : tout ce qui sort de la caisse.",
+    blocks: [
+      { shot: "expenses", cap: "Finance → Dépenses" },
+      { list: [
+        "<span class=\"ui\">Ajouter une dépense</span> : catégorie, description, montant, bénéficiaire et date.",
+        "Les achats de stock sortent de la caisse mais ne sont pas comptés deux fois dans le bénéfice : c'est le coût des articles vendus qui compte.",
+        "Le gérant peut modifier ou supprimer une dépense."
+      ] }
+    ] },
+  { id: "close", g: "money", title: "Clôture du jour et résumé du mois", lede: "Le soir, Warshati calcule ce qui doit être dans le tiroir et votre vrai bénéfice.",
+    blocks: [
+      { shot: "close", cap: "Finance → Clôture journalière" },
+      { list: [
+        "<b>Caisse nette</b> = ventes en espèces + acomptes + dettes encaissées − remboursements − dépenses et paiements fournisseurs.",
+        "<b>Bénéfice net</b> (gérant) = revenu − coût des pièces et articles − dépenses de fonctionnement.",
+        "<span class=\"ui\">Clôturer Aujourd'hui</span> enregistre le bilan du jour (une fois par jour). <span class=\"ui\">Print Report</span> imprime le rapport en A4."
+      ] },
+      { h: "Résumé mensuel (gérant)" },
+      { shot: "monthly", cap: "Finance → Résumé mensuel" },
+      { p: "Choisissez un mois : totaux, revenu et caisse jour par jour, réparations reçues et livrées, et les 10 articles les plus vendus. Imprimable en A4." }
+    ] },
+  { id: "team", g: "admin", title: "Utilisateurs et droits", lede: "Le gérant voit tout. Le vendeur travaille sans voir vos marges.",
+    blocks: [
+      { shot: "users", cap: "Paramètres → Utilisateurs" },
+      { table: { head: ["Le vendeur peut", "Réservé au gérant"], rows: [
+        ["Réceptions, tickets, garantie, reprises", "Fournisseurs, résumé mensuel, paramètres, utilisateurs, sauvegardes"],
+        ["Caisse, factures, clients", "Ajouter ou modifier le stock, voir les prix d'achat"],
+        ["Encaisser une dette, ajouter une dépense", "Rembourser, annuler un paiement, ajouter une ancienne dette"],
+        ["Clôture du jour (caisse nette)", "Voir le bénéfice et les coûts"]
+      ] } },
+      { list: [
+        "<span class=\"ui\">Ajouter un utilisateur</span> : nom, email, mot de passe et rôle (vendeur par défaut).",
+        "Désactivez un compte quand un employé part : il ne peut plus se connecter, son historique reste.",
+        "La boutique garde toujours au moins un gérant actif."
+      ] }
+    ] },
+  { id: "printing", g: "admin", title: "Impression", lede: "Tickets et reçus sur imprimante thermique 58 ou 80 mm, rapports en A4.",
+    blocks: [
+      { shot: "store", cap: "Paramètres → Boutique" },
+      { steps: [
+        "<span class=\"ui\">Paramètres → Boutique</span> : choisissez l'imprimante de reçus.",
+        "Réglez la largeur pour les reçus de vente, pour les tickets de réparation (58 mm, 80 mm ou A4) et pour les rapports (A4).",
+        "<span class=\"ui\">Test d'impression</span> pour vérifier, puis <span class=\"ui\">Enregistrer</span>."
+      ] },
+      { note: "Avec une imprimante choisie, Warshati imprime directement, sans fenêtre. Cochez « Always show system print dialog » si vous préférez choisir à chaque fois." },
+      { warn: "Le texte est coupé ou trop petit ? La largeur choisie ne correspond pas au rouleau : 58 mm pour les petites imprimantes, 80 mm pour les grandes." }
+    ] },
+  { id: "backup", g: "admin", title: "Sauvegardes", badge: ["owner"], lede: "Vos données sont sur votre PC. Warshati en fait une copie chaque jour.",
+    blocks: [
+      { shot: "backup", cap: "Paramètres → Sauvegarde" },
+      { list: [
+        "<b>Automatique</b> : une copie par jour, les 14 derniers jours sont gardés.",
+        "<span class=\"ui\">Sauvegarder maintenant</span> : choisissez où enregistrer la copie. Mettez-en une sur une clé USB de temps en temps.",
+        "<span class=\"ui\">Restaurer depuis la sauvegarde</span> : choisissez le fichier. Une copie de sécurité des données actuelles est faite d'abord, puis Warshati redémarre."
+      ] },
+      { warn: "Restaurer remplace toutes les données actuelles par celles de la sauvegarde." }
+    ] },
+  { id: "network", g: "admin", title: "Réseau du magasin", badge: ["vip", "newb"], lede: "Plusieurs PC dans la boutique, les mêmes données : un PC principal les garde, les autres s'y connectent par le Wi-Fi ou le câble du magasin.",
+    blocks: [
+      { shot: "network", cap: "Paramètres → Réseau du magasin" },
+      { h: "Sur le PC principal" },
+      { steps: [
+        "Choisissez le PC allumé toute la journée. <span class=\"ui\">Paramètres → Réseau du magasin</span> → <span class=\"ui\">Partager</span>.",
+        "Si Windows demande si Warshati peut utiliser le réseau, choisissez <b>Autoriser</b> (réseaux privés).",
+        "Notez le <b>code de liaison</b> affiché (ex. K7QM-4XWP)."
+      ] },
+      { h: "Sur chaque autre PC" },
+      { steps: [
+        "Installez Warshati. Sur l'écran d'activation, cliquez sur <span class=\"ui\">Connecter ce PC au PC principal</span>.",
+        "Le PC principal est trouvé tout seul (sinon tapez son adresse). Tapez le code de liaison.",
+        "Connectez-vous avec un compte de la boutique."
+      ] },
+      { note: "Gardez le PC principal allumé avec Warshati ouvert. Les sauvegardes se font sur le PC principal. <span class=\"ui\">Nouveau code</span> déconnecte tous les autres PC." }
+    ] },
+  { id: "plans", g: "more", title: "Plans et mises à jour", lede: "Les mises à jour se téléchargent seules : Warshati vous propose de redémarrer quand elles sont prêtes.",
+    blocks: [
+      { plans: [
+        ["Licence à vie", "12 000 DA", "une fois · prix exclusif (au lieu de 15 000 DA)", ["Warshati pour toujours sur votre PC", "Toutes les mises à jour", "Fonctionne sans internet"]],
+        ["Cloud", "5 000 DA", "par an", ["Services cloud", "Application mobile connectée au logiciel"]],
+        ["VIP", "7 000 DA", "par an", ["Tout ce qu'offrent les autres plans", "Réseau du magasin : plusieurs PC sur les mêmes données", "Accès exclusif à toutes les nouvelles fonctions"]]
+      ] }
+    ] },
+  { id: "faq", g: "more", title: "Questions fréquentes", lede: "Les réponses aux questions qu'on nous pose le plus.",
+    blocks: [
+      { faq: [
+        ["Internet est coupé, est-ce que Warshati marche ?", "Oui. Tout fonctionne sans internet. La licence est vérifiée quand internet revient ; sans connexion, vous avez 30 jours."],
+        ["Je change d'ordinateur.", "Faites une sauvegarde sur une clé USB, puis contactez-nous pour libérer votre clé. Sur le nouveau PC : installez, activez, puis restaurez la sauvegarde."],
+        ["J'ai oublié mon mot de passe.", "Écran de connexion → « Email ou mot de passe oublié ? » et tapez votre clé de licence. Voir le chapitre Mot de passe oublié."],
+        ["Le message WhatsApp ne s'ouvre pas.", "Vérifiez le numéro du client. Un numéro local (06…) est converti en +213 ; un numéro étranger doit commencer par son indicatif."],
+        ["Le vendeur peut-il voir mon bénéfice ?", "Non. Il voit la caisse nette du jour, jamais les prix d'achat ni le bénéfice."],
+        ["J'ai fait une erreur dans un paiement de dette.", "Le gérant l'annule dans Créances → Paiements. Rien n'est effacé, l'annulation est enregistrée aujourd'hui."],
+        ["Puis-je utiliser Warshati sur deux PC ?", "Oui avec le plan VIP : le réseau du magasin partage les mêmes données entre vos PC."]
+      ] }
+    ] }
+],
+ar: [
+  { id: "start", g: "start", title: "التثبيت والتفعيل", lede: "يُثبَّت ورشتي على حاسوب ويندوز ويعمل دون إنترنت. الإنترنت ضروري فقط عند التفعيل.",
+    blocks: [
+      { pair: [["activation", "شاشة التفعيل"], ["login", "تسجيل الدخول"]] },
+      { h: "تفعيل الترخيص" },
+      { steps: [
+        "ثبّت ورشتي وافتحه. تظهر شاشة <span class=\"ui\">تنشيط البرنامج</span>.",
+        "اكتب المفتاح الذي استلمته عند الشراء (يبدأ بـ <b dir=\"ltr\">WARSHATI-</b>) ثم اضغط <span class=\"ui\">تنشيط الجهاز</span>.",
+        "يُربط المفتاح بهذا الحاسوب. احتفظ به جيداً: يُستعمل أيضاً لاسترجاع كلمة المرور."
+      ] },
+      { note: "مفتاح واحد = حاسوب واحد. لتغيير الحاسوب، تواصل معنا وسنحرر المفتاح للحاسوب الجديد." },
+      { h: "إنشاء المحل (أول مرة)" },
+      { steps: [
+        "أدخل <b>اسم المحل</b> والهاتف والعنوان: تظهر على التذاكر والإيصالات.",
+        "اختر العملة (الدينار الجزائري افتراضياً) ومدة الضمان الافتراضية بالأيام (30).",
+        "أنشئ <b>حساب المالك</b>: اسمك، بريد إلكتروني وكلمة مرور من 6 أحرف على الأقل.",
+        "سجّل الدخول بهذا البريد وكلمة المرور."
+      ] },
+      { h: "دون إنترنت؟" },
+      { p: "يتحقق ورشتي من الترخيص عند كل تشغيل إذا توفر الإنترنت. دون اتصال، يواصل العمل عادياً لمدة <b>30 يوماً</b> بعد آخر تحقق ناجح." }
+    ] },
+  { id: "recover", g: "start", title: "نسيت كلمة المرور", badge: ["newb"], lede: "نسي المالك بريده أو كلمة المرور؟ مفتاح الترخيص يكفي، حتى دون إنترنت.",
+    blocks: [
+      { shot: "recover", cap: "استعادة الحساب بمفتاح الترخيص" },
+      { steps: [
+        "في شاشة الدخول، اضغط <span class=\"ui\">نسيت البريد الإلكتروني أو كلمة المرور؟</span>",
+        "اكتب مفتاح ترخيص المحل ثم <span class=\"ui\">متابعة</span>. يظهر بريدك الإلكتروني.",
+        "اختر كلمة مرور جديدة (مرتين) واحفظها. سجّل الدخول بكلمة المرور الجديدة."
+      ] },
+      { note: "بائع نسي كلمة مروره: يغيّرها المالك من <span class=\"ui\">الإعدادات ← المستخدمين</span>." },
+      { warn: "أضعت المفتاح أيضاً؟ راسلنا على واتساب: نعطيك إياه بعد التأكد من هويتك. بعد 5 مفاتيح خاطئة، تتوقف الاستعادة 5 دقائق." }
+    ] },
+  { id: "tour", g: "start", title: "التعرف على البرنامج", lede: "القائمة الجانبية تجمع كل شيء، ولوحة القيادة تعرض أهم أرقام اليوم.",
+    blocks: [
+      { shot: "dashboard", cap: "لوحة القيادة" },
+      { list: [
+        "<b>الرئيسية</b>: لوحة القيادة، الزبائن، المخزون، دليل الأجهزة.",
+        "<b>الصيانة</b>: الاستلام، التصليحات، الضمان، شراء الهواتف.",
+        "<b>المبيعات</b>: نقطة البيع والفواتير. <b>المالية</b>: المصاريف، الموردين، الديون، الغلق اليومي، الملخص الشهري.",
+        "<b>الإعدادات</b>: المحل، المستخدمين، النسخ الاحتياطي، شبكة المحل."
+      ] },
+      { p: "تعرض لوحة القيادة التصليحات المنتظرة، ربح اليوم الصافي، غير المدفوع والمخزون المنخفض، مع آخر التصليحات والمبيعات. الأزرار في الأعلى تفتح الأعمال اليومية." },
+      { h: "اختصارات لوحة المفاتيح" },
+      { table: { head: ["الزر", "العمل"], rows: [
+        ["<kbd>F1</kbd>", "عرض كل الاختصارات"], ["<kbd>F2</kbd>", "نقطة البيع"], ["<kbd>F3</kbd>", "تصليح جديد"],
+        ["<kbd>F4</kbd>", "استلام جديد"], ["<kbd>F6</kbd>", "التصليحات"], ["<kbd>F7</kbd>", "المخزون"], ["<kbd>F8</kbd>", "الديون"],
+        ["<kbd>F9</kbd>", "الغلق اليومي"], ["<kbd>Ctrl</kbd> <kbd>K</kbd>", "الذهاب إلى خانة البحث"], ["<kbd>Esc</kbd>", "إغلاق النافذة المفتوحة"],
+        ["<kbd>F10</kbd>", "نقطة البيع: إتمام البيع"], ["<kbd>Ctrl</kbd> <kbd>S</kbd> · <kbd>Ctrl</kbd> <kbd>P</kbd>", "التذكرة: حفظ · طباعة"]
+      ] } },
+      { note: "اللغة: <span class=\"ui\">الإعدادات ← المحل ← اللغة</span>. العربية أو Français أو English، دون إعادة تشغيل." }
+    ] },
+  { id: "repairs", g: "repairs", title: "استلام التصليح ومتابعته", lede: "لكل جهاز تذكرته، من الاستلام حتى تسليمه للزبون.",
+    blocks: [
+      { h: "استلام سريع (عند الزحام)" },
+      { shot: "checkins", cap: "الصيانة ← إستلام" },
+      { steps: [
+        "<span class=\"ui\">إستلام</span> (<kbd>F4</kbd>) ← <span class=\"ui\">استلام جديد</span>.",
+        "اسم الزبون وهاتفه، العلامة والطراز، IMEI، اللون، الحالة الظاهرة وكلام الزبون عن العطل كما قاله.",
+        "اطبع إيصال الاستلام للزبون (أيقونة الطابعة).",
+        "لاحقاً، اضغط <span class=\"ui\">تحويل إلى تذكرة</span>: تُفتح التذكرة معبأة مسبقاً."
+      ] },
+      { h: "إنشاء تذكرة تصليح" },
+      { shot: "ticket", cap: "تذكرة مفتوحة" },
+      { steps: [
+        "<span class=\"ui\">تصليح جديد</span> (<kbd>F3</kbd>)، أو حوّل استلاماً.",
+        "اختر الجهاز من القائمة (هاتف، حاسوب محمول أو جهاز ألعاب) أو اكتبه يدوياً: سيتذكره ورشتي.",
+        "املأ العطل، كلمة سر الجهاز، السعر النهائي، العربون، الأولوية والتاريخ المتوقع.",
+        "<span class=\"ui\">حفظ</span> (<kbd>Ctrl</kbd> <kbd>S</kbd>)، ثم <span class=\"ui\">طباعة التذكرة</span> (<kbd>Ctrl</kbd> <kbd>P</kbd>)."
+      ] },
+      { note: "الزبون الذي له نفس رقم الهاتف يُعثر عليه تلقائياً. العربون يدخل في صندوق اليوم." },
+      { h: "مراحل التصليح" },
+      { flow: ["جاري التشخيص", "بانتظار القطع", "في الإصلاح", "مكتمل", "تم التسليم"] },
+      { list: [
+        "غيّر المرحلة بأزرار <span class=\"ui\">الانتقال إلى</span> أعلى التذكرة.",
+        "<b>مكتمل</b> يطلب السعر النهائي. ثم اضغط <span class=\"ui\">إعلام الزبون عبر واتساب</span>: الرسالة مع المبلغ المتبقي جاهزة.",
+        "<b>تم التسليم</b>: اختر <b>نقداً</b> أو <b>كريدي</b>. ينشئ ورشتي الفاتورة؛ وإن بقي مبلغ، يصبح ديناً على الزبون.",
+        "<b>ملغى</b> يوقف التذكرة. القطع المأخوذة لا ترجع للمخزون وحدها: أرجعها أولاً."
+      ] },
+      { h: "قطع من المخزون" },
+      { p: "في <span class=\"ui\">قطع من المخزون</span>، اختر القطعة والكمية: تخرج من المخزون وتُضاف تكلفتها إلى تكلفة قطع التذكرة. سلة المهملات تعيدها للمخزون (ما دامت التذكرة غير مفوترة)." },
+      { shot: "tickets", cap: "التصليحات: كل التذاكر ومراحلها" }
+    ] },
+  { id: "warranty", g: "repairs", title: "الضمان", lede: "رجع زبون بنفس المشكل؟ ابحث عن التصليح واعرف فوراً إن كان تحت الضمان.",
+    blocks: [
+      { shot: "warranty", cap: "الصيانة ← الضمان" },
+      { steps: [
+        "<span class=\"ui\">الضمان</span> ← <span class=\"ui\">تقديم المطالبة</span>. ابحث برقم التذكرة، IMEI، اسم الزبون أو هاتفه.",
+        "صِف المشكل الجديد، وإن لزم المسؤولية (عيب، كسر…).",
+        "يبيّن ورشتي إن كانت المطالبة <b>تحت الضمان</b> (تاريخ التسليم + أيام ضمان التذكرة).",
+        "<span class=\"ui\">إنشاء تذكرة</span> يفتح تصليحاً مستعجلاً لنفس الجهاز، مجانياً إن كان تحت الضمان."
+      ] },
+      { note: "المطالبة ممكنة فقط للتذاكر المسلَّمة. مدة الضمان الافتراضية تُضبط في الإعدادات ← المحل." }
+    ] },
+  { id: "pos", g: "sales", title: "نقطة البيع", lede: "بيع إكسسوار أو قطعة أو هاتف في ثوانٍ، بماسح الباركود أو دونه.",
+    blocks: [
+      { shot: "pos", cap: "المبيعات ← نقطة البيع" },
+      { steps: [
+        "امسح الباركود، أو اكتب الاسم واضغط <kbd>Enter</kbd>. يمكنك أيضاً الضغط على منتج من القائمة.",
+        "عدّل الكمية والسعر إن لزم. أضف الزبون برقم هاتفه (إجباري للبيع بالكريدي).",
+        "التخفيض ورصيد الاستبدال يُطرحان من المجموع.",
+        "اختر طريقة الدفع، اكتب المبلغ المقبوض واضغط <span class=\"ui\">إتمام البيع</span> (<kbd>F10</kbd>).",
+        "يُطبع الإيصال: <kbd>Enter</kbd> لطباعته فوراً."
+      ] },
+      { h: "طرق الدفع" },
+      { table: { head: ["الطريقة", "متى تستعملها"], rows: [
+        ["نقداً", "الزبون يدفع كل المبلغ الآن."],
+        ["كريدي (بالكامل)", "الزبون لا يدفع شيئاً الآن: كل المبلغ يصبح ديناً عليه."],
+        ["مختلط (نقداً + كريدي)", "يدفع جزءاً: الباقي يصبح ديناً عليه."]
+      ] } },
+      { note: "المبلغ النقدي ناقص؟ اضغط <span class=\"ui\">تسجيل الباقي كدين</span>: يتحول البيع إلى مختلط." }
+    ] },
+  { id: "invoices", g: "sales", title: "الفواتير والاسترجاع", lede: "كل المبيعات مع حالتها. الاسترجاع يعيد المنتجات إلى المخزون.",
+    blocks: [
+      { shot: "invoices", cap: "المبيعات ← الفواتير" },
+      { list: [
+        "ابحث عن فاتورة، أعد طباعة الإيصال، صدّر القائمة إلى Excel.",
+        "<b>الاسترجاع</b> (المالك): كل المنتجات ترجع للمخزون، يُغلق الدين المفتوح على البيع، ويخبرك ورشتي كم ترد للزبون.",
+        "فاتورة التصليح لا تُسترجع هنا: استعمل الضمان."
+      ] },
+      { note: "الاسترجاع دائماً كامل (كل البيع)." }
+    ] },
+  { id: "stock", g: "sales", title: "المخزون", lede: "هواتف جديدة ومستعملة، قطع غيار وإكسسوارات: المخزون ينقص وحده مع كل بيع وكل قطعة مستعملة.",
+    blocks: [
+      { shot: "inventory", cap: "المخزون" },
+      { list: [
+        "<b>إضافة</b> (المالك): النوع، الاسم، الجهاز المتوافق، الباركود أو IMEI، سعر الشراء والبيع، الكمية وحد المخزون المنخفض.",
+        "علّم «دفعت ثمن هذا المخزون اليوم» لتسجيل المصروف في نفس الوقت.",
+        "<b>إعادة تموين سريعة</b>: تضيف كمية وتسجل المصروف.",
+        "عندما تصل الكمية إلى الحد، يصبح المنتج <b>مخزوناً منخفضاً</b> ويظهر في لوحة القيادة.",
+        "تعطيل منتج يخفيه من القوائم دون حذف تاريخه."
+      ] },
+      { note: "البائعون لا يرون أسعار الشراء ولا يمكنهم تعديل المخزون." }
+    ] },
+  { id: "labels", g: "sales", title: "ملصقات الباركود", badge: ["newb"], lede: "اطبع ملصقات صغيرة بالباركود والسعر، لتلصقها على الأغطية والشواحن والقطع.",
+    blocks: [
+      { shot: "labels", cap: "المخزون ← ملصقات" },
+      { steps: [
+        "في <span class=\"ui\">المخزون</span>، اضغط <span class=\"ui\">ملصقات</span> (كل المنتجات) أو أيقونة الباركود في سطر منتج.",
+        "اختر المقاس (من 30×20 إلى 58×40 مم) وطابعة الملصقات.",
+        "أبقِ أو احذف اسم المحل والسعر، وعدد الملصقات لكل منتج (1 لكل منتج، = المخزون، أو لا شيء).",
+        "راجع المعاينة ثم <span class=\"ui\">طباعة</span>."
+      ] },
+      { note: "المنتج بلا باركود يحصل على واحد تلقائياً: ماسح نقطة البيع سيجده." }
+    ] },
+  { id: "devices", g: "sales", title: "دليل الأجهزة", lede: "617 هاتفاً و578 حاسوباً محمولاً و18 جهاز ألعاب موجودة في البرنامج بمواصفاتها.",
+    blocks: [
+      { shot: "devices", cap: "الرئيسية ← الأجهزة" },
+      { list: [
+        "اختر الجهاز في التذاكر والاستلام وشراء الهواتف والمخزون: لا حاجة لكتابته.",
+        "لكل هاتف علامة <b>جودة-سعر</b> من 0 إلى 100 لتنصح الزبون المتردد.",
+        "جهاز غير موجود؟ اكتبه مرة واحدة وسيُقترح في المرة القادمة.",
+        "صور الهواتف: <span class=\"ui\">الإعدادات ← دليل الأجهزة</span> (حوالي 15 ميغابايت، تُحمَّل مرة واحدة)."
+      ] }
+    ] },
+  { id: "tradeins", g: "sales", title: "شراء الهواتف", lede: "تشتري هاتف زبون: يدخل مباشرة إلى مخزونك المستعمل.",
+    blocks: [
+      { shot: "tradeins", cap: "الصيانة ← شراء هواتف" },
+      { steps: [
+        "<span class=\"ui\">شراء هواتف</span> ← عملية جديدة. الزبون، الجهاز، IMEI، اللون، السعة، الحالة والقيمة المقترحة.",
+        "اختر الدفع: <b>نقداً</b> (يُسجَّل مصروف) أو <b>رصيد في المحل</b>.",
+        "<span class=\"ui\">تقييم</span>: يُضاف الهاتف للمخزون كهاتف مستعمل، بسعر بيع مقترح (القيمة + 30٪) يمكنك تغييره."
+      ] },
+      { note: "رصيد في المحل: في نقطة البيع، اكتب المبلغ في خانة <b>رصيد الاستبدال</b>." }
+    ] },
+  { id: "customers", g: "money", title: "الزبائن", lede: "لكل زبون بطاقته: التصليحات، المشتريات، الديون والهواتف المشتراة منه.",
+    blocks: [
+      { shot: "customers", cap: "الرئيسية ← الزبائن" },
+      { list: [
+        "يُنشأ الزبائن تلقائياً من التذاكر ونقطة البيع والديون. يمكنك أيضاً إضافتهم يدوياً.",
+        "افتح زبوناً لترى كل تاريخه مع المحل.",
+        "الرقم يُستعمل لواتساب: الرقم المحلي (06…، 05…، 07…) يحصل على رمز +213 تلقائياً."
+      ] }
+    ] },
+  { id: "debts", g: "money", title: "ديون الزبائن", lede: "دفتر الديون، لكنه يحسب وحده ويذكّر الزبون عبر واتساب.",
+    blocks: [
+      { shot: "debts", cap: "المالية ← الديون" },
+      { list: [
+        "الديون تُنشأ وحدها: بيع بالكريدي أو مختلط، تصليح سُلِّم بالكريدي.",
+        "<span class=\"ui\">تسديد</span>: اكتب المبلغ المقبوض. يصبح الدين جزئياً ثم مسدداً. يقترح ورشتي طباعة إيصال.",
+        "<span class=\"ui\">تذكير واتساب</span>: رسالة جاهزة بالمبلغ المتبقي.",
+        "<span class=\"ui\">المدفوعات</span>: تاريخ كل دين."
+      ] },
+      { h: "ديون ما قبل ورشتي" },
+      { p: "<span class=\"ui\">إضافة دين</span> (المالك): للمال الذي كان الزبون يدين به من قبل، مثلاً في دفترك. لا يُحسب في مبيعات اليوم؛ أما تسديداته فتُحسب." },
+      { h: "تصحيح دفعة خاطئة" },
+      { p: "في <span class=\"ui\">المدفوعات</span>، <span class=\"ui\">إلغاء الدفعة</span> (المالك) مع ذكر السبب. لا يُحذف شيء: يُضاف سطر إلغاء اليوم وينقص صندوق اليوم بنفس المبلغ." }
+    ] },
+  { id: "suppliers", g: "money", title: "الموردون والمشتريات", badge: ["owner"], lede: "مورّدوك، طلبات الشراء وما تدين لهم به.",
+    blocks: [
+      { shot: "suppliers", cap: "المالية ← الموردين" },
+      { steps: [
+        "أضف المورد، ثم افتحه ← <span class=\"ui\">طلب شراء جديد</span>.",
+        "أضف المنتجات والكميات وأسعار الوحدة. يزيد المخزون فوراً ويُحدَّث سعر شراء المنتج.",
+        "مدفوع نقداً: يُسجَّل مصروف. بالكريدي: يُنشأ دين للمورد.",
+        "تبويب <b>الديون</b>: <span class=\"ui\">تسديد</span> المورد، عرض المدفوعات، أو <span class=\"ui\">إضافة دين سابق</span> من قبل ورشتي."
+      ] }
+    ] },
+  { id: "expenses", g: "money", title: "المصاريف", lede: "الكراء، الكهرباء، النقل، شراء السلع: كل ما يخرج من الصندوق.",
+    blocks: [
+      { shot: "expenses", cap: "المالية ← المصاريف" },
+      { list: [
+        "<span class=\"ui\">إضافة مصروف</span>: الفئة، الوصف، المبلغ، المستفيد والتاريخ.",
+        "شراء السلع يخرج من الصندوق لكنه لا يُحسب مرتين في الربح: ما يُحسب هو تكلفة المنتجات المبيعة.",
+        "يمكن للمالك تعديل مصروف أو حذفه."
+      ] }
+    ] },
+  { id: "close", g: "money", title: "غلق اليوم وملخص الشهر", lede: "في المساء، يحسب ورشتي ما يجب أن يكون في الدرج وربحك الحقيقي.",
+    blocks: [
+      { shot: "close", cap: "المالية ← الغلق اليومي" },
+      { list: [
+        "<b>الصندوق الصافي</b> = المبيعات النقدية + العرابين + الديون المحصّلة − المبالغ المسترجعة − المصاريف وتسديدات الموردين.",
+        "<b>الربح الصافي</b> (المالك) = المداخيل − تكلفة القطع والمنتجات − مصاريف التشغيل.",
+        "<span class=\"ui\">إغلاق اليوم</span> يحفظ حصيلة اليوم (مرة في اليوم). زر طباعة التقرير يطبعه بمقاس A4."
+      ] },
+      { h: "الملخص الشهري (المالك)" },
+      { shot: "monthly", cap: "المالية ← الملخص الشهري" },
+      { p: "اختر شهراً: المجاميع، المداخيل والصندوق يوماً بيوم، التصليحات المستلمة والمسلَّمة، وأكثر 10 منتجات مبيعاً. قابل للطباعة بمقاس A4." }
+    ] },
+  { id: "team", g: "admin", title: "المستخدمون والصلاحيات", lede: "المالك يرى كل شيء. البائع يعمل دون أن يرى هوامش ربحك.",
+    blocks: [
+      { shot: "users", cap: "الإعدادات ← المستخدمين" },
+      { table: { head: ["البائع يستطيع", "خاص بالمالك"], rows: [
+        ["الاستلام، التذاكر، الضمان، شراء الهواتف", "الموردون، الملخص الشهري، الإعدادات، المستخدمون، النسخ الاحتياطي"],
+        ["نقطة البيع، الفواتير، الزبائن", "إضافة المخزون أو تعديله، رؤية أسعار الشراء"],
+        ["تحصيل دين، إضافة مصروف", "الاسترجاع، إلغاء دفعة، إضافة دين قديم"],
+        ["غلق اليوم (الصندوق الصافي)", "رؤية الربح والتكاليف"]
+      ] } },
+      { list: [
+        "<span class=\"ui\">إضافة مستخدم</span>: الاسم، البريد، كلمة المرور والدور (بائع افتراضياً).",
+        "عطّل الحساب عندما يغادر موظف: لا يستطيع الدخول، ويبقى تاريخه.",
+        "يحتفظ المحل دائماً بمالك نشط واحد على الأقل."
+      ] }
+    ] },
+  { id: "printing", g: "admin", title: "الطباعة", lede: "التذاكر والإيصالات على طابعة حرارية 58 أو 80 مم، والتقارير بمقاس A4.",
+    blocks: [
+      { shot: "store", cap: "الإعدادات ← المحل" },
+      { steps: [
+        "<span class=\"ui\">الإعدادات ← المحل</span>: اختر طابعة الإيصالات.",
+        "اضبط عرض الورق لإيصالات البيع، لتذاكر التصليح (58 مم، 80 مم أو A4) وللتقارير (A4).",
+        "<span class=\"ui\">طباعة تجريبية</span> للتأكد، ثم <span class=\"ui\">حفظ</span>."
+      ] },
+      { note: "مع طابعة مختارة، يطبع ورشتي مباشرة دون نافذة. علّم خانة <span dir=\"ltr\">«Always show system print dialog»</span> إن أردت الاختيار كل مرة." },
+      { warn: "النص مقطوع أو صغير جداً؟ العرض المختار لا يوافق لفة الورق: 58 مم للطابعات الصغيرة، 80 مم للكبيرة." }
+    ] },
+  { id: "backup", g: "admin", title: "النسخ الاحتياطي", badge: ["owner"], lede: "بياناتك على حاسوبك. ورشتي يحفظ نسخة منها كل يوم.",
+    blocks: [
+      { shot: "backup", cap: "الإعدادات ← النسخ الاحتياطي" },
+      { list: [
+        "<b>تلقائياً</b>: نسخة كل يوم، وتُحفظ آخر 14 يوماً.",
+        "<span class=\"ui\">إنشاء نسخة احتياطية الآن</span>: اختر مكان الحفظ. ضع نسخة على فلاشة من حين لآخر.",
+        "<span class=\"ui\">استعادة من النسخة الاحتياطية</span>: اختر الملف. تُحفظ نسخة أمان من البيانات الحالية أولاً، ثم يُعاد تشغيل ورشتي."
+      ] },
+      { warn: "الاستعادة تستبدل كل البيانات الحالية ببيانات النسخة." }
+    ] },
+  { id: "network", g: "admin", title: "شبكة المحل", badge: ["vip", "newb"], lede: "عدة حواسيب في المحل بنفس البيانات: حاسوب رئيسي يحفظها، والبقية تتصل به عبر الواي فاي أو كابل المحل.",
+    blocks: [
+      { shot: "network", cap: "الإعدادات ← شبكة المحل" },
+      { h: "على الحاسوب الرئيسي" },
+      { steps: [
+        "اختر الحاسوب الذي يبقى شغالاً طول اليوم. <span class=\"ui\">الإعدادات ← شبكة المحل</span> ← <span class=\"ui\">مشاركة</span>.",
+        "إن سأل ويندوز هل يستعمل ورشتي الشبكة، اختر <b>السماح</b> (الشبكات الخاصة).",
+        "سجّل <b>رمز الربط</b> الظاهر (مثلاً K7QM-4XWP)."
+      ] },
+      { h: "على كل حاسوب آخر" },
+      { steps: [
+        "ثبّت ورشتي. في شاشة التنشيط، اضغط <span class=\"ui\">اربط هذا الحاسوب بالحاسوب الرئيسي</span>.",
+        "يُعثر على الحاسوب الرئيسي وحده (وإلا اكتب عنوانه). اكتب رمز الربط.",
+        "سجّل الدخول بحساب من حسابات المحل."
+      ] },
+      { note: "أبقِ الحاسوب الرئيسي شغالاً وورشتي مفتوح. النسخ الاحتياطي يتم على الحاسوب الرئيسي. «رمز جديد» يفصل كل الحواسيب الأخرى." }
+    ] },
+  { id: "plans", g: "more", title: "الخطط والتحديثات", lede: "التحديثات تُحمَّل وحدها: يقترح عليك ورشتي إعادة التشغيل عندما تكون جاهزة.",
+    blocks: [
+      { plans: [
+        ["ترخيص مدى الحياة", "12 000 دج", "مرة واحدة · سعر حصري (بدل 15 000 دج)", ["ورشتي على حاسوبك للأبد", "كل التحديثات", "يعمل دون إنترنت"]],
+        ["سحابي", "5 000 دج", "في السنة", ["خدمات سحابية", "تطبيق هاتف متصل بالبرنامج"]],
+        ["VIP", "7 000 دج", "في السنة", ["كل ما في الخطط الأخرى", "شبكة المحل: عدة حواسيب على نفس البيانات", "وصول حصري لكل الميزات الجديدة القادمة"]]
+      ] }
+    ] },
+  { id: "faq", g: "more", title: "أسئلة شائعة", lede: "أجوبة الأسئلة التي تُطرح علينا أكثر.",
+    blocks: [
+      { faq: [
+        ["انقطع الإنترنت، هل يعمل ورشتي؟", "نعم. كل شيء يعمل دون إنترنت. يُتحقق من الترخيص عند عودة الإنترنت؛ ودون اتصال لديك 30 يوماً."],
+        ["سأغيّر الحاسوب.", "اصنع نسخة احتياطية على فلاشة، ثم تواصل معنا لتحرير مفتاحك. على الحاسوب الجديد: ثبّت، فعّل، ثم استعد النسخة."],
+        ["نسيت كلمة المرور.", "شاشة الدخول ← «نسيت البريد الإلكتروني أو كلمة المرور؟» واكتب مفتاح الترخيص. انظر فصل نسيت كلمة المرور."],
+        ["رسالة واتساب لا تُفتح.", "تحقق من رقم الزبون. الرقم المحلي (06…) يُحوَّل إلى +213؛ الرقم الأجنبي يجب أن يبدأ برمز بلده."],
+        ["هل يرى البائع ربحي؟", "لا. يرى صندوق اليوم الصافي فقط، ولا يرى أسعار الشراء ولا الربح."],
+        ["أخطأت في تسديد دين.", "يلغيه المالك من الديون ← المدفوعات. لا يُحذف شيء، ويُسجَّل الإلغاء اليوم."],
+        ["هل أستطيع استعمال ورشتي على حاسوبين؟", "نعم مع خطة VIP: شبكة المحل تشارك نفس البيانات بين حواسيبك."]
+      ] }
+    ] }
+],
+en: [
+  { id: "start", g: "start", title: "Install and activate", lede: "Warshati installs on a Windows PC and works without internet. Internet is only needed to activate it.",
+    blocks: [
+      { pair: [["activation", "The activation screen"], ["login", "Signing in"]] },
+      { h: "Activate the license" },
+      { steps: [
+        "Install Warshati and open it. The <span class=\"ui\">Software Activation</span> screen appears.",
+        "Type the key you received when you bought it (it starts with <b>WARSHATI-</b>) and click <span class=\"ui\">Activate Device</span>.",
+        "The key is tied to this PC. Keep it safe: it also recovers the password."
+      ] },
+      { note: "One key = one PC. To move to another computer, contact us: we free the key for the new PC." },
+      { h: "Create the shop (first time)" },
+      { steps: [
+        "Enter the <b>shop name</b>, phone and address: they appear on tickets and receipts.",
+        "Choose the currency (DZD by default) and the default warranty in days (30).",
+        "Create the <b>owner account</b>: your name, an email and a password of at least 6 characters.",
+        "Sign in with that email and password."
+      ] },
+      { h: "No internet?" },
+      { p: "Warshati checks the license at every start when internet is there. Offline, it keeps working normally for <b>30 days</b> after the last successful check." }
+    ] },
+  { id: "recover", g: "start", title: "Forgotten password", badge: ["newb"], lede: "The owner forgot their email or password? The license key is enough, even offline.",
+    blocks: [
+      { shot: "recover", cap: "Recovering the account with the license key" },
+      { steps: [
+        "On the sign-in screen, click <span class=\"ui\">Forgot your email or password?</span>",
+        "Type the shop's license key, then <span class=\"ui\">Continue</span>. Your email appears.",
+        "Choose a new password (twice) and save. Sign in with the new password."
+      ] },
+      { note: "A seller who forgets their password: the owner changes it in <span class=\"ui\">Settings → Users</span>." },
+      { warn: "Lost the key too? Message us on WhatsApp: we give it back after checking it is you. After 5 wrong keys, recovery is blocked for 5 minutes." }
+    ] },
+  { id: "tour", g: "start", title: "Finding your way", lede: "The menu on the left holds everything. The dashboard shows what matters today.",
+    blocks: [
+      { shot: "dashboard", cap: "Dashboard" },
+      { list: [
+        "<b>Main</b>: dashboard, customers, inventory, device catalog.",
+        "<b>Repairs</b>: check-in, tickets, warranty, trade-ins.",
+        "<b>Sales</b>: POS and invoices. <b>Finance</b>: expenses, suppliers, debt ledger, daily close, monthly summary.",
+        "<b>Settings</b>: store, users, backup, shop network."
+      ] },
+      { p: "The dashboard shows pending repairs, today's net profit, unpaid amounts and low stock, with the latest repairs and sales. The buttons at the top start the everyday actions." },
+      { h: "Keyboard shortcuts" },
+      { table: { head: ["Key", "Action"], rows: [
+        ["<kbd>F1</kbd>", "Show every shortcut"], ["<kbd>F2</kbd>", "POS"], ["<kbd>F3</kbd>", "New repair ticket"],
+        ["<kbd>F4</kbd>", "New check-in"], ["<kbd>F6</kbd>", "Tickets"], ["<kbd>F7</kbd>", "Inventory"], ["<kbd>F8</kbd>", "Debt ledger"],
+        ["<kbd>F9</kbd>", "Daily close"], ["<kbd>Ctrl</kbd> <kbd>K</kbd>", "Go to the search box"], ["<kbd>Esc</kbd>", "Close the window on top"],
+        ["<kbd>F10</kbd>", "POS: complete the sale"], ["<kbd>Ctrl</kbd> <kbd>S</kbd> · <kbd>Ctrl</kbd> <kbd>P</kbd>", "Ticket: save · print"]
+      ] } },
+      { note: "Language: <span class=\"ui\">Settings → Store → Language</span>. English, Français or العربية, no restart needed." }
+    ] },
+  { id: "repairs", g: "repairs", title: "Take in and follow a repair", lede: "Every device has its ticket, from check-in until it goes back to the customer.",
+    blocks: [
+      { h: "Quick check-in (when the shop is busy)" },
+      { shot: "checkins", cap: "Repairs → Check-In" },
+      { steps: [
+        "<span class=\"ui\">Check-In</span> (<kbd>F4</kbd>) → <span class=\"ui\">New Check-In</span>.",
+        "Customer name and phone, brand and model, IMEI, color, visible condition and the customer's own words about the problem.",
+        "Print the check-in receipt for the customer (printer icon).",
+        "Later, click <span class=\"ui\">Convert to Ticket</span>: the ticket opens already filled in."
+      ] },
+      { h: "Create a repair ticket" },
+      { shot: "ticket", cap: "An open ticket" },
+      { steps: [
+        "<span class=\"ui\">New Ticket</span> (<kbd>F3</kbd>), or convert a check-in.",
+        "Pick the device from the list (phone, laptop or console) or type it by hand: Warshati will remember it.",
+        "Fill in the problem, the device password, the final price, the deposit, the priority and the expected date.",
+        "<span class=\"ui\">Save</span> (<kbd>Ctrl</kbd> <kbd>S</kbd>), then <span class=\"ui\">Print Ticket</span> (<kbd>Ctrl</kbd> <kbd>P</kbd>)."
+      ] },
+      { note: "A customer with the same phone number is found automatically. The deposit counts in today's cash." },
+      { h: "The steps of a repair" },
+      { flow: ["Diagnosing", "Waiting Parts", "In Repair", "Done", "Delivered"] },
+      { list: [
+        "Change the step with the <span class=\"ui\">Move to</span> buttons at the top of the ticket.",
+        "<b>Done</b> asks for the final price. Then click <span class=\"ui\">Tell customer on WhatsApp</span>: the message with the amount left to pay is ready.",
+        "<b>Delivered</b>: choose <b>Cash</b> or <b>Credit</b>. Warshati creates the invoice; anything still owed becomes the customer's debt.",
+        "<b>Cancelled</b> stops the ticket. Parts already taken do not go back to stock on their own: remove them first."
+      ] },
+      { h: "Parts from stock" },
+      { p: "In <span class=\"ui\">Parts from stock</span>, choose the part and quantity: it leaves the stock and its cost is added to the ticket's parts cost. The bin puts it back in stock (as long as the ticket is not invoiced)." },
+      { shot: "tickets", cap: "Tickets: every repair and its step" }
+    ] },
+  { id: "warranty", g: "repairs", title: "Warranty", lede: "A customer comes back with the same problem? Find the repair and see at once if it is still under warranty.",
+    blocks: [
+      { shot: "warranty", cap: "Repairs → Warranty" },
+      { steps: [
+        "<span class=\"ui\">Warranty</span> → <span class=\"ui\">File Claim</span>. Search by ticket number, IMEI, customer name or phone.",
+        "Describe the new problem and, if needed, who is responsible (defect, damage…).",
+        "Warshati shows whether the claim is <b>within warranty</b> (delivery date + the ticket's warranty days).",
+        "<span class=\"ui\">Create Ticket</span> opens an urgent repair for the same device, free when it is within warranty."
+      ] },
+      { note: "Only delivered tickets can get a claim. The default warranty is set in Settings → Store." }
+    ] },
+  { id: "pos", g: "sales", title: "POS (the till)", lede: "Sell an accessory, a part or a phone in seconds, with or without a scanner.",
+    blocks: [
+      { shot: "pos", cap: "Sales → POS" },
+      { steps: [
+        "Scan the barcode, or type the name and press <kbd>Enter</kbd>. You can also click an item in the list.",
+        "Adjust the quantity and price if needed. Add the customer by phone number (required for a credit sale).",
+        "Discount and trade-in credit are taken off the total.",
+        "Choose the payment method, type the amount received and click <span class=\"ui\">Complete Sale</span> (<kbd>F10</kbd>).",
+        "The receipt prints: <kbd>Enter</kbd> prints it right away."
+      ] },
+      { h: "Payment methods" },
+      { table: { head: ["Method", "When to use it"], rows: [
+        ["Cash", "The customer pays everything now."],
+        ["Credit (Full)", "The customer pays nothing now: the whole amount becomes their debt."],
+        ["Split (Cash + Credit)", "They pay part of it: the rest becomes their debt."]
+      ] } },
+      { note: "Short on cash? Click <span class=\"ui\">Record the rest as a debt</span>: the sale switches to Split." }
+    ] },
+  { id: "invoices", g: "sales", title: "Invoices and refunds", lede: "Every sale with its status. A refund puts the items back in stock.",
+    blocks: [
+      { shot: "invoices", cap: "Sales → Invoices" },
+      { list: [
+        "Search for an invoice, reprint the receipt, export the list to Excel.",
+        "<b>Refund</b> (owner): every item goes back to stock, an open debt on the sale is closed, and Warshati tells you how much to give back.",
+        "A repair invoice is not refunded here: use a warranty claim."
+      ] },
+      { note: "Refunds are always for the whole sale." }
+    ] },
+  { id: "stock", g: "sales", title: "Inventory", lede: "New and used phones, parts and accessories: stock goes down on its own with every sale and every part used.",
+    blocks: [
+      { shot: "inventory", cap: "Inventory" },
+      { list: [
+        "<b>Add</b> (owner): type, name, compatible device, barcode or IMEI, buy and sell price, quantity and low-stock level.",
+        "Tick “I paid for this stock today” to record the expense at the same time.",
+        "<b>Quick restock</b>: adds quantity and records the expense.",
+        "When the quantity reaches the level, the item shows as <b>low stock</b> and appears on the dashboard.",
+        "Deactivating an item hides it from lists without erasing its history."
+      ] },
+      { note: "Sellers do not see buy prices and cannot change the stock." }
+    ] },
+  { id: "labels", g: "sales", title: "Barcode labels", badge: ["newb"], lede: "Print small labels with a barcode and price, to stick on cases, chargers and parts.",
+    blocks: [
+      { shot: "labels", cap: "Inventory → Labels" },
+      { steps: [
+        "In <span class=\"ui\">Inventory</span>, click <span class=\"ui\">Labels</span> (every item) or the barcode icon on a row.",
+        "Choose the size (30×20 to 58×40 mm) and the label printer.",
+        "Keep or remove the shop name and the price, and set the labels per item (1 each, = stock, or none).",
+        "Check the preview, then <span class=\"ui\">Print</span>."
+      ] },
+      { note: "An item without a barcode gets one automatically: the POS scanner will find it." }
+    ] },
+  { id: "devices", g: "sales", title: "Device catalog", lede: "617 phones, 578 laptops and 18 consoles already in the app, with their specifications.",
+    blocks: [
+      { shot: "devices", cap: "Main → Devices" },
+      { list: [
+        "Pick the device in tickets, check-ins, trade-ins and stock: no more typing it.",
+        "Every phone has a <b>value-for-money</b> score from 0 to 100 to advise a customer who hesitates.",
+        "Device missing? Type it once and it will be offered next time.",
+        "Phone photos: <span class=\"ui\">Settings → Device Catalog</span> (about 15 MB, downloaded once)."
+      ] }
+    ] },
+  { id: "tradeins", g: "sales", title: "Trade-ins", lede: "You buy a customer's phone: it goes straight into your used stock.",
+    blocks: [
+      { shot: "tradeins", cap: "Repairs → Trade-Ins" },
+      { steps: [
+        "<span class=\"ui\">Trade-Ins</span> → new trade-in. Customer, device, IMEI, color, storage, condition and offered value.",
+        "Choose the payout: <b>cash</b> (an expense is recorded) or <b>store credit</b>.",
+        "<span class=\"ui\">Appraise</span>: the phone is added to stock as a used phone, with a suggested sell price (value + 30%) that you can change."
+      ] },
+      { note: "Store credit: at the POS, type the amount in <b>Trade-in Credit</b>." }
+    ] },
+  { id: "customers", g: "money", title: "Customers", lede: "Every customer has a record: repairs, purchases, debts and trade-ins.",
+    blocks: [
+      { shot: "customers", cap: "Main → Customers" },
+      { list: [
+        "Customers are created on their own from tickets, the POS and debts. You can also add them by hand.",
+        "Open a customer to see their whole history with the shop.",
+        "The number is used for WhatsApp: a local number (06…, 05…, 07…) gets the +213 code automatically."
+      ] }
+    ] },
+  { id: "debts", g: "money", title: "Customer debts", lede: "Your debt notebook, but it adds up by itself and reminds the customer on WhatsApp.",
+    blocks: [
+      { shot: "debts", cap: "Finance → Debt Ledger" },
+      { list: [
+        "Debts are created on their own: credit or split sales, repairs delivered on credit.",
+        "<span class=\"ui\">Pay</span>: type the amount received. The debt becomes partial, then settled. Warshati offers to print a receipt.",
+        "<span class=\"ui\">WhatsApp reminder</span>: a ready message with the amount left.",
+        "<span class=\"ui\">Payments</span>: the history of each debt."
+      ] },
+      { h: "Debts from before Warshati" },
+      { p: "<span class=\"ui\">Add Debt</span> (owner): for money a customer already owed, from your notebook for example. It does not count in today's sales; its payments do." },
+      { h: "Fix a wrong payment" },
+      { p: "In <span class=\"ui\">Payments</span>, <span class=\"ui\">Cancel payment</span> (owner) with a reason. Nothing is erased: a cancelling line is added today and today's cash goes down by the same amount." }
+    ] },
+  { id: "suppliers", g: "money", title: "Suppliers and purchases", badge: ["owner"], lede: "Your suppliers, your purchase orders and what you owe them.",
+    blocks: [
+      { shot: "suppliers", cap: "Finance → Suppliers" },
+      { steps: [
+        "Add the supplier, then open it → <span class=\"ui\">New Purchase Order</span>.",
+        "Add the items, quantities and unit costs. Stock goes up at once and the item's buy price is updated.",
+        "Paid in cash: an expense is recorded. On credit: a supplier debt is created.",
+        "<b>Debt</b> tab: <span class=\"ui\">Pay</span> the supplier, see the payments, or <span class=\"ui\">Add Existing Debt</span> from before Warshati."
+      ] }
+    ] },
+  { id: "expenses", g: "money", title: "Expenses", lede: "Rent, electricity, transport, stock purchases: everything that leaves the till.",
+    blocks: [
+      { shot: "expenses", cap: "Finance → Expenses" },
+      { list: [
+        "<span class=\"ui\">Add Expense</span>: category, description, amount, paid to and date.",
+        "Stock purchases leave the till but are not counted twice in profit: what counts is the cost of the items sold.",
+        "The owner can edit or delete an expense."
+      ] }
+    ] },
+  { id: "close", g: "money", title: "Daily close and monthly summary", lede: "At night, Warshati works out what should be in the drawer and your real profit.",
+    blocks: [
+      { shot: "close", cap: "Finance → Daily Close" },
+      { list: [
+        "<b>Net cash</b> = cash sales + deposits + debts collected − refunds − expenses and supplier payments.",
+        "<b>Net profit</b> (owner) = revenue − cost of parts and items − running expenses.",
+        "<span class=\"ui\">Close Today</span> saves the day's figures (once a day). <span class=\"ui\">Print Report</span> prints them on A4."
+      ] },
+      { h: "Monthly summary (owner)" },
+      { shot: "monthly", cap: "Finance → Monthly Summary" },
+      { p: "Pick a month: totals, revenue and cash day by day, repairs received and delivered, and the 10 best-selling items. Printable on A4." }
+    ] },
+  { id: "team", g: "admin", title: "Users and permissions", lede: "The owner sees everything. Sellers work without seeing your margins.",
+    blocks: [
+      { shot: "users", cap: "Settings → Users" },
+      { table: { head: ["Sellers can", "Owner only"], rows: [
+        ["Check-ins, tickets, warranty, trade-ins", "Suppliers, monthly summary, settings, users, backups"],
+        ["POS, invoices, customers", "Add or edit stock, see buy prices"],
+        ["Collect a debt, add an expense", "Refund, cancel a payment, add an old debt"],
+        ["Daily close (net cash)", "See profit and costs"]
+      ] } },
+      { list: [
+        "<span class=\"ui\">Add User</span>: name, email, password and role (seller by default).",
+        "Deactivate an account when someone leaves: they can no longer sign in, their history stays.",
+        "The shop always keeps at least one active owner."
+      ] }
+    ] },
+  { id: "printing", g: "admin", title: "Printing", lede: "Tickets and receipts on a 58 or 80 mm thermal printer, reports on A4.",
+    blocks: [
+      { shot: "store", cap: "Settings → Store" },
+      { steps: [
+        "<span class=\"ui\">Settings → Store</span>: choose the receipt printer.",
+        "Set the paper width for sale receipts, for repair tickets (58 mm, 80 mm or A4) and for reports (A4).",
+        "<span class=\"ui\">Test Print</span> to check, then <span class=\"ui\">Save</span>."
+      ] },
+      { note: "With a printer chosen, Warshati prints straight away, with no window. Tick “Always show system print dialog” if you prefer to choose every time." },
+      { warn: "Text cut off or too small? The width does not match the paper roll: 58 mm for small printers, 80 mm for large ones." }
+    ] },
+  { id: "backup", g: "admin", title: "Backups", badge: ["owner"], lede: "Your data is on your PC. Warshati copies it every day.",
+    blocks: [
+      { shot: "backup", cap: "Settings → Backup" },
+      { list: [
+        "<b>Automatic</b>: one copy a day, the last 14 days are kept.",
+        "<span class=\"ui\">Backup Now</span>: choose where to save the copy. Put one on a USB stick from time to time.",
+        "<span class=\"ui\">Restore from Backup</span>: choose the file. A safety copy of the current data is made first, then Warshati restarts."
+      ] },
+      { warn: "Restoring replaces all current data with the backup's data." }
+    ] },
+  { id: "network", g: "admin", title: "Shop network", badge: ["vip", "newb"], lede: "Several PCs in the shop, the same data: one main PC keeps it, the others connect to it over the shop's Wi-Fi or cable.",
+    blocks: [
+      { shot: "network", cap: "Settings → Shop network" },
+      { h: "On the main PC" },
+      { steps: [
+        "Pick the PC that stays on all day. <span class=\"ui\">Settings → Shop network</span> → <span class=\"ui\">Share</span>.",
+        "If Windows asks whether Warshati may use the network, choose <b>Allow</b> (private networks).",
+        "Note the <b>pairing code</b> shown (e.g. K7QM-4XWP)."
+      ] },
+      { h: "On every other PC" },
+      { steps: [
+        "Install Warshati. On the activation screen, click <span class=\"ui\">Connect this PC to the main PC</span>.",
+        "The main PC is found on its own (otherwise type its address). Type the pairing code.",
+        "Sign in with one of the shop's accounts."
+      ] },
+      { note: "Keep the main PC on with Warshati open. Backups happen on the main PC. <span class=\"ui\">New code</span> disconnects every other PC." }
+    ] },
+  { id: "plans", g: "more", title: "Plans and updates", lede: "Updates download on their own: Warshati offers to restart when they are ready.",
+    blocks: [
+      { plans: [
+        ["Lifetime license", "12,000 DA", "one time · exclusive price (instead of 15,000 DA)", ["Warshati forever on your PC", "All updates", "Works without internet"]],
+        ["Cloud", "5,000 DA", "per year", ["Cloud services", "Mobile app connected to the software"]],
+        ["VIP", "7,000 DA", "per year", ["Everything in the other plans", "Shop network: several PCs on the same data", "Exclusive access to all new upcoming features"]]
+      ] }
+    ] },
+  { id: "faq", g: "more", title: "Frequent questions", lede: "Answers to the questions we hear most.",
+    blocks: [
+      { faq: [
+        ["The internet is down. Does Warshati work?", "Yes. Everything works without internet. The license is checked when internet comes back; offline, you have 30 days."],
+        ["I am changing computers.", "Make a backup on a USB stick, then contact us to free your key. On the new PC: install, activate, then restore the backup."],
+        ["I forgot my password.", "Sign-in screen → “Forgot your email or password?” and type your license key. See the Forgotten password chapter."],
+        ["The WhatsApp message does not open.", "Check the customer's number. A local number (06…) becomes +213; a foreign number must start with its country code."],
+        ["Can sellers see my profit?", "No. They see today's net cash, never buy prices or profit."],
+        ["I made a mistake in a debt payment.", "The owner cancels it in Debt Ledger → Payments. Nothing is erased; the cancellation is recorded today."],
+        ["Can I use Warshati on two PCs?", "Yes, with the VIP plan: the shop network shares the same data between your PCs."]
+      ] }
+    ] }
+]
+};
+
+/* ---------------------------------------------------------------
+   Rendering
+   --------------------------------------------------------------- */
+const GROUPS = ["start", "repairs", "sales", "money", "admin", "more"];
+const params = new URLSearchParams(location.search);
+let lang = ["fr", "ar", "en"].includes(params.get("lang")) ? params.get("lang") : "fr";
+try { const saved = localStorage.getItem("warshati-lang"); if (!params.get("lang") && saved && T[saved]) lang = saved; } catch (e) {}
+
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const img = (name) => `/assets/guide/${name}-${lang}.webp`;
+
+function shot(name, cap) {
+  const t = T[lang];
+  return `<figure class="shot">
+    <div class="bar"><i></i><i></i><i></i><span>Warshati — ${esc(cap)}</span></div>
+    <button type="button" data-zoom="${img(name)}" aria-label="${esc(t.zoom)}: ${esc(cap)}"><img src="${img(name)}" alt="${esc(cap)}" width="1440" height="900" loading="lazy" decoding="async"></button>
+  </figure>`;
+}
+
+function block(b) {
+  if (b.h) return `<h3>${b.h}</h3>`;
+  if (b.p) return `<p class="txt">${b.p}</p>`;
+  if (b.steps) return `<ol class="steps">${b.steps.map((s) => `<li><div>${s}</div></li>`).join("")}</ol>`;
+  if (b.list) return `<ul class="dots">${b.list.map((s) => `<li><div>${s}</div></li>`).join("")}</ul>`;
+  if (b.note) return `<div class="note"><div>${b.note}</div></div>`;
+  if (b.warn) return `<div class="warn"><div>${b.warn}</div></div>`;
+  if (b.flow) return `<div class="flow">${b.flow.map((s, i) => `${i ? "<i>→</i>" : ""}<span class="${i === b.flow.length - 1 ? "end" : ""}">${esc(s)}</span>`).join("")}</div>`;
+  if (b.shot) return shot(b.shot, b.cap);
+  if (b.pair) return `<div class="pair">${b.pair.map(([n, c]) => shot(n, c)).join("")}</div>`;
+  if (b.table) return `<div class="tbl"><table><thead><tr>${b.table.head.map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${b.table.rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  if (b.faq) return b.faq.map(([q, a]) => `<details class="faq"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("");
+  if (b.plans) return `<div class="plans">${b.plans.map(([name, price, sub, items], i) => `<div class="plan${i === 2 ? " vip" : ""}"><h3>${esc(name)}</h3><div class="price"><bdi>${esc(price)}</bdi><small>${esc(sub)}</small></div><ul>${items.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>`).join("")}</div>`;
+  return "";
+}
+
+function render() {
+  const t = T[lang];
+  const chapters = C[lang];
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  document.title = lang === "ar" ? "دليل ورشتي — Warshati" : (lang === "fr" ? "Guide Warshati — ورشتي" : "Warshati guide — ورشتي");
+  document.querySelectorAll("[data-t]").forEach((el) => { el.textContent = t[el.dataset.t] ?? ""; });
+  document.querySelectorAll("[data-th]").forEach((el) => { el.innerHTML = t[el.dataset.th] ?? ""; });
+  document.querySelectorAll("[data-tp]").forEach((el) => { el.placeholder = t[el.dataset.tp] ?? ""; });
+  document.querySelectorAll("a[data-reg]").forEach((a) => { a.href = "/register?lang=" + lang; });
+  document.querySelectorAll(".langs button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+  document.getElementById("toc").setAttribute("aria-label", t.toc);
+
+  const num = (i) => String(i + 1).padStart(2, "0");
+  document.getElementById("quick").innerHTML = t.quick.map(([id, n, title, sub]) => {
+    const i = chapters.findIndex((c) => c.id === id);
+    return `<a href="#${id}"><i>${i >= 0 ? num(i) : n}</i><b>${esc(title)}</b><span>${esc(sub)}</span></a>`;
+  }).join("");
+
+  document.getElementById("chapters").innerHTML = chapters.map((c, i) => {
+    const badges = (c.badge || []).map((k) => `<span class="badge ${k === "newb" ? "new" : k}">${esc(k === "newb" ? t.newb : k === "vip" ? t.vip : t.owner)}</span>`).join("");
+    return `<section class="chap" id="${c.id}" data-g="${c.g}">
+      <header>
+        <p class="eyebrow">${num(i)} · ${esc(t.groups[c.g])}</p>
+        <h2>${esc(c.title)}</h2>
+        ${badges ? `<div class="badges">${badges}</div>` : ""}
+        <p class="lede">${c.lede}</p>
+      </header>
+      ${c.blocks.map(block).join("")}
+    </section>`;
+  }).join("");
+
+  document.getElementById("toc").innerHTML = GROUPS.map((g) => {
+    const items = chapters.map((c, i) => [c, i]).filter(([c]) => c.g === g);
+    return `<div class="grp">${esc(t.groups[g])}</div>` + items.map(([c, i]) => `<a href="#${c.id}" data-id="${c.id}"><span>${num(i)}</span>${esc(c.title)}</a>`).join("");
+  }).join("");
+
+  document.getElementById("picker").innerHTML = `<option value="">${esc(t.toc)}…</option>` +
+    GROUPS.map((g) => `<optgroup label="${esc(t.groups[g])}">` + chapters.map((c, i) => [c, i]).filter(([c]) => c.g === g).map(([c, i]) => `<option value="${c.id}">${num(i)} · ${esc(c.title)}</option>`).join("") + `</optgroup>`).join("");
+
+  filter();
+  watchSections();
+}
+
+/* Search: keeps the chapters whose text has every typed word (accents and case ignored) */
+const fold = (s) => s.toLowerCase().normalize("NFD").replace(/[̀-ًͯ-ْ]/g, "");
+function filter() {
+  const q = document.getElementById("q").value.trim();
+  const words = fold(q).split(/\s+/).filter(Boolean);
+  let shown = 0;
+  document.querySelectorAll(".chap").forEach((sec) => {
+    const hit = !words.length || words.every((w) => fold(sec.textContent).includes(w));
+    sec.hidden = !hit;
+    document.querySelectorAll(`.toc a[data-id="${sec.id}"]`).forEach((a) => { a.hidden = !hit; });
+    if (hit) shown++;
+  });
+  const empty = document.getElementById("empty");
+  empty.hidden = shown > 0;
+  if (!shown) empty.innerHTML = `<b>${esc(T[lang].empty.replace("{q}", q))}</b><span>${esc(T[lang].empty_help)}</span>`;
+}
+
+/* Highlight the chapter being read */
+let observer;
+function watchSections() {
+  observer?.disconnect();
+  observer = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      document.querySelectorAll(".toc a").forEach((a) => a.setAttribute("aria-current", String(a.dataset.id === e.target.id)));
     });
+  }, { rootMargin: "-20% 0px -70% 0px" });
+  document.querySelectorAll(".chap").forEach((s) => observer.observe(s));
+}
 
-    // Active nav link
-    const sections = document.querySelectorAll('section[id], footer');
-    const navLinks = document.querySelectorAll('.nav-link');
+function setLang(l) {
+  lang = l;
+  try { localStorage.setItem("warshati-lang", l); } catch (e) {}
+  const here = location.hash;
+  render();
+  if (here) document.querySelector(here)?.scrollIntoView();
+}
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          navLinks.forEach(l => l.classList.remove('active'));
-          const active = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
-          if (active) active.classList.add('active');
-        }
-      });
-    }, { threshold: 0.3 });
+document.querySelectorAll(".langs button").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
+document.getElementById("q").addEventListener("input", filter);
+document.getElementById("picker").addEventListener("change", (e) => { if (e.target.value) location.hash = e.target.value; e.target.value = ""; });
 
-    sections.forEach(s => observer.observe(s));
-  </script>
+// Enlarge a screenshot
+const zoom = document.getElementById("zoom");
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-zoom]");
+  if (!b) return;
+  document.getElementById("zoom-img").src = b.dataset.zoom;
+  document.getElementById("zoom-img").alt = b.querySelector("img")?.alt || "";
+  zoom.showModal();
+});
+document.getElementById("zoom-close").addEventListener("click", () => zoom.close());
+zoom.addEventListener("click", (e) => { if (e.target === zoom) zoom.close(); });
+
+// Back to top
+const up = document.getElementById("up");
+window.addEventListener("scroll", () => up.classList.toggle("show", window.scrollY > 900), { passive: true });
+up.addEventListener("click", () => window.scrollTo({ top: 0 }));
+
+render();
+if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
+</script>
 </body>
-
 </html>
