@@ -112,6 +112,9 @@ html[lang="ar"] .eyebrow { letter-spacing: 0; font-family: "IBM Plex Sans Arabic
 .hero h1 em { font-style: normal; color: var(--gold); }
 .hero .lede { font-size: 1.1875rem; }
 .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.dl-ico { width: 18px; height: 18px; flex: none; }
+.dl-meta { margin-top: 12px; font: 400 var(--s1)/1.4 var(--f-mono); color: var(--mute); }
+html[lang="ar"] .dl-meta { font-family: "IBM Plex Sans Arabic", var(--f-body); }
 .facts { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 36px; color: var(--mute); font-size: var(--s1); }
 .facts span { display: inline-flex; align-items: center; gap: 8px; }
 .facts span::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
@@ -318,8 +321,9 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
         <p class="lede" data-i18n="hero_lede"></p>
         <div class="cta-row">
           <a class="btn btn-gold" href="/register" data-reg data-i18n="cta_main"></a>
-          <a class="btn btn-ghost" href="#day" data-i18n="cta_tour"></a>
+          <a class="btn btn-ghost" href="https://github.com/Moh20All/Warshati/releases/latest" data-download><svg class="dl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 19h16"/></svg><span data-i18n="dl_btn"></span></a>
         </div>
+        <p class="dl-meta" data-dl-meta></p>
         <div class="facts">
           <span data-i18n="fact_offline"></span>
           <span data-i18n="fact_lang"></span>
@@ -508,7 +512,9 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
       <h2 data-i18n="final_title"></h2>
       <p class="lede" data-i18n="final_lede"></p>
       <p class="lede" style="font-weight:600" data-i18n="final_free"></p>
-      <p><a class="btn btn-gold" href="/register" data-reg data-i18n="cta_main"></a></p>
+      <p class="cta-row" style="justify-content:center;margin-top:0"><a class="btn btn-gold" href="/register" data-reg data-i18n="cta_main"></a>
+        <a class="btn btn-ghost" href="https://github.com/Moh20All/Warshati/releases/latest" data-download><svg class="dl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 19h16"/></svg><span data-i18n="dl_btn"></span></a></p>
+      <p class="dl-meta" data-dl-meta></p>
       <div class="contact" id="contact-lines"></div>
     </div>
   </section>
@@ -556,6 +562,7 @@ fr: {
   cur: "DA",
   nav_day: "Une journée", nav_catalog: "Catalogue", nav_money: "Caisse", nav_faq: "Questions", nav_guide: "Guide",
   cta_short: "S'inscrire", cta_main: "Réserver ma place gratuite", cta_tour: "Voir une journée avec Warshati",
+  dl_btn: "Télécharger pour Windows", dl_meta: "Windows 10 et 11 · version {v} · {mb} Mo", dl_meta0: "Windows 10 et 11",
   hero_eyebrow: "Logiciel pour réparateurs de téléphones",
   hero_title: "Votre atelier, <em>enfin en ordre.</em>",
   hero_lede: "Tickets de réparation, caisse, stock, dettes clients et fournisseurs : Warshati tient tout au même endroit, sur votre PC, même quand internet est coupé.",
@@ -633,6 +640,7 @@ ar: {
   cur: "دج",
   nav_day: "يوم في المحل", nav_catalog: "دليل الأجهزة", nav_money: "الصندوق", nav_faq: "أسئلة", nav_guide: "الدليل",
   cta_short: "سجّل الآن", cta_main: "احجز مكانك المجاني", cta_tour: "شاهد يوماً مع ورشتي",
+  dl_btn: "تحميل لويندوز", dl_meta: "ويندوز 10 و11 · الإصدار {v} · {mb} ميغابايت", dl_meta0: "ويندوز 10 و11",
   hero_eyebrow: "برنامج لمحلات تصليح الهواتف",
   hero_title: "ورشتك، <em>منظّمة أخيراً.</em>",
   hero_lede: "تذاكر التصليح، الصندوق، المخزون، ديون الزبائن والموردين: ورشتي يجمع كل شيء في مكان واحد، على حاسوبك، حتى عند انقطاع الإنترنت.",
@@ -710,6 +718,7 @@ en: {
   cur: "DZD",
   nav_day: "A day", nav_catalog: "Catalog", nav_money: "Cash", nav_faq: "Questions", nav_guide: "Guide",
   cta_short: "Sign up", cta_main: "Reserve my free spot", cta_tour: "See a day with Warshati",
+  dl_btn: "Download for Windows", dl_meta: "Windows 10 and 11 · version {v} · {mb} MB", dl_meta0: "Windows 10 and 11",
   hero_eyebrow: "Software for phone repair shops",
   hero_title: "Your workshop, <em>finally in order.</em>",
   hero_lede: "Repair tickets, cash register, stock, customer and supplier debts: Warshati keeps it all in one place, on your PC, even when the internet is down.",
@@ -794,6 +803,28 @@ const fmt = n => Math.round(n).toLocaleString("fr-FR").replace(/ | /g, " ");
 const money = n => (n < 0 ? "− " : "") + fmt(Math.abs(n)) + " " + T[lang].cur;
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
+/* Download buttons: the newest Windows installer of the latest GitHub release.
+   Until GitHub answers (or if it does not), they open the releases page. */
+const DL = { url: "https://github.com/Moh20All/Warshati/releases/latest", version: "", mb: 0 };
+function renderDownload() {
+  const t = T[lang];
+  document.querySelectorAll("a[data-download]").forEach(a => { a.href = DL.url; });
+  document.querySelectorAll("[data-dl-meta]").forEach(el => {
+    el.textContent = DL.version ? t.dl_meta.replace("{v}", DL.version).replace("{mb}", fmt(DL.mb)) : t.dl_meta0;
+  });
+}
+fetch("https://api.github.com/repos/Moh20All/Warshati/releases/latest")
+  .then(r => (r.ok ? r.json() : null))
+  .then(rel => {
+    const exe = rel?.assets?.find(a => /\.exe$/i.test(a.name));
+    if (!exe) return;
+    DL.url = exe.browser_download_url;
+    DL.version = String(rel.tag_name || "").replace(/^v/i, "");
+    DL.mb = Math.round(exe.size / 1048576);
+    renderDownload();
+  })
+  .catch(() => {});
+
 function applyText() {
   const t = T[lang];
   document.documentElement.lang = lang;
@@ -803,6 +834,7 @@ function applyText() {
   document.querySelectorAll("[data-i18n-ph]").forEach(el => { el.placeholder = t[el.dataset.i18nPh] ?? ""; });
   document.querySelectorAll("a[data-reg]").forEach(a => { a.href = "/register?lang=" + lang; });
   document.querySelectorAll("a[data-guide]").forEach(a => { a.href = "/guide?lang=" + lang; });
+  renderDownload();
   document.querySelectorAll(".money").forEach(el => { el.textContent = money(Number(el.dataset.v)); });
   document.querySelectorAll(".langs button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
   renderStep(); renderList(); renderClose(); renderContact();

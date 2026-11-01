@@ -93,6 +93,11 @@ html[lang="ar"] .brand .tag { font-family: var(--f-ar); }
 .search input { width: 100%; padding: 15px 18px; padding-inline-start: 46px; border-radius: 12px; border: 1px solid var(--line); background: var(--raised); color: var(--text); font: 400 1rem/1.3 var(--f-body); }
 .search input::placeholder { color: var(--mute); }
 .search input:focus { outline: 2px solid var(--gold); outline-offset: 0; border-color: transparent; }
+.dl-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.dl-row .btn { display: inline-flex; padding: 13px 20px; }
+.dl-ico { width: 18px; height: 18px; flex: none; }
+.dl-meta { font: 400 .8125rem/1.4 var(--f-mono); color: var(--mute); }
+html[lang="ar"] .dl-meta { font-family: var(--f-ar); }
 .quick { display: grid; gap: 12px; margin-top: 14px; }
 @media (min-width: 640px) { .quick { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1040px) { .quick { grid-template-columns: repeat(4, 1fr); } }
@@ -259,6 +264,10 @@ dialog.zoom button { position: absolute; top: 10px; inset-inline-end: 10px; widt
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
       <input id="q" type="search" autocomplete="off" data-tp="search">
     </label>
+    <div class="dl-row">
+      <a class="btn btn-cta" href="https://github.com/Moh20All/Warshati/releases/latest" data-download><svg class="dl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 19h16"/></svg><span data-t="dl_btn"></span></a>
+      <span class="dl-meta" data-dl-meta></span>
+    </div>
     <div class="quick" id="quick"></div>
   </div>
 </section>
@@ -300,6 +309,7 @@ dialog.zoom button { position: absolute; top: 10px; inset-inline-end: 10px; widt
 const T = {
 fr: {
   tag: "Guide", nav_home: "Accueil", nav_price: "Prix", nav_help: "Aide", cta: "S'inscrire",
+  dl_btn: "Télécharger pour Windows", dl_meta: "Windows 10 et 11 · version {v} · {mb} Mo", dl_meta0: "Windows 10 et 11",
   eyebrow: "Guide d'utilisation · Warshati 1.6",
   title: "Tout Warshati, <em>pas à pas.</em>",
   lede: "Comment installer Warshati, recevoir une réparation, vendre au comptoir, suivre les dettes et fermer la caisse le soir. Chaque chapitre montre l'écran tel que vous le verrez.",
@@ -320,6 +330,7 @@ fr: {
 },
 ar: {
   tag: "الدليل", nav_home: "الرئيسية", nav_price: "الأسعار", nav_help: "مساعدة", cta: "التسجيل",
+  dl_btn: "تحميل لويندوز", dl_meta: "ويندوز 10 و11 · الإصدار {v} · {mb} ميغابايت", dl_meta0: "ويندوز 10 و11",
   eyebrow: "دليل الاستخدام · ورشتي 1.6",
   title: "كل ورشتي، <em>خطوة بخطوة.</em>",
   lede: "كيف تثبّت ورشتي، تستلم جهازاً للتصليح، تبيع في المحل، تتابع الديون وتغلق الصندوق في المساء. كل فصل يعرض الشاشة كما ستراها.",
@@ -340,6 +351,7 @@ ar: {
 },
 en: {
   tag: "Guide", nav_home: "Home", nav_price: "Pricing", nav_help: "Help", cta: "Sign up",
+  dl_btn: "Download for Windows", dl_meta: "Windows 10 and 11 · version {v} · {mb} MB", dl_meta0: "Windows 10 and 11",
   eyebrow: "User guide · Warshati 1.6",
   title: "All of Warshati, <em>step by step.</em>",
   lede: "How to install Warshati, take in a repair, sell at the counter, follow debts and close the till at night. Every chapter shows the screen as you will see it.",
@@ -1316,7 +1328,29 @@ function render() {
 
   filter();
   watchSections();
+  renderDownload();
 }
+
+/* Download button: the newest Windows installer of the latest GitHub release (the releases page until GitHub answers) */
+const DL = { url: "https://github.com/Moh20All/Warshati/releases/latest", version: "", mb: 0 };
+function renderDownload() {
+  const t = T[lang];
+  document.querySelectorAll("a[data-download]").forEach((a) => { a.href = DL.url; });
+  document.querySelectorAll("[data-dl-meta]").forEach((el) => {
+    el.textContent = DL.version ? t.dl_meta.replace("{v}", DL.version).replace("{mb}", DL.mb) : t.dl_meta0;
+  });
+}
+fetch("https://api.github.com/repos/Moh20All/Warshati/releases/latest")
+  .then((r) => (r.ok ? r.json() : null))
+  .then((rel) => {
+    const exe = rel?.assets?.find((a) => /\.exe$/i.test(a.name));
+    if (!exe) return;
+    DL.url = exe.browser_download_url;
+    DL.version = String(rel.tag_name || "").replace(/^v/i, "");
+    DL.mb = Math.round(exe.size / 1048576);
+    renderDownload();
+  })
+  .catch(() => {});
 
 /* Search: keeps the chapters whose text has every typed word (accents and case ignored) */
 const fold = (s) => s.toLowerCase().normalize("NFD").replace(/[̀-ًͯ-ْ]/g, "");
